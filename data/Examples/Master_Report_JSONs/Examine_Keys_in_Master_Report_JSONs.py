@@ -37,34 +37,34 @@ for File in JSON_File_Names:
         #Section: Read Data from JSON Dictionary
         CSV_Record = {}
         # CSV_Record['Report_Creator'] contains the Created_By value
-        # CSV_Record['Report'] contains the master report ID
-        # CSV_Record['ID'] contains the COUNTER namespace for the source of the report
+        # CSV_Record['Report_Type'] contains the master report ID
+        # CSV_Record['Source_COUNTER_Namespace'] contains the COUNTER namespace for the source of the report
         # CSV_Record['Platform'] contains the platform
 
         #Subsection: Read Data from Header
         CSV_Record['Report_Creator'] = JSON_Dictionary['Report_Header']['Created_By']
-        CSV_Record['Report'] = JSON_Dictionary['Report_Header']['Report_ID']
+        CSV_Record['Report_Type'] = JSON_Dictionary['Report_Header']['Report_ID']
 
         try:
             for ID in JSON_Dictionary['Report_Header']['Institution_ID']:
                 if ID['Type'] == "Proprietary":
-                    CSV_Record['ID'] = ID['Value'].split(":")[0]
+                    CSV_Record['Source_COUNTER_Namespace'] = ID['Value'].split(":")[0]
         except KeyError:
             if ":" in JSON_Dictionary['Report_Header']['Customer_ID']:
-                CSV_Record['ID'] = JSON_Dictionary['Report_Header']['Customer_ID'].split(":")[0]
+                CSV_Record['Source_COUNTER_Namespace'] = JSON_Dictionary['Report_Header']['Customer_ID'].split(":")[0]
             else:
-                CSV_Record['ID'] = "No COUNTER Namespace"
+                CSV_Record['Source_COUNTER_Namespace'] = "No COUNTER Namespace"
 
         #Subsection: Get List of Platforms
         if len(JSON_Dictionary['Report_Items']) == 0: # If the Report_Items section is empty
-            CSV_Record['Platform'] = "Empty report"
+            CSV_Record['Resource_Platform'] = "Empty report"
             CSV_Records.append(CSV_Record)
             continue
 
         for Platforms in JSON_Dictionary['Report_Items']:
             for Key, Value in Platforms.items():
                 if Key == "Platform":
-                    CSV_Record['Platform'] = Value
+                    CSV_Record['Resource_Platform'] = Value
                     CSV_Records.append(CSV_Record)
 
 #Section: Create CSV

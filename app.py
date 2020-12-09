@@ -76,17 +76,23 @@ for SUSHI_Call_Data in SUSHI_Data:
             #ToDo: Determine if "continue" is appropriate keyword to move on to next Master_Report in Available_Master_Reports
             continue
         
-        Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path.findall(Master_Report["Path"])[0] # This uses a regex to construct the API URL so only the piece of the path related to the report requested is included (some platforms have a "Path" attribute that include the domain as well)
+        Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path.findall(Master_Report["Path"])[0]
+        # This uses a regex to construct the API URL so only the piece of the path related to the report requested is included (some platforms have a "Path" attribute that include the domain as well)
         try:
             Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=90)
+            # Larger reports seem to take longer to respond, so the initial timeout interval is long
         except Timeout as error:
-            print(f"Server didn't respond to request for {Master_Report_Type} after 90 seconds [{format(error)}].")
-            # Larger reports seem to take longer to respond, so the timeout interval is long
-            #Alert: Need to look at JSON of Available_Reports to determien how to best load it into SUSHIErrorReports table
-            print(Available_Reports.text)
-            #ToDo: Get COUNTER namespace from Institution_ID, Created, Created_By, Report_Name from Available_Reports
-            #ToDo: Load above data into a record in SUSHIErrorReports
-            continue
+            try: # Timeout errors seem to be random, so going to try get request again with more time
+                Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=120)
+            except Timeout as error:
+                #ToDo: Get following info
+                    # COUNTER namespace for the provider of the report: COUNTER_Namespace [extracted from Report_Header:Institution_ID]--derived by matching to URL
+                    # Time the attempt to run the report was made: Time_Report_Run [Report_Header:Created]--timestamp?
+                    # Platform that created the report: Report_Source [Report_Header:Created_By]--derived by matching to URL
+                    # Full name of the master report: Report_Type [Report_Header:Report_Name] = Master_Report_Type
+                #ToDo: Load above data into a record in SUSHIErrorReports
+                print(f"Server didn't respond to request for {Master_Report_Type} after second request of 120 seconds [{format(error)}].")
+                continue
 
         #Section: Read Master Report into Dataframe
         Report_JSON = json.loads(Master_Report_Response.text)

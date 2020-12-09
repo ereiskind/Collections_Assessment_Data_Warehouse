@@ -348,6 +348,8 @@ for SUSHI_Call_Data in SUSHI_Data:
         # Should Access_Method be manipulated into a Boolean that would allow for exclusion of TDM, or should potential of other Access_Method options be kept?
         # Resource identifiers (DOI, ISBN, ect.) come as a list of dictionaries where all the dictionaries have the keys "Type" for the type of identifier and "Value" for the identifier itself; putting the whole list in the dataframe will be simpler and will more readily convert to a relational system where data about individual resources is in a separate relation
         # IR records largely lack elements indicating parent titles (thus far, none found)--do we want to try using the DOI API to connect items to titles?
+            # Not all TR contain DOI for journals--is there an API that takes in ISSNs and returns DOIs?
+            # Can that same API handle ISBNs?
         # YOP of 0001 means unknown, YOP of 9999 means articles in press--need way to indicate this in outputting results
 
 

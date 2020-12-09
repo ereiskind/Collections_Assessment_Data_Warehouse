@@ -138,27 +138,27 @@ for SUSHI_Call_Data in SUSHI_Data:
     Credentials["end_date"] = "2020-01-31"
 
     for Master_Report in Available_Master_Reports: 
-        Master_Report_Type = Master_Report["Report_Name"]
+        Master_Report_Type = Master_Report["Report_ID"]
         # If the parameters for showing parent details in Item Master Report are in other master reports, an error message saying the parameter's been ignored is included in the report header; the below takes them out of the query
         if "include_parent_details" in Credentials:
             del Credentials["include_parent_details"]
             del Credentials["include_component_details"]
         
         # This cycles through each of the master reports offered by the platform, adding the URL query parameters needed to get the most granular version of the given master report
-        if Master_Report_Type.startswith("Platform Master Report"):
+        if Master_Report_Type == "PR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
-        elif Master_Report_Type.startswith("Database Master Report"):
+        elif Master_Report_Type == "DR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
-        elif Master_Report_Type.startswith("Title Master Report"):
+         elif Master_Report_Type == "TR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type|Section_Type"
-        elif Master_Report_Type.startswith("Item Master Report"):
+        elif Master_Report_Type == "IR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
             # If either of the below isn't used, it's presence will add a 3050 warning to the JSON; since there's no good way to tell which IRs use which parameter, using both and letting the warning pass silently is the best option
             Credentials["include_parent_details"] = "True"
             #Alert: PQ IR had {"Name": "Include_Component_Details", "Value": "No"} as Report_Attributes item
             Credentials["include_component_details"] = "True"
         else:
-            print("Invalid Master Report Type: " + Master_Report_Type)
+            print("Invalid Master Report Type: " + Master_Report["Report_Name"])
             continue
         
         URL_Report_Path = URL_Report_Path_Regex.findall(Master_Report["Path"])[0] #Alert: KeyError 'Path' possible here
@@ -314,17 +314,17 @@ for SUSHI_Call_Data in SUSHI_Data:
             ['Report_Items', 'Data_Type'] #ToDo: Determine if issues with some of the reports returning errors are actually issues with missing keys and json_normalize (which shouldn't be happening since errors='ignore')
         ]
 
-        if Master_Report_Type.startswith("Database Master Report"):
+        if Master_Report_Type == "DR":
             Dataframe_Fields.append(['Report_Items', 'Database'])
             Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
-        elif Master_Report_Type.startswith("Title Master Report"):
+        elif Master_Report_Type == "TR":
             Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
             Dataframe_Fields.append(['Report_Items', 'Item_ID'])
             Dataframe_Fields.append(['Report_Items', 'Section_Type'])
             Dataframe_Fields.append(['Report_Items', 'Access_Type'])
             Dataframe_Fields.append(['Report_Items', 'YOP'])
             Dataframe_Fields.append(['Report_Items', 'Title'])
-        elif Master_Report_Type.startswith("Item Master Report"):
+        elif Master_Report_Type == "IR":
             Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
             Dataframe_Fields.append(['Report_Items', 'Item_ID'])
             Dataframe_Fields.append(['Report_Items', 'Access_Type'])

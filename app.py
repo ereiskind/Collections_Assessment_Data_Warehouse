@@ -5,6 +5,7 @@ import json
 import csv
 import requests
 from requests import HTTPError, Timeout
+import re
 
 #Section: Collect Information Needed for SUSHI Call
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
@@ -52,6 +53,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Available_Master_Reports.append(Report)
     
     #Subsection: Collect Reports
+    URL_Report_Path = re.compile(r'reports/\w{2}')
     for Master_Report in Available_Master_Reports:
         try:
             Master_Report_Response = requests.get(Master_Report["Path"], params=Credentials, timeout=10)

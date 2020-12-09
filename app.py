@@ -50,9 +50,15 @@ for SUSHI_Call_Data in SUSHI_Data:
     for Report in json.loads(Available_Reports.text):
         if "Master Report" in Report["Report_Name"]:
             Available_Master_Reports.append(Report)
-    print(Available_Master_Reports)
-
+    
     #Subsection: Collect Reports
+    for Master_Report in Available_Master_Reports:
+        try:
+            Master_Report_Response = requests.get(Master_Report["Path"], params=Credentials, timeout=10)
+        except Timeout as error:
+            print(f"Server didn't respond to request for {Master_Report["Report_Name"]} after 10 seconds ({format(error)}).")
+            continue
+        print(Master_Report_Response)
     #ToDo: For each item in available reports tuple, request report with as much detail as possible
     #ToDo: Save reports
 

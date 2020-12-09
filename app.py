@@ -92,11 +92,18 @@ for SUSHI_Call_Data in SUSHI_Data:
             Top_Level_Keys += 1
 
         if Top_Level_Keys == 1:
-            Error_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header'])
-            Error_Dataframe.to_csv('Check_Dataframe.csv', 'a') # Using to more clearly investigate contents
-            #ToDo: Determine best way to load JSON to a CSV to record useful information about errors
-            #ToDo: Create CSV to serve as error log--should it be in gitignore?
-            print("Break to look at CSV")
+            Error_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], meta=[
+                ['Report_Header', 'Created'],
+                ['Report_Header', 'Created_By'],
+                ['Report_Header', 'Institution_ID'],
+                ['Report_Header', 'Report_ID'],
+                ['Report_Header', 'Report_Name']
+            ]) # for some reasion, including "['Report_Header', 'Institution_ID', 'Type']" or "['Report_Header', 'Institution_ID', 'Value']" led to "TypeError: list indices must be integers or slices, not strings"
+            #ToDo: Use regex on value of Error_Dataframe['Report_Header.Institution_ID'] to isolate the namespace
+            #ToDo sample text: "{'Type': 'Proprietary', 'Value': 'MUSE:institution16849'}" looking to isolate "MUSE"
+            # Is it worth exporting this to the datbase into two seperate tables for the purpose of more readily generating a list of reports not pulled without duplicates but retaining all the error codes?
+            Error_Dataframe.to_csv('Check_Dataframe.csv', mode='a', header=False, index=False)
+            #ToDo: Create seperate CSV to serve as error log--should it be in gitignore?
             print("The report returned an error. See the error log in Report_Errors.csv for more details.")
             continue
         

@@ -124,14 +124,17 @@ for SUSHI_Call_Data in SUSHI_Data:
                 print(f"Server didn't respond to request for {Master_Report_Type} after second request of 120 seconds [{format(error)}].")
                 continue
 
-        #Section: Read Master Report into Dataframe
         Report_JSON = json.loads(Master_Report_Response.text)
-        #Subsection: If Report Contains Error Codes, Record Errors and Move to Next Report
+        
+
+        #Section: Handle Reports Returning Errors
+        #Subsection: Determine if Report is an Error Report
         # In error responses, no data is being reported, so Report_Header is the only top-level key; when data is returned, it's joined by Report_Items
         Top_Level_Keys = 0
         for value in Report_JSON.values():
             Top_Level_Keys += 1
 
+        #Subsection: Clean Data for Error Reports
         if Top_Level_Keys == 1:
             Error_Reports_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=[
                 ['Report_Header', 'Created'],
@@ -148,6 +151,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error_Reports_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
             Error_Reports_Dataframe['COUNTER_Namespace'] = Error_Reports_Dataframe.Value.str.split(":").str[0]
             Error_Reports_Dataframe.drop(columns='Value', inplace=True)
+            
+            #Subsection: Load Error Reports into MySQL
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
             Error_Reports_Dataframe = Error_Reports_Dataframe[[
                 'COUNTER_Namespace',
@@ -156,11 +161,14 @@ for SUSHI_Call_Data in SUSHI_Data:
                 'Report_Header:Created_By',
                 'Report_Header:Report_Name'
             ]]
+            #ToDo: Change field names to match the MySQL table
             Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
+            #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated: Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine)
 
-            #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated
+            #Subsection: Get New Error Reports Primary Keys from MySQL
             #ToDo: Read PK and index back from MySQL
 
+            #Subsection: Clean Data for Error Log
             Error_Log_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
                 ['Report_Header', 'Institution_ID'],
                 ['Report_Header', 'Report_ID'],
@@ -172,6 +180,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error_Log_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
             #ToDo: Add reports PK to log dataframe as another field by matching on field Report_Matching_Index
             #ToDo: Remove Report_Matching_Index column from dataframe
+            
+            #Subsection: Load Error Log into MySQL
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
             Error_Log_Dataframe = Error_Log_Dataframe[[
                 # Report_ID FK column goes here
@@ -180,14 +190,17 @@ for SUSHI_Call_Data in SUSHI_Data:
                 'Message', #Name
                 'Severity'
             ]]
+            #ToDo: Change field names to match the MySQL table
             Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
 
-            #ToDo: Load log dataframe to MySQL, where PK is autogenenerated
+            #Subsection: Null Values Used to Designate New Primary Keys in Error Report
             #ToDo: Null values in "Match" column of SUSHIErrorReports table for those reports just loaded
 
             print("The report returned an error. See the SUSHI error reports log in the data warehouse for more details.")
             continue
         
+        
+        #Section: Read Master Report into Dataframe
         #Subsection: Determine Fields to Import
         Dataframe_Fields = [
             ['Report_Header', 'Created'],

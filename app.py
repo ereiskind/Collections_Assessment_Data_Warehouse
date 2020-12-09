@@ -45,10 +45,12 @@ for SUSHI_Call_Data in SUSHI_Data:
     except Timeout as error:
         print(f"Server didn't respond to request for list of available reports after 10 seconds ({format(error)}).")
         continue
+    
+    Available_Master_Reports = [] # This list will contain the dictionaries for the master reports available on the platform, which will be the only reports pulled
     for Report in json.loads(Available_Reports.text):
-        print(Report)
-    #ToDo: Run API call for list of available R5 reports
-    #ToDo: Save results into a tuple
+        if "Master Report" in Report["Report_Name"]:
+            Available_Master_Reports.append(Report)
+    print(Available_Master_Reports)
 
     #Subsection: Collect Reports
     #ToDo: For each item in available reports tuple, request report with as much detail as possible

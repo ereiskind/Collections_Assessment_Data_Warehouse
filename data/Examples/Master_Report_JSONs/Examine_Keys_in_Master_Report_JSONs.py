@@ -9,28 +9,30 @@ CSV_Records = []
 
 
 #Section: Open JSON
+#Subsection: Get list of JSON Files in Folder
 Current_Folder = os.path.dirname(os.path.realpath(__file__)) # Goes down to this specific subfolder--getcwd pulls all folders, including git
 for Folder, Subfolders, Files in os.walk(Current_Folder):
     for File in Files:
         if File.endswith(".json"):
             JSON_File_Names.append(File)
 
+#Subsection: Loop Through Opening JSON Files in Folder
 for File in JSON_File_Names:
     File_Path = os.path.dirname(os.path.realpath(__file__)) + "\\" + File
     with open(File_Path) as JSON_File:
         JSON_Dictionary = json.load(JSON_File)
 
 
-#Section: Read Data from JSON Dictionary
-#Subsection: Read Data from Header
-#ToDo: Get JSON_Dictionary['Report_Header']['Created_By'], a string, and save as the report creator
-#ToDo: Get JSON_Dictionary['Institution_ID'], a list of dictionaries, and save the dictionary where "Type": "Proprietary" to a variable
-#ToDo: From the above variable, get the value for the key 'Value'
+        #Section: Read Data from JSON Dictionary
+        #Subsection: Read Data from Header
+        #ToDo: Get JSON_Dictionary['Report_Header']['Created_By'], a string, and save as the report creator
+        #ToDo: Get JSON_Dictionary['Institution_ID'], a list of dictionaries, and save the dictionary where "Type": "Proprietary" to a variable
+        #ToDo: From the above variable, get the value for the key 'Value'
 
-#Subsection: Get List of Platforms
-#ToDo: Get JSON_Dictionary['Report_Items'], a list of dictionaries, and save to an iterable
-#ToDo: Iterate through the above, pulling the value for the key 'Platform' and saving it to a list
-#ToDo: Dedupe list (use list comprehension?)
+        #Subsection: Get List of Platforms
+        #ToDo: Get JSON_Dictionary['Report_Items'], a list of dictionaries, and save to an iterable
+        #ToDo: Iterate through the above, pulling the value for the key 'Platform' and saving it to a list
+        #ToDo: Dedupe list (use list comprehension?)
 
 
 #Section: Create CSV Record

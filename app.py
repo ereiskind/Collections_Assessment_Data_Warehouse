@@ -59,6 +59,20 @@ for SUSHI_Call_Data in SUSHI_Data:
     Credentials["end_date"] = "2020-06-30"
     for Master_Report in Available_Master_Reports:
         Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path.findall(Master_Report["Path"])[0]
+        Master_Report_Type = Master_Report["Report_Name"]
+        if Master_Report_Type == "Platform Master Report":
+            print("Platform Master Report")
+        elif Master_Report_Type == "Database Master Report":
+            print("Database Master Report")
+        elif Master_Report_Type == "Title Master Report":
+            print("Title Master Report")
+        elif Master_Report_Type == "Item Master Report":
+            print("Item Master Report")
+        else:
+            print("Invalid Master Report Type")
+            #ToDo: Determine if "continue" is appropriate keyword to move on to next Master_Report in Available_Master_Reports
+            continue
+        
         try:
             Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=10)
         except Timeout as error:
@@ -68,7 +82,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         #ToDo: Need a way to capture when the response isn't usage stats (e.g. code 1011, "Report Queued for Processing")
         print(json.loads(Master_Report_Response.text))
         #Alert: Some JSONs appear to be getting truncated in terminal window--determine if this is terminal window issue or if complete JSONs aren't being returned
-        
+
     #ToDo: For each item in available reports tuple, request report with as much detail as possible
     #ToDo: Save reports
 

@@ -92,7 +92,7 @@ def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     WebDriver.execute("send_command", params)
     WebDriver.get(URL) # From source: "get request to target the site selenium is active on"
 
-    time.sleep(0.025) # This delay allows the downloaded JSON to be in the folder for long enough that the walk method can detect it
+    time.sleep(0.1) # This delay allows the downloaded JSON to be in the folder for long enough that the walk method can detect it
     for Folder, Subfolder, Files in os.walk(API_Download_Folder):
         for File in Files: # There is actually only one file, but the iterator is needed to extract it from the list data structure
             Download_File_Path = str(Path('.', 'API_Download', File))
@@ -245,7 +245,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     #Subsection: Get List of R5 Reports Available
     Reports_URL = SUSHI_Call_Data["URL"] + "reports" # This API returns a list of the available SUSHI reports
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
+    time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
     try:
         Available_Reports = requests.get(Reports_URL, params=Credentials_String, timeout=10)
     except Timeout as error:
@@ -294,13 +294,13 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         Master_Report_URL = SUSHI_Call_Data["URL"] + "reports/" + Master_Report_Type.lower()
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-        time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
+        time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
         try:
             Master_Report_Response = requests.get(Master_Report_URL, params=Credentials_String, timeout=90)
             # Larger reports seem to take longer to respond, so the initial timeout interval is long
         except Timeout as error:
             try: # Timeout errors seem to be random, so going to try get request again with more time
-                time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
+                time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
                 Master_Report_Response = requests.get(Master_Report_URL, params=Credentials_String, timeout=120)
             except Timeout as error:
                 #ToDo: Get info for loading into sushierrorreports table--note that SUSHI JSONs for this resource don't have Report_Header sections, so data needs to come from elsewhere

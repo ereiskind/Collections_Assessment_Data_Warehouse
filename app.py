@@ -85,10 +85,31 @@ for SUSHI_Call_Data in SUSHI_Data:
         #ToDo: Need a way to capture when the response isn't usage stats (e.g. code 1011, "Report Queued for Processing"; code 1020, "Client has made too many requests")--JSON has fields "Code" with number, "Message" with problem description, "Data" with more details on problem
         # JSONs are truncated when output to terminal 
         Report_JSON = json.loads(Master_Report_Response.text)
-        print(json.dumps(Report_JSON, indent=4))
 
 
         #Section: Read Master Report into Dataframe
+        #Subsection: Determine Fields to Import
+        Dataframe_Fields = [['Report_Header', 'Created'], ['Report_Items', 'Platform'], ['Report_Items', 'Performance', 'Period', 'Begin_Date'], ['Report_Items', 'Performance', 'Period', 'End_Date'], ['Report_Items', 'Performance', 'Instance', 'Metric_Type'], ['Report_Items', 'Performance', 'Instance', 'Count'], ['Report_Items', 'Access_Method'], ['Report_Items', 'Data_Type']]
+
+        if Master_Report_Type == "Database Master Report":
+            Dataframe_Fields.append(['Report_Items', 'Database'])
+            Dataframe_Fields.append(['Report_Items', 'Publisher'])
+        elif Master_Report_Type == "Title Master Report":
+            Dataframe_Fields.append(['Report_Items', 'Publisher'])
+            Dataframe_Fields.append(['Report_Items', 'Item_ID'])
+            Dataframe_Fields.append(['Report_Items', 'Section_Type'])
+            Dataframe_Fields.append(['Report_Items', 'Access_Type'])
+            Dataframe_Fields.append(['Report_Items', 'YOP'])
+            Dataframe_Fields.append(['Report_Items', 'Title'])
+        elif Master_Report_Type == "Item Master Report":
+            Dataframe_Fields.append(['Report_Items', 'Publisher'])
+            Dataframe_Fields.append(['Report_Items', 'Item_ID'])
+            Dataframe_Fields.append(['Report_Items', 'Access_Type'])
+            Dataframe_Fields.append(['Report_Items', 'YOP'])
+            Dataframe_Fields.append(['Report_Items', 'Item'])
+        else:
+            pass # Because of if-elif-else with same Boolean Expressions above, this should never happen
+        
         #Subsection: Create Initial Dataframe
         Report_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'])
         Report_Dataframe.to_csv('Review_Dataframe.csv') # Using to more clearly investigate contents

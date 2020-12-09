@@ -132,9 +132,18 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error_Reports_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
             Error_Reports_Dataframe['COUNTER_Namespace'] = Error_Reports_Dataframe.Value.str.split(":").str[0]
             Error_Reports_Dataframe.drop(columns='Value', inplace=True)
-            #Alert: If import to MySQL relies on fields in certain order, dataframe may not have that
-            # Columns (in order): Report_Header:Created, Report_Header:Created_By, Report_Header:Report_Name, Report_Matching_Index, COUNTER_Namespace
+            # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
+            Error_Reports_Dataframe = Error_Reports_Dataframe[
+                ['COUNTER_Namespace'],
+                ['Report_Matching_Index'],
+                ['Report_Header:Created'],
+                ['Report_Header:Created_By'],
+                ['Report_Header:Report_Name']
+            ]
             Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
+
+            #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated
+            #ToDo: Read PK and index back from MySQL
 
             Error_Log_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
                 ['Report_Header', 'Institution_ID'],
@@ -145,15 +154,20 @@ for SUSHI_Call_Data in SUSHI_Data:
             # Above assumes that there won't be more than 10 rows (error codes) returned for a given report
             Error_Log_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
             Error_Log_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
-            #Alert: If import to MySQL relies on fields in certain order, dataframe may not have that
-            # Columns (in order): Code, Data, Message, Severity, Report_Matching_Index
+            #ToDo: Add reports PK to log dataframe as another field by matching on field Report_Matching_Index
+            #ToDo: Remove Report_Matching_Index column from dataframe
+            # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
+            Error_Log_Dataframe = Error_Log_Dataframe[
+                # Report_ID FK column goes here
+                ['Code'],
+                ['Data'], #Details
+                ['Message'], #Name
+                ['Severity']
+            ]
             Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
 
-            #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated
-            #ToDo: Read PK and index back from MySQL
-            #ToDo: Add reports PK to log dataframe as another field
-            #ToDo: Remove index column from dataframe
-            #ToDo: Create transaction to load log dataframe to MySQL and null values in "Match" column of SUSHIErrorReports table
+            #ToDo: Load log dataframe to MySQL, where PK is autogenenerated
+            #ToDo: Null values in "Match" column of SUSHIErrorReports table for those reports just loaded
 
             print("The report returned an error. See the SUSHI error reports log in the data warehouse for more details.")
             continue

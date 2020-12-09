@@ -129,14 +129,13 @@ for SUSHI_Call_Data in SUSHI_Data:
     Credentials["end_date"] = "2020-01-31"
     for Master_Report in Available_Master_Reports: # This cycles through each of the master reports offered by the platform
         Master_Report_Type = Master_Report["Report_Name"] # This adds all of the possible attributes for a given master report to the URL used to request that master report
-        #ToDo: Change equals to .startswith()
-        if Master_Report_Type == "Platform Master Report":
+        if Master_Report_Type.startswith("Platform Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
-        elif Master_Report_Type == "Database Master Report":
+        elif Master_Report_Type.startswith("Database Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
-        elif Master_Report_Type == "Title Master Report":
+        elif Master_Report_Type.startswith("Title Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type|Section_Type"
-        elif Master_Report_Type == "Item Master Report":
+        elif Master_Report_Type.startswith("Item Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
         else:
             print("Invalid Master Report Type: "+Master_Report_Type)
@@ -285,18 +284,17 @@ for SUSHI_Call_Data in SUSHI_Data:
             ['Report_Items', 'Data_Type'] #ToDo: Determine if issues with some of the reports returning errors are actually issues with missing keys and json_normalize (which shouldn't be happening since errors='ignore')
         ]
 
-        #ToDo: Change equals to .startswith()
-        if Master_Report_Type == "Database Master Report":
+        if Master_Report_Type.startswith("Database Master Report"):
             Dataframe_Fields.append(['Report_Items', 'Database'])
             Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
-        elif Master_Report_Type == "Title Master Report":
+        elif Master_Report_Type.startswith("Title Master Report"):
             Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
             Dataframe_Fields.append(['Report_Items', 'Item_ID'])
             Dataframe_Fields.append(['Report_Items', 'Section_Type'])
             Dataframe_Fields.append(['Report_Items', 'Access_Type'])
             Dataframe_Fields.append(['Report_Items', 'YOP'])
             Dataframe_Fields.append(['Report_Items', 'Title'])
-        elif Master_Report_Type == "Item Master Report":
+        elif Master_Report_Type.startswith("Item Master Report"):
             Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
             Dataframe_Fields.append(['Report_Items', 'Item_ID'])
             Dataframe_Fields.append(['Report_Items', 'Access_Type'])

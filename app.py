@@ -93,20 +93,23 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         if Master_Report_Type == "Database Master Report":
             Dataframe_Fields.append(['Report_Items', 'Database'])
-            Dataframe_Fields.append(['Report_Items', 'Publisher'])
+            Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
         elif Master_Report_Type == "Title Master Report":
-            Dataframe_Fields.append(['Report_Items', 'Publisher'])
+            Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
             Dataframe_Fields.append(['Report_Items', 'Item_ID'])
             Dataframe_Fields.append(['Report_Items', 'Section_Type'])
             Dataframe_Fields.append(['Report_Items', 'Access_Type'])
             Dataframe_Fields.append(['Report_Items', 'YOP'])
             Dataframe_Fields.append(['Report_Items', 'Title'])
         elif Master_Report_Type == "Item Master Report":
-            Dataframe_Fields.append(['Report_Items', 'Publisher'])
+            Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
             Dataframe_Fields.append(['Report_Items', 'Item_ID'])
             Dataframe_Fields.append(['Report_Items', 'Access_Type'])
             Dataframe_Fields.append(['Report_Items', 'YOP'])
             Dataframe_Fields.append(['Report_Items', 'Item'])
+            # Excluded attributes: Authors, Publication_Date, Article_Version, Parent_Authors, Parent_Publication_Date, Parent_Article_Version, Component_Authors, Component_Publication_Date
+            # Can include parent info--how is this nested???
+            # Desired parent info: Parent_Title, Parent_Data_Type, Parent_DOI, Parent_Propriatary_ID, Parent_ISBN, Parent_Print_ISSN, Parent_Online_ISSN, Parent_URI, Component_Title, Component_Data_Type, Component_DOI, Component_Propriatary_ID, Component_ISBN, Component_Print_ISSN, Component_Online_ISSN, Component_URI
         else:
             pass # Because of if-elif-else with same Boolean Expressions above, this should never happen
         
@@ -124,6 +127,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         # Should Access_Method be manipulated into a Boolean that would allow for exclusion of TDM, or should potential of other Access_Method options be kept?
         # Resource identifiers (DOI, ISBN, ect.) come as a list of dictionaries where all the dictionaries have the keys "Type" for the type of identifier and "Value" for the identifier itself; putting the whole list in the dataframe will be simpler and will more readily convert to a relational system where data about individual resources is in a seperate relation
         # IR records might not have parent item elements--if that's the case, can DOI be fed to API to get info needed to establish relation to its parent item?
+        # YOP of 0001 means unknown, YOP of 9999 means articles in press--need way to indicate this in outputting results
 
 
         #Section: Export Dataframe to MySQL

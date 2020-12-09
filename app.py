@@ -181,7 +181,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     Credentials["end_date"] = "2020-01-31"
 
     for Master_Report in Available_Master_Reports: 
-        Master_Report_Type = Master_Report["Report_ID"]
+        Master_Report_Type = Master_Report["Report_ID"].upper()
         # If the parameters for showing parent details in Item Master Report are in other master reports, an error message saying the parameter's been ignored is included in the report header; the below takes them out of the query
         if "include_parent_details" in Credentials:
             del Credentials["include_parent_details"]

@@ -179,7 +179,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
             if Master_Report_Response.text == "":
                 #ToDo: If Master_Report_Response.json() is empty, get above data and load into record in SUSHIErrorReports
-                print("{Master_Report_URL} returned no data.")
+                print(f"{Master_Report_URL} returned no data.")
                 continue
 
         Report_JSON = Master_Report_Response.json()

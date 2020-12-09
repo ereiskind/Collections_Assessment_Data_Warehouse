@@ -1,5 +1,6 @@
 # Loops through all of the JSONs in the folder; for each one, pulls "Report_Header:Created_By" and "Report_Header:Institution_ID:Value" for Institution_ID Type=Proprietary, then creates a CSV row for each instance of "Report_Items:Platform" with the above data points included
 
+import os
 import json
 
 #Section: Initialize List
@@ -7,9 +8,8 @@ import json
 
 
 #Section: Open JSON
-#ToDo: Create counter to JSON file name
-#ToDo: with open('JSON file name') as JSONfile:
-    #ToDo: JSON_Dictionary = json.load(JSONfile)
+Folder = os.getcwd()
+#ToDo: Iterate through all items in Folder that end in ".json"
 
 
 #Section: Read Data from JSON Dictionary

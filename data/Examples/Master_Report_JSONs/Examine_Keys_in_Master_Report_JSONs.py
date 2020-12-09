@@ -46,7 +46,7 @@ for File in JSON_File_Names:
                 if ID['Type'] == "Proprietary":
                     CSV_Record['ID'] = ID['Value'].split(":")[0]
         except KeyError:
-            CSV_Record['ID'] = None
+            CSV_Record['ID'] = None # String JSON_Dictionary['Report_Header']['Customer_ID'] may be equal to Proprietary Institution_ID value
 
         #Subsection: Get List of Platforms
         for Platforms in JSON_Dictionary['Report_Items']:

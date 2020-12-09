@@ -99,6 +99,8 @@ Engine = create_engine(
 #Section: Make API Calls
 for SUSHI_Call_Data in SUSHI_Data:
     Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"} # This creates another dictionary without the URL to be used in the URL's query string
+    #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself--leads to requests getting a 403 error on a URL that works generates JSON download without a problem when used manually
+    #ToDo: Check if both Requestor ID and API Key are in credentials; if so, uses Selenium to get JSONs
     #Subsection: Determine SUSHI Availability
     Status_URL = SUSHI_Call_Data["URL"] + "status"
     try:
@@ -141,9 +143,6 @@ for SUSHI_Call_Data in SUSHI_Data:
                 #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
             except:
                 pass # If the status check passes, a KeyError is returned
-
-    #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself--believed this meant requests couldn't find the data, needs to be confirmed
-    #ToDo: Possibly handle above by checking if Status_Check.json() is empty
 
     #Subsection: Get List of R5 Reports Available
     Reports_URL = SUSHI_Call_Data["URL"] + "reports" # This API returns a list of the available SUSHI reports

@@ -36,13 +36,17 @@ for SUSHI_Call_Data in SUSHI_Data:
     except:
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
         continue
-
-    print(f"Sucessful request to {Status_URL} got status code {Status_Check}.")
     #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself; as a result, requests can't find the data
-    #ToDo: Run API call for status
-    #ToDo: If return value not 200, break and return error message to user
 
     #Subsection: Get List of R5 Reports Available
+    Reports_URL = SUSHI_Call_Data["URL"] + "reports"
+    try:
+        Available_Reports = requests.get(Reports_URL, params=Credentials, timeout=10)
+    except Timeout as error:
+        print(f"Server didn't respond to request for list of available reports after 10 seconds ({format(error)}).")
+        continue
+    for Report in json.loads(Available_Reports.text):
+        print(Report)
     #ToDo: Run API call for list of available R5 reports
     #ToDo: Save results into a tuple
 

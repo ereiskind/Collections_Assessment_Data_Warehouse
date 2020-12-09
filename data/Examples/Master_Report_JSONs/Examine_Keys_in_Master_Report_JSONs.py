@@ -3,7 +3,8 @@
 import os
 import json
 
-#Section: Initialize List
+#Section: Initialize Lists
+JSON_File_Names = []
 CSV_Records = []
 
 
@@ -12,7 +13,12 @@ Current_Folder = os.path.dirname(os.path.realpath(__file__)) # Goes down to this
 for Folder, Subfolders, Files in os.walk(Current_Folder):
     for File in Files:
         if File.endswith(".json"):
-            CSV_Records.append(File)
+            JSON_File_Names.append(File)
+
+for File in JSON_File_Names:
+    File_Path = os.path.dirname(os.path.realpath(__file__)) + "\\" + File
+    with open(File_Path) as JSON_File:
+        JSON_Dictionary = json.load(JSON_File)
 
 
 #Section: Read Data from JSON Dictionary

@@ -53,7 +53,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Available_Master_Reports.append(Report)
     
     #Subsection: Collect Reports
-    URL_Report_Path = re.compile(r'reports/\w{2}')
+    URL_Report_Path = re.compile(r'reports/\w{2}$')
     #ToDo: Allow system or user to change dates
     Credentials["begin_date"] = "2020-01-01"
     Credentials["end_date"] = "2020-01-31"

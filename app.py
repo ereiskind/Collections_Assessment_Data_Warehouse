@@ -158,7 +158,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                 'Report_Header:Created': 'Time_Report_Run',
                 'Report_Header:Created_By': 'Report_Source',
                 'Report_Header:Report_Name': 'Report_Type'
-            })
+            }, inplace=True)
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
             Error_Reports_Dataframe = Error_Reports_Dataframe[[
                 'COUNTER_Namespace',
@@ -191,7 +191,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                 'Code': 'Error_Code',
                 'Data': 'Error_Details',
                 'Message': 'Error_Name'
-            })
+            }, inplace=True)
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
             Error_Log_Dataframe = Error_Log_Dataframe[[
                 'Report_ID',

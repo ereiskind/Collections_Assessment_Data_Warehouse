@@ -103,7 +103,23 @@ def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     return JSON_File_Data
 
 
-#Section: Initialize Variables for Reports Not Captured
+#Subsection: Data Type Conversions
+def JSON_to_Python_Data_Types(JSON):
+    """Returns a JSON-like object that uses Python data types from multiple different forms of input that include JSON formatted data.
+    This function takes a JSON-like Python dictionary, JSON-like Python list, requests object with JSON data, or <insert other objects here> and returns the same data using native Python data types.
+    Arguments:
+        JSON {varies} -- an object containing a JSON or JSON-like data
+    Returns:
+        dictionary or list -- the data in JSON using Python data types
+    """
+    if str(type(JSON)) == "<class 'dict'>":
+        return JSON
+    elif str(type(JSON)) == "<class 'list'>": #Alert: Not yet tested
+        return JSON
+    elif str(type(JSON)) == "<class 'requests.models.Response'>":
+        return JSON.json()
+
+
 #Section: Establish Prerequisites for Script Execution
 #Subsection: Confirm Folder "API_Download" is Empty
 API_Download_Path = str(Path.cwd()) + r"\API_Download"

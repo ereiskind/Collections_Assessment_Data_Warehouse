@@ -69,6 +69,7 @@ def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     Returns:
         dictionary -- the API response JSON file transformed into Python data types
     """
+    #ToDo: This works when using an absolute path as a raw string, but not a relative path constructed via Path() and converted to a string; determine if the issue is the coversion or the relative path
     API_Download_Folder = Path('.', 'API_Download') # There's no apparent way to get the name of the file that gets downloaded, so this file path will need to be just for the downloaded file and hold one file at a time
 
     # From source: "function to handle setting up headless download"
@@ -77,7 +78,7 @@ def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     WebDriver.execute("send_command", params)
     WebDriver.get(URL) # From source: "get request to target the site selenium is active on"
 
-    for Folder, Subfolder, Files in os.walk(API_Download_Folder): #ToDo: Determine why this loop isn't running
+    for Folder, Subfolder, Files in os.walk(API_Download_Folder):
         print(Files)
         with open(Files) as File:
             JSON_File_Data = json.load(File)

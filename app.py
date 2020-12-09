@@ -92,6 +92,7 @@ def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     WebDriver.execute("send_command", params)
     WebDriver.get(URL) # From source: "get request to target the site selenium is active on"
 
+    time.sleep(0.025) # This delay allows the downloaded JSON to be in the folder for long enough that the walk method can detect it
     for Folder, Subfolder, Files in os.walk(API_Download_Folder):
         for File in Files: # There is actually only one file, but the iterator is needed to extract it from the list data structure
             Download_File_Path = str(Path('.', 'API_Download', File))
@@ -205,8 +206,8 @@ for SUSHI_Call_Data in SUSHI_Data:
         Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+"\tTimeout")
         continue    
     except HTTPError as error: # If the API request returns a 4XX HTTP code
-        if format(error.response) == "<Response [403]>":
-            print("Response 403")
+        if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
+            Status_Check = Retrieve_Downloaded_JSON_File(Chrome_Browser_Driver, Status_URL + "?" + Credentials_String)
         else:
             print(f"HTTP Error: {format(error)}")
             Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+"\tHTTP Error")

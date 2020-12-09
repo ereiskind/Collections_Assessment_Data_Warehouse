@@ -93,12 +93,13 @@ def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     WebDriver.get(URL) # From source: "get request to target the site selenium is active on"
 
     for Folder, Subfolder, Files in os.walk(API_Download_Folder):
-        print(Files)
-        with open(Files) as File:
-            JSON_File_Data = json.load(File)
-        os.unlink(API_Download_Folder + Files)
+        for File in Files: # There is actually only one file, but the iterator is needed to extract it from the list data structure
+            Download_File_Path = str(Path('.', 'API_Download', File))
+            with open(Download_File_Path) as JSONfile:
+                JSON_File_Data = json.load(JSONfile)
+            os.unlink(Download_File_Path)
 
-    return "The dictionary with the data from the downloaded JSON file"
+    return JSON_File_Data
 
 
 #Section: Initialize Variables for Reports Not Captured

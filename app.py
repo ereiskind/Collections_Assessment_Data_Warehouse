@@ -270,6 +270,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         
         
         #Section: Read Master Report into Dataframe
+        #Alert: Alma structure so one-to-many between vendors and platforms and each platform has own SUSHI--how is that handled in relation to the model where a single SUSHI can cover multiple platforms? --issue of database schema
         #Subsection: Determine Fields to Import
         Dataframe_Fields = [
             ['Report_Header', 'Created'],

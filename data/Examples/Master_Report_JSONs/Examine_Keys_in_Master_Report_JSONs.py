@@ -34,10 +34,13 @@ for File in JSON_File_Names:
                     CSV_Record['ID'] = ID['Value'].split(":")[0]
         except KeyError:
             CSV_Record['ID'] = None
-        print(CSV_Record)
 
         #Subsection: Get List of Platforms
-        #ToDo: Get JSON_Dictionary['Report_Items'], a list of dictionaries, and save to an iterable
+        for Platforms in JSON_Dictionary['Report_Items']:
+            for Platform in Platforms:
+                print(CSV_Record)
+                print(Platform['Platform']) #Got "indices must be interger" error
+        #ToDo: Get , a list of dictionaries, and save to an iterable
         #ToDo: Iterate through the above, pulling the value for the key 'Platform' and saving it to a list
         #ToDo: Dedupe list (use list comprehension?)
 

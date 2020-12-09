@@ -1,4 +1,3 @@
-#Git repository
 #API repository: https://app.swaggerhub.com/apis/COUNTER/counter-sushi_5_0_api/1.0.0
 
 import requests
@@ -6,7 +5,16 @@ import json
 import csv
 
 #Section: Collect Information Needed for SUSHI Call
-#ToDo: Get SUSHI creds, possible name of file to be saved from external file of type TBD
+SUSHI_Creds_File = open('SUSHI_R5_Credentials.csv','r')
+
+# print(SUSHI_Creds_File.readline())
+# print("something")
+# print(SUSHI_Creds_File.readline())
+
+# Column 1: URL
+# Column 2: Requestor ID
+# Column 3: API Key
+# Column 4: Customer [Reference] ID
 #ToDo: Save SUSHI creds for use in multiple API calls
 # Methiod for saving creds should also handle if call needs requestor ID and/or API key
 
@@ -26,6 +34,26 @@ import csv
 #ToDo: Save reports
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 #Section: Class "Collection Category"
 #This class assumes all are SUSHI R5 compliant--actual dashboard backend will have master class and subclasses for each type of collection
 class Collection_Category:
@@ -96,9 +124,4 @@ elif VerificationType == 3:
 StatusURL = Collection_Category_Name.BaseURL() + '/status'
 StatusResult = requests.get(StatusURL, params=Collection_Category_Name.Call_Parameters_without_Dates())
 print(StatusResult) #Returns status code--checks if everthing's OK
-StatusResult = json.dumps(StatusResult.json(), indent=4) #Returns JSON result of API call and transforms it into JSON; indent argument formats output
-
-#Section: Available Reports
-#Todo: parse return into tuple, then loop to run all possible reports
-
-#Section: Reports 
+StatusResult = json.dumps(StatusResult.json(), indent=4) #Returns JSON result of API call and transforms it into JSON; indent argument formats output"""

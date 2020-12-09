@@ -6,6 +6,7 @@ import csv
 import requests
 from requests import HTTPError, Timeout
 import re
+import pandas
 import pymysql
 
 #Section: Collect Information Needed for SUSHI Call
@@ -83,7 +84,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             continue
         #ToDo: Need a way to capture when the response isn't usage stats (e.g. code 1011, "Report Queued for Processing"; code 1020, "Client has made too many requests")--JSON has fields "Code" with number, "Message" with problem description, "Data" with more details on problem
         # JSONs are truncated when output to terminal 
-        print(json.loads(Master_Report_Response.text))
+        Report_JSON = json.loads(Master_Report_Response.text)
+        print(json.dumps(Report_JSON, indent=4))
 
 
         #Section: Read Master Report into Dataframe

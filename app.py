@@ -121,7 +121,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Available_Master_Reports.append(Report)
     
     #Subsection: Collect Reports
-    URL_Report_Path = re.compile(r'reports/\w{2}$')
+    URL_Report_Path = re.compile(r'reports/\w{2}$') #ToDo: Handle trailing slash by adding it with a ? here, then creating a variable that removes it if it exists
     #ToDo: Allow system or user to change dates
     Credentials["begin_date"] = "2020-01-01"
     Credentials["end_date"] = "2020-01-31"
@@ -280,7 +280,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             ['Report_Items', 'Performance', 'Instance', 'Metric_Type'],
             ['Report_Items', 'Performance', 'Instance', 'Count'],
             ['Report_Items', 'Access_Method'],
-            ['Report_Items', 'Data_Type']
+            ['Report_Items', 'Data_Type'] #ToDo: Determine if issues with some of the reports returning errors are actually issues with missing keys and json_normalize (which shouldn't be happening since errors='ignore')
         ]
 
         if Master_Report_Type == "Database Master Report":

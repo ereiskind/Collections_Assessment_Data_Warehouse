@@ -153,15 +153,20 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error_Reports_Dataframe.drop(columns='Value', inplace=True)
             
             #Subsection: Load Error Reports into MySQL
+            Error_Reports_Dataframe.rename(columns={
+                'Report_Matching_Index': 'Matching',
+                'Report_Header:Created': 'Time_Report_Run',
+                'Report_Header:Created_By': 'Report_Source',
+                'Report_Header:Report_Name': 'Report_Type'
+            })
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
             Error_Reports_Dataframe = Error_Reports_Dataframe[[
                 'COUNTER_Namespace',
-                'Report_Matching_Index',
-                'Report_Header:Created',
-                'Report_Header:Created_By',
-                'Report_Header:Report_Name'
+                'Matching',
+                'Time_Report_Run',
+                'Report_Source',
+                'Report_Type'
             ]]
-            #ToDo: Change field names to match the MySQL table
             Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
             #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated: Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine)
 
@@ -178,19 +183,23 @@ for SUSHI_Call_Data in SUSHI_Data:
             # Above assumes that there won't be more than 10 rows (error codes) returned for a given report
             Error_Log_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
             Error_Log_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
-            #ToDo: Add reports PK to log dataframe as another field by matching on field Report_Matching_Index
+            #ToDo: Add reports PK to log dataframe as field named "Report_ID" by matching on field Report_Matching_Index
             #ToDo: Remove Report_Matching_Index column from dataframe
             
             #Subsection: Load Error Log into MySQL
+            Error_Log_Dataframe.rename(columns={
+                'Code': 'Error_Code',
+                'Data': 'Error_Details',
+                'Message': 'Error_Name'
+            })
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
             Error_Log_Dataframe = Error_Log_Dataframe[[
-                # Report_ID FK column goes here
-                'Code',
-                'Data', #Details
-                'Message', #Name
+                'Report_ID',
+                'Error_Code',
+                'Error_Details',
+                'Error_Name',
                 'Severity'
             ]]
-            #ToDo: Change field names to match the MySQL table
             Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
 
             #Subsection: Null Values Used to Designate New Primary Keys in Error Report

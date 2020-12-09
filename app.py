@@ -17,18 +17,19 @@ for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_
     SUSHI_Data.append(Data)
 
 #Section: Make API Calls
-#ToDo: Initiate for loop looking at dictionaries within SUSHI_Credentials
-#Subsection: Determine SUSHI Availability
-#ToDo: Run API call for status
-#ToDo: If return value not 200, break and return error message to user
+for SUSHI_Call_Data in SUSHI_Data:
+    Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"} # This creates another dictionary without the URL to be used in the URL's query string
+    #Subsection: Determine SUSHI Availability
+    #ToDo: Run API call for status
+    #ToDo: If return value not 200, break and return error message to user
 
-#Subsection: Get List of R5 Reports Available
-#ToDo: Run API call for list of available R5 reports
-#ToDo: Save results into a tuple
+    #Subsection: Get List of R5 Reports Available
+    #ToDo: Run API call for list of available R5 reports
+    #ToDo: Save results into a tuple
 
-#Subsection: Collect Reports
-#ToDo: For each item in available reports tuple, request report with as much detail as possible
-#ToDo: Save reports
+    #Subsection: Collect Reports
+    #ToDo: For each item in available reports tuple, request report with as much detail as possible
+    #ToDo: Save reports
 
 
 

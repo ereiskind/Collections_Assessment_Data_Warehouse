@@ -15,7 +15,11 @@ import Database_Credentials #Alert: From original repository with flat structure
 def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
     """A pandas to_sql function call bracketed by the creation and destruction of a SQLAlchemy session object.
     
-    This function loads the data contained in Dataframe, a pandas dataframe, into DBTable, a table (relation) in the MySQL database which is being called by DBEngine, a SQLAlchemy engine object. Dataframe's record index values aren't included.
+    This function loads the data contained in Dataframe into DBTable, which is in the MySQL database referenced by DBEngine. Dataframe's record index values aren't included.
+    Arguments:
+        Dataframe {pandas dataframe} -- dataframe to be loaded into MySQL
+        DBTable {string} -- name of the MySQL table (relation) the data's being loaded into
+        DBEngine {SQLAlchemy engine} -- engine object for MySQL database
     """
     Connection = DBEngine.connect()
     Dataframe.to_sql(

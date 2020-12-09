@@ -86,7 +86,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         #Section: Read Master Report into Dataframe
         Report_JSON = json.loads(Master_Report_Response.text)
         #Subsection: If Report Contains Error Codes, Record Errors and Move to Next Report
-        # In error responses, no data is being reported, so Report_Header is the only top-level key; when data is return, it's joined by Report_Items
+        # In error responses, no data is being reported, so Report_Header is the only top-level key; when data is returned, it's joined by Report_Items
         Top_Level_Keys = 0
         for value in Report_JSON.values():
             Top_Level_Keys += 1

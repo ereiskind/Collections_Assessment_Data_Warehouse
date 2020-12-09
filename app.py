@@ -249,7 +249,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             Load_Dataframe_into_MySQL(Error_Log_Dataframe, 'sushierrorlog', Engine)
 
             #Subsection: Null Values Used to Designate New Primary Keys in Error Report
-            #ToDo: Null values in "Match" column of SUSHIErrorReports table for those reports just loaded
+            Query_for_Clearing = f"UPDATE sushierrorreports SET Matching = null WHERE SUSHIErrorReports_ID = {Foreign_Key_Dataframe.SUSHIErrorReports_ID.iloc[0]};"
+            Execute_SQL_Statement(Query_for_Clearing, Connection)
 
             print("The report returned an error. See the SUSHI error reports log in the data warehouse for more details.")
             continue

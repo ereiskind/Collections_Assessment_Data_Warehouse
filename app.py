@@ -122,14 +122,16 @@ for SUSHI_Call_Data in SUSHI_Data:
         if "Master Report" in Report["Report_Name"]:
             Available_Master_Reports.append(Report)
     
-    #Subsection: Collect Reports
+    #Subsection: Collect Individual Master Reports
     # A regex is used to construct the API URL so only the appropriate part of the "Path" attribute is added to the base URL (some platforms have a "Path" attribute that include the domain, others include a trailing slash)
     URL_Report_Path_Regex = re.compile(r'reports/\w{2}/?$')
     #ToDo: Allow system or user to change dates
     Credentials["begin_date"] = "2020-01-01"
     Credentials["end_date"] = "2020-01-31"
-    for Master_Report in Available_Master_Reports: # This cycles through each of the master reports offered by the platform
-        Master_Report_Type = Master_Report["Report_Name"] # This adds all of the possible attributes for a given master report to the URL used to request that master report
+
+    for Master_Report in Available_Master_Reports: 
+        Master_Report_Type = Master_Report["Report_Name"]
+        # This cycles through each of the master reports offered by the platform, adding the URL query parameters needed to get the most granular version of the given master report
         if Master_Report_Type.startswith("Platform Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
             Credentials["include_parent_details"] = "False"

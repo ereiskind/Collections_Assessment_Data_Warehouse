@@ -44,13 +44,22 @@ for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_
     SUSHI_Data.append(Data)
 
 
-#Section: Create the SQLAlchemy Engine
+#Section: Create the PyMySQL Connection and SQLAlchemy Engine
+Database = 'testdatawarehouse'
+
+Connection = pymysql.connect(
+    host=Database_Credentials.Host,
+    user=Database_Credentials.Username,
+    password=Database_Credentials.Password,
+    db=Database
+)
+
 Engine = create_engine(
     'mysql+pymysql://' +
     Database_Credentials.Username + ':' +
     Database_Credentials.Password + '@' +
     Database_Credentials.Host + ':' + str(Database_Credentials.Post) + '/' +
-    'testdatawarehouse',
+    Database,
     echo=False
 )
 
@@ -287,3 +296,5 @@ for SUSHI_Call_Data in SUSHI_Data:
 
 
         #Section: Export Dataframe to MySQL
+
+Connection.close()

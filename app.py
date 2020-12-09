@@ -5,16 +5,21 @@ import json
 import csv
 
 #Section: Collect Information Needed for SUSHI Call
-SUSHI_Creds_File = open('SUSHI_R5_Credentials.csv','r')
+SUSHI_Credentials_File = open('SUSHI_R5_Credentials.csv','r')
+SUSHI_Credentials = []
+for Set in [SUSHI_Credential_Set.rstrip().split(",") for SUSHI_Credential_Set in SUSHI_Credentials_File]: # This turns each line oc the CSV into a dictionary within a list
+    if Set[1] == "":
+        Credentials = dict(URL = Set[0], APIKey = Set[2], CustomerID = Set[3])
+    elif Set[2] == "":
+        Credentials = dict(URL = Set[0], RequestorID = Set[1], CustomerID = Set[3])
+    else:
+        Credentials = dict(URL = Set[0], RequestorID = Set[1], APIKey = Set[2], CustomerID = Set[3])
+    SUSHI_Credentials.append(Credentials)
 
 # print(SUSHI_Creds_File.readline())
 # print("something")
 # print(SUSHI_Creds_File.readline())
 
-# Column 1: URL
-# Column 2: Requestor ID
-# Column 3: API Key
-# Column 4: Customer [Reference] ID
 #ToDo: Save SUSHI creds for use in multiple API calls
 # Methiod for saving creds should also handle if call needs requestor ID and/or API key
 

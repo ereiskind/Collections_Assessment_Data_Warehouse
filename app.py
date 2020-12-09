@@ -56,6 +56,7 @@ def Handle_Status_Check_Error(URL, Message, Code):
 
 #Section: Collect Information Needed for SUSHI Call
 # Later, this will be replaced with a call to the Alma API--see Credentials_Through_Alma_API.py
+#ToDo: Use credential set containing comma in mock Alma API response
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r', encoding='utf-8-sig') # Without encoding, characters added to front of first URL, causing API call to fail
 SUSHI_Data = []
 for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns the CSV into a list where each line is a dictionary
@@ -110,6 +111,8 @@ for SUSHI_Call_Data in SUSHI_Data:
     Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"} # This creates another dictionary without the URL to be used in the URL's query string
     #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself--leads to requests getting a 403 error on a URL that works generates JSON download without a problem when used manually
     #ToDo: Check if both Requestor ID and API Key are in credentials; if so, uses Selenium to get JSONs
+    #Alert: Sheridan PubFactory returns "403 Client Error: Forbidden for url" with URLs that are fine when entered manually
+    #ToDo: If "403 Client Error: Forbidden for url" is the result, try again with Selenium
     #Subsection: Determine SUSHI Availability
     Status_URL = SUSHI_Call_Data["URL"] + "status"
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
@@ -118,6 +121,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         Status_Check.raise_for_status()
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         print(f"HTTP Error: {format(error)}")
+        #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
         #ToDo: Add platform and error to Platforms_Not_Collected
         continue
     except Timeout as error: # If the API request times out

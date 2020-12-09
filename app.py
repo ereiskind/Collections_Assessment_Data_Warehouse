@@ -131,19 +131,18 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     for Master_Report in Available_Master_Reports: 
         Master_Report_Type = Master_Report["Report_Name"]
+        # If the parameters for showing parent details in Item Master Report are in other master reports, an error message saying the parameter's been ignored is included in the report header; the below takes them out of the query
+        if "include_parent_details" in Credentials:
+            del Credentials["include_parent_details"]
+            del Credentials["include_component_details"]
+        
         # This cycles through each of the master reports offered by the platform, adding the URL query parameters needed to get the most granular version of the given master report
         if Master_Report_Type.startswith("Platform Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
-            Credentials["include_parent_details"] = "False"
-            Credentials["include_component_details"] = "False"
         elif Master_Report_Type.startswith("Database Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
-            Credentials["include_parent_details"] = "False"
-            Credentials["include_component_details"] = "False"
         elif Master_Report_Type.startswith("Title Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type|Section_Type"
-            Credentials["include_parent_details"] = "False"
-            Credentials["include_component_details"] = "False"
         elif Master_Report_Type.startswith("Item Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
             Credentials["include_parent_details"] = "True"

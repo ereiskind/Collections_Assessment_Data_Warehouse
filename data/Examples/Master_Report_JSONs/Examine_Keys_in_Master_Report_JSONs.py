@@ -16,13 +16,14 @@ from pathlib import Path
 import csv
 
 
-#Section: Initialize Lists
-JSON_File_Names = []
-CSV_Record_List = []
+#Section: Create CSV
+#ToDo: Create CSV and open it
+#ToDo: Create CSV Dictwriter with headers
 
 
 #Section: Open JSON
 #Subsection: Get list of JSON Files in Folder
+JSON_File_Names = []
 Current_Folder = os.path.dirname(os.path.realpath(__file__)) # Goes down to this specific subfolder--getcwd pulls all folders, including git
 for Folder, Subfolders, Files in os.walk(Current_Folder):
     for File in Files:
@@ -56,10 +57,8 @@ for File in JSON_File_Names:
 
         #Subsection: Get List of Platforms
         if len(JSON_Dictionary['Report_Items']) == 0: # If the Report_Items section is empty
-            CSV_Record = {}
-            Move_Key_Value_Pairs(Header_Data, CSV_Record)
             CSV_Record['Resource_Platform'] = "Empty report"
-            CSV_Record_List.append(CSV_Record)
+            #ToDo: Write CSV_Record to CSV
             continue
 
         Platform_List = []
@@ -68,12 +67,7 @@ for File in JSON_File_Names:
                 if Key == "Platform":
                     Platform_List.append(Value)
         
-        CSV_Record = {}
-        Move_Key_Value_Pairs(Header_Data, CSV_Record)
         for Found_Platform in Platform_List:
             CSV_Record['Resource_Platform'] = Found_Platform
-            #ToDo: When the above step runs, the 'Resource_Platform' values within both CSV_Record and all the dictionaries within CSV_Record_List change--desired behavior is only the former changes
-
-#Section: Create CSV
-for Record in CSV_Record_List:
-    print(Record)
+            
+            #ToDo: Write CSV_Record to CSV

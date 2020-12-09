@@ -51,7 +51,7 @@ def Execute_SQL_Statement(SQLStatement, DBConnection):
 
 #Section: Collect Information Needed for SUSHI Call
 # Later, this will be replaced with a call to the Alma API--see Credentials_Through_Alma_API.py
-SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
+SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r', encoding='utf-8-sig') # Without encoding, characters added to front of first URL, causing API call to fail
 SUSHI_Data = []
 for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns the CSV into a list where each line is a dictionary
     if Set[1] == "":

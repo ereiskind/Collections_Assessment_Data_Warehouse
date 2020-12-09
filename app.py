@@ -103,22 +103,25 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error_Reports_Dataframe.drop(columns='Type', inplace=True)
             Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe['Report_Header:Institution_ID'].to_string()
             Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe.Report_Matching_Index.str.slice(start=1) + Error_Reports_Dataframe['Report_Header:Report_ID']
-            # Above assumes that there won't be more than 10 rows (error codes) returned for a given report
             Error_Reports_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
             Error_Reports_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
             Error_Reports_Dataframe['COUNTER_Namespace'] = Error_Reports_Dataframe.Value.str.split(":").str[0]
             Error_Reports_Dataframe.drop(columns='Value', inplace=True)
-            Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
             # Columns (in order): Report_Header:Created, Report_Header:Created_By, Report_Header:Report_Name, Report_Matching_Index, COUNTER_Namespace
+            Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
 
             Error_Log_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
                 ['Report_Header', 'Institution_ID'],
                 ['Report_Header', 'Report_ID'],
             ])
+            Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe['Report_Header:Institution_ID'].to_string()
+            Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe.Report_Matching_Index.str.slice(start=1) + Error_Log_Dataframe['Report_Header:Report_ID']
+            # Above assumes that there won't be more than 10 rows (error codes) returned for a given report
+            Error_Log_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
+            Error_Log_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
+            # Columns (in order): Code, Data, Message, Severity, Report_Matching_Index
             Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
 
-            #ToDo: Create record index for both dataframes combining Institution_ID and Report_ID
-            #ToDo: Remove Report_ID and Institution_ID fields from both dataframes
             #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated
             #ToDo: Read PK and index back from MySQL
             #ToDo: Add reports PK to log dataframe as another field

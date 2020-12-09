@@ -152,7 +152,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             print("Invalid Master Report Type: " + Master_Report_Type)
             continue
         
-        URL_Report_Path = URL_Report_Path_Regex.findall(Master_Report["Path"])[0]
+        URL_Report_Path = URL_Report_Path_Regex.findall(Master_Report["Path"])[0] #Alert: KeyError 'Path' possible here
         if URL_Report_Path.endswith("/"):
             URL_Report_Path = URL_Report_Path[0:-1]
         Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path

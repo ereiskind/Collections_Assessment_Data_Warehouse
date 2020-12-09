@@ -171,7 +171,14 @@ for SUSHI_Call_Data in SUSHI_Data:
             Load_Dataframe_into_MySQL(Error_Reports_Dataframe, 'sushierrorreports', Engine)
 
             #Subsection: Get New Error Reports Primary Keys from MySQL
-            #ToDo: Read PK and index back from MySQL
+            # The sushierrorreports table contains all the API calls for master reports that returned errors. Those records that haven't been connected to items in the sushierrorlog table contain the information needed to make this connection in the "Matching" field; reports that have been connected have a null "Matching" field.
+            Query_for_Foreign_Keys = "SELECT SUSHIErrorReports_ID, Matching FROM sushierrorreports WHERE Matching IS NOT null;"
+            Foreign_Key_Dataframe = pandas.read_sql(
+                Query_for_Foreign_Keys,
+                con=Engine,
+                index_col='SUSHIErrorReports_ID',
+                columns='Matching'
+            )
 
             #Subsection: Clean Data for Error Log
             Error_Log_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[

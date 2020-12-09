@@ -48,22 +48,22 @@ for File in JSON_File_Names:
 
 
         #Section: Read Data from JSON Dictionary
-        Header_Data = {}
-        Header_Data['Source_JSON'] = File
+        CSV_Record = {}
+        CSV_Record['Source_JSON'] = File
         
         #Subsection: Read Data from Header
-        Header_Data['Report_Creator'] = JSON_Dictionary['Report_Header']['Created_By']
-        Header_Data['Report_Type'] = JSON_Dictionary['Report_Header']['Report_ID']
+        CSV_Record['Report_Creator'] = JSON_Dictionary['Report_Header']['Created_By']
+        CSV_Record['Report_Type'] = JSON_Dictionary['Report_Header']['Report_ID']
 
         try:
             for ID in JSON_Dictionary['Report_Header']['Institution_ID']:
                 if ID['Type'] == "Proprietary":
-                    Header_Data['Source_COUNTER_Namespace'] = ID['Value'].split(":")[0]
+                    CSV_Record['Source_COUNTER_Namespace'] = ID['Value'].split(":")[0]
         except KeyError:
             if ":" in JSON_Dictionary['Report_Header']['Customer_ID']:
-                Header_Data['Source_COUNTER_Namespace'] = JSON_Dictionary['Report_Header']['Customer_ID'].split(":")[0]
+                CSV_Record['Source_COUNTER_Namespace'] = JSON_Dictionary['Report_Header']['Customer_ID'].split(":")[0]
             else:
-                Header_Data['Source_COUNTER_Namespace'] = "No COUNTER Namespace"
+                CSV_Record['Source_COUNTER_Namespace'] = "No COUNTER Namespace"
 
         #Subsection: Get List of Platforms
         if len(JSON_Dictionary['Report_Items']) == 0: # If the Report_Items section is empty

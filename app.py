@@ -82,12 +82,24 @@ for SUSHI_Call_Data in SUSHI_Data:
             print(f"Server didn't respond to request for master report after 10 seconds ({format(error)}).")
             #ToDo: Try to get type of master report in string--using Master_Report["Report_Name"] in curly brackets led to an error
             continue
-        #ToDo: Need a way to capture when the response isn't usage stats (e.g. code 1011, "Report Queued for Processing"; code 1020, "Client has made too many requests")--JSON has fields "Code" with number, "Message" with problem description, "Data" with more details on problem
-        # JSONs are truncated when output to terminal 
-        Report_JSON = json.loads(Master_Report_Response.text)
-
 
         #Section: Read Master Report into Dataframe
+        Report_JSON = json.loads(Master_Report_Response.text)
+        #Subsection: If Report Contains Error Codes, Record Errors and Move to Next Report
+        # In error responses, no data is being reported, so Report_Header is the only top-level key; when data is return, it's joined by Report_Items
+        Top_Level_Keys = 0
+        for value in Report_JSON.values():
+            Top_Level_Keys += 1
+
+        if Top_Level_Keys == 1:
+            Error_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header'])
+            Error_Dataframe.to_csv('Check_Dataframe.csv', 'a') # Using to more clearly investigate contents
+            #ToDo: Determine best way to load JSON to a CSV to record useful information about errors
+            #ToDo: Create CSV to serve as error log--should it be in gitignore?
+            print("Break to look at CSV")
+            print("The report returned an error. See the error log in Report_Errors.csv for more details.")
+            continue
+        
         #Subsection: Determine Fields to Import
         Dataframe_Fields = [['Report_Header', 'Created'], ['Report_Items', 'Platform'], ['Report_Items', 'Performance', 'Period', 'Begin_Date'], ['Report_Items', 'Performance', 'Period', 'End_Date'], ['Report_Items', 'Performance', 'Instance', 'Metric_Type'], ['Report_Items', 'Performance', 'Instance', 'Count'], ['Report_Items', 'Access_Method'], ['Report_Items', 'Data_Type']]
 

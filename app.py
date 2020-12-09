@@ -99,10 +99,17 @@ for SUSHI_Call_Data in SUSHI_Data:
                 ['Report_Header', 'Report_ID'],
                 ['Report_Header', 'Report_Name']
             ])
-            #ToDo: Filter out records where Error_Reports_Dataframe != "Proprietary"
-            #ToDo: Remove Error_Reports_Dataframe.Type
-            #ToDo: Create COUNTER namespace field with Error_Reports_Dataframe.Value.str.split(":")[0] and append it to dataframe
+            Error_Reports_Dataframe.drop(Error_Reports_Dataframe[Error_Reports_Dataframe.Type != "Proprietary"].index, inplace=True)
+            Error_Reports_Dataframe.drop(columns='Type', inplace=True)
+            Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe['Report_Header:Institution_ID'].to_string()
+            Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe.Report_Matching_Index.str.slice(start=1) + Error_Reports_Dataframe['Report_Header:Report_ID']
+            # Above assumes that there won't be more than 10 rows (error codes) returned for a given report
+            Error_Reports_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
+            Error_Reports_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
+            Error_Reports_Dataframe['COUNTER_Namespace'] = Error_Reports_Dataframe.Value.str.split(":").str[0]
+            Error_Reports_Dataframe.drop(columns='Value', inplace=True)
             Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
+            # Columns (in order): Report_Header:Created, Report_Header:Created_By, Report_Header:Report_Name, Report_Matching_Index, COUNTER_Namespace
 
             Error_Log_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
                 ['Report_Header', 'Institution_ID'],

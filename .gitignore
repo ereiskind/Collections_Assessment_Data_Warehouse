@@ -1,2 +1,7 @@
 # Private data copied from runtime environment repository
 data/Database_Credentials.py
+
+# Examples from Alma containing only sample data--these can be safely saved to this repository
+!data/Examples/Alma_Vendor_Sample.json
+!data/Examples/Alma_Vendor_API_Call_Sample.json
+!data/Examples/Alma_Vendor_Common_Keys.json

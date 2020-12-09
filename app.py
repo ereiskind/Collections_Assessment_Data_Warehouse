@@ -17,6 +17,16 @@ import Database_Credentials #Alert: FROM ORIGINAL REPOSITORY with flat structure
 
 
 #Section: Functions
+def API_Download_Not_Empty():
+    """Prints a message indicating that the "API_Download" folder isn't empty and that it needs to be for the program to work properly, then exits the program.
+    
+    Returns:
+        None
+    """
+    print("The \"API_Downloads\" folder has something in it; it must be empty for this program to work properly. Please remove everthing from that folder, then try to run this program again.")
+    sys.exit()
+
+
 def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
     """A pandas to_sql function call bracketed by the creation and destruction of a SQLAlchemy session object.
     

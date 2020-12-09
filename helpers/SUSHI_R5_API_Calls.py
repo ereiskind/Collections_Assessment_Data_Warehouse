@@ -35,6 +35,8 @@ def Retrieve_Downloaded_JSON_File(WebDriver, URL):
 
     time.sleep(0.1) # This delay allows the downloaded JSON to be in the folder for long enough that the walk method can detect it
     for Folder, Subfolder, Files in os.walk(API_Download_Folder):
+        if Files == []: # This means the 403 error was the result of something other than the data being downloaded as a JSON file
+            return Files
         for File in Files: # There is actually only one file, but the iterator is needed to extract it from the list data structure
             Download_File_Path = str(Path('.', 'API_Download', File))
             with open(Download_File_Path) as JSONfile:
@@ -83,6 +85,8 @@ def Status(URL, Parameters, WebDriver):
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
             Status_Check = Retrieve_Downloaded_JSON_File(WebDriver, Status_URL + "?" + Parameters)
+            if Status_Check == []:
+                return URL + f"{format(error)}"
         else:
             print(f"HTTP Error: {format(error)}")
             return "URL"+"|HTTP Error"

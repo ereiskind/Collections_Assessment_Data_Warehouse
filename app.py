@@ -147,6 +147,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
             # If either of the below isn't used, it's presence will add a 3050 warning to the JSON; since there's no good way to tell which IRs use which parameter, using both and letting the warning pass silently is the best option
             Credentials["include_parent_details"] = "True"
+            #Alert: PQ IR had {"Name": "Include_Component_Details", "Value": "No"} as Report_Attributes item
             Credentials["include_component_details"] = "True"
         else:
             print("Invalid Master Report Type: " + Master_Report_Type)

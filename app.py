@@ -101,44 +101,20 @@ def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     return "The dictionary with the data from the downloaded JSON file"
 
 
-
 #Section: Initialize Variables for Reports Not Captured
+#Section: Establish Prerequisites for Script Execution
+#Subsection: Confirm Folder "API_Download" is Empty
+API_Download_Path = str(Path.cwd()) + r"\API_Download"
+for Folder, Subfolder, Files in os.walk(API_Download_Path):
+    if len(Files) > 0:
+        API_Download_Not_Empty()
+    elif len(Subfolder) > 0:
+        API_Download_Not_Empty()
+
+#Subsection: Initialize Variables for Reports Not Captured
 #ToDo: Save the current time to variable Script_Start_Time
 Platforms_Not_Collected = [] # This will contain the URLs for failed API calls
 
-
-#Section: Collect Information Needed for SUSHI Call
-# Later, this will be replaced with a call to the Alma API--see Credentials_Through_Alma_API.py
-#ToDo: Use credential set containing comma in mock Alma API response
-SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r', encoding='utf-8-sig') # Without encoding, characters added to front of first URL, causing API call to fail
-SUSHI_Data = []
-for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns the CSV into a list where each line is a dictionary
-    try: # If none of the credential sets have a platform, the if statement below causes a key error
-        if Set[4] != "":
-            if Set[1] == "":
-                Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3], platform = Set[4])
-            elif Set[2] == "":
-                Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3], platform = Set[4])
-            else:
-                Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3], platform = Set[4])
-        else:
-            if Set[1] == "":
-                Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
-            elif Set[2] == "":
-                Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
-            else:
-                Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
-    except:
-        if Set[1] == "":
-            Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
-        elif Set[2] == "":
-            Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
-        else:
-            Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
-    SUSHI_Data.append(Data)
-
-
-#Section: Create Connectors
 #Subsection: Create the PyMySQL Connection and SQLAlchemy Engine
 Database = 'testdatawarehouse'
 
@@ -180,6 +156,38 @@ chrome_options.add_argument('--disable-software-rasterizer')
 #Alert: FROM ORIGINAL REPOSITORY; path to chromedriver probably needs to be changed, probably to "../usr/local/bin/"
 Path_to_ChromeDriver = Path('..', 'AppData', 'Local', 'chromedriver.exe') # For this path to work, the repo must be in the directory named for the user, and the "Local" directory must be in PATH
 Chrome_Browser_Driver = webdriver.Chrome(options=chrome_options, executable_path=Path_to_ChromeDriver)
+
+
+#Section: Collect Information Needed for SUSHI Call
+# Later, this will be replaced with a call to the Alma API--see Credentials_Through_Alma_API.py
+#ToDo: Use credential set containing comma in mock Alma API response
+SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r', encoding='utf-8-sig') # Without encoding, characters added to front of first URL, causing API call to fail
+SUSHI_Data = []
+for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns the CSV into a list where each line is a dictionary
+    try: # If none of the credential sets have a platform, the if statement below causes a key error
+        if Set[4] != "":
+            if Set[1] == "":
+                Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3], platform = Set[4])
+            elif Set[2] == "":
+                Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3], platform = Set[4])
+            else:
+                Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3], platform = Set[4])
+        else:
+            if Set[1] == "":
+                Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
+            elif Set[2] == "":
+                Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
+            else:
+                Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
+    except:
+        if Set[1] == "":
+            Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
+        elif Set[2] == "":
+            Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
+        else:
+            Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
+    SUSHI_Data.append(Data)
+
 
 #Section: Make API Calls
 for SUSHI_Call_Data in SUSHI_Data:

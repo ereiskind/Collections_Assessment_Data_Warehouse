@@ -101,7 +101,16 @@ for SUSHI_Call_Data in SUSHI_Data:
             continue
         
         #Subsection: Determine Fields to Import
-        Dataframe_Fields = [['Report_Header', 'Created'], ['Report_Items', 'Platform'], ['Report_Items', 'Performance', 'Period', 'Begin_Date'], ['Report_Items', 'Performance', 'Period', 'End_Date'], ['Report_Items', 'Performance', 'Instance', 'Metric_Type'], ['Report_Items', 'Performance', 'Instance', 'Count'], ['Report_Items', 'Access_Method'], ['Report_Items', 'Data_Type']]
+        Dataframe_Fields = [
+            ['Report_Header', 'Created'],
+            ['Report_Items', 'Platform'],
+            ['Report_Items', 'Performance', 'Period', 'Begin_Date'],
+            ['Report_Items', 'Performance', 'Period', 'End_Date'],
+            ['Report_Items', 'Performance', 'Instance', 'Metric_Type'],
+            ['Report_Items', 'Performance', 'Instance', 'Count'],
+            ['Report_Items', 'Access_Method'],
+            ['Report_Items', 'Data_Type']
+        ]
 
         if Master_Report_Type == "Database Master Report":
             Dataframe_Fields.append(['Report_Items', 'Database'])

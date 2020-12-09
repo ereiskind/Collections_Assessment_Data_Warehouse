@@ -57,16 +57,14 @@ for File in JSON_File_Names:
         #Subsection: Get List of Platforms
         if len(JSON_Dictionary['Report_Items']) == 0: # If the Report_Items section is empty
             CSV_Record['Platform'] = "Empty report"
+            CSV_Records.append(CSV_Record)
             continue
-        
+
         for Platforms in JSON_Dictionary['Report_Items']:
-            List_of_Platforms = []
             for Key, Value in Platforms.items():
-                print(CSV_Record)
                 if Key == "Platform":
-                    List_of_Platforms.append(Value)
-                print(List_of_Platforms)
-        #ToDo: Dedupe list (use list comprehension?)--all the List_of_Platform values for the samples contain a single platform--inspect SAGE/CQ and Oxford, get a mix of types of master reports
+                    CSV_Record['Platform'] = Value
+                    CSV_Records.append(CSV_Record)
 
 #Section: Create CSV
 #ToDo: Create CSV using CSV_Records

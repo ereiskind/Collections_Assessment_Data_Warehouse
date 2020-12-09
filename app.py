@@ -104,7 +104,15 @@ for SUSHI_Call_Data in SUSHI_Data:
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
         #ToDo: Add platform and error to Platforms_Not_Collected
         continue
-    #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself; as a result, requests can't find the data
+
+    #Subsection: Confirm Returned Data Means OK to Continue
+    #ToDo: Check if returned JSON is for a status code that indicates credentials that don't work (see https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ for those codes)
+    #ToDo: If the credentials aren't valid:
+        #ToDo: Add platform and error to Platforms_Not_Collected
+        #ToDo: Print message about invalid credentials
+        #ToDo: continue
+
+    #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself--believed this meant requests couldn't find the data, needs to be confirmed
     #ToDo: Possibly handle above by checking if Status_Check.json() is empty
 
     #Subsection: Get List of R5 Reports Available

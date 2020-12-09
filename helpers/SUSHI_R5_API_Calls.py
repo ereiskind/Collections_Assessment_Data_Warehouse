@@ -1,12 +1,19 @@
 # This serves as the library for the API calls and the ensuing status checks
 
+import time
+import requests
+from requests import HTTPError, Timeout
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
 #Section: API Calls
-def Status(URL, Parameters):
+def Status(URL, Parameters, WebDriver):
     """Performs the SUSHI R5 API call to check for SUSHI server status and performs error checking on the response to ensure that it's valid.
+    
     Arguments:
         URL {string} -- the root URL for the SUSHI API
         Parameters {string} -- the parameters that need to be passed as part of the API call
-    
+        WebDriver {WebDriver} -- Selenium WebDriver object
     
     Returns:
         dictionary or list -- the data in JSON using Python data types
@@ -22,12 +29,12 @@ def Status(URL, Parameters):
         return "URL"+"|Status Check Timeout"
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
-            Status_Check = Retrieve_Downloaded_JSON_File(Chrome_Browser_Driver, Status_URL + "?" + Credentials_String)
+            Status_Check = Retrieve_Downloaded_JSON_File(WebDriver, Status_URL + "?" + Parameters)
         else:
             print(f"HTTP Error: {format(error)}")
             return "URL"+"|HTTP Error"
     except: # If there's some other problem with the API request
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
-        return "URL"+"|Something Else")    
+        return "URL"+"|Something Else"    
 
-    Status_Check = JSON_to_Python_Data_Types(Status_Check)
+    return JSON_to_Python_Data_Types(Status_Check)

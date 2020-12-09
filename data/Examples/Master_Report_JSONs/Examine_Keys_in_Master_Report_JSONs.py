@@ -1,5 +1,15 @@
 # Loops through all of the JSONs in the folder; for each one, pulls "Report_Header:Created_By" and "Report_Header:Institution_ID:Value" for Institution_ID Type=Proprietary, then creates a CSV row for each instance of "Report_Items:Platform" with the above data points included
 
+"""To obtain JSONs, the following goes at the very end of the "Make API Calls" section of app.py:
+
+from pathlib import Path
+print(type(Report_JSON))
+Namespace = str(Report_JSON['Report_Header']['Institution_ID'][0]['Value']).split(":")[0]
+File_Name = Path('Examples', 'Example_JSONs', f"{Report_JSON['Report_Header']['Report_ID']}_{Namespace}.json")
+with open(File_Name, 'w') as writeJSON:
+    json.dump(Master_Report_Response.json(), writeJSON)
+"""
+
 import os
 import json
 

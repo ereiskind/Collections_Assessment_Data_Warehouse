@@ -166,6 +166,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Top_Level_Keys += 1
 
         #Subsection: Clean Data for Error Reports
+        #ToDo: EBSCO error report not wrapped in "Report_Header"--instance of malformed JSON that should be reported?
         if Top_Level_Keys == 1:
             Error_Reports_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=[
                 ['Report_Header', 'Created'],

@@ -163,6 +163,9 @@ for SUSHI_Call_Data in SUSHI_Data:
     #Subsection: Determine SUSHI Availability
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
     Status_Check = SUSHI_R5_API_Calls.Status(SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+    if str(type(Status_Check)) == "<class 'str'>": # Meaning the API call returned an error
+        Platforms_Not_Collected.append(Status_Check)
+        continue
 
     #Subsection: Check if Status_Check Returns COUNTER Error
     # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes

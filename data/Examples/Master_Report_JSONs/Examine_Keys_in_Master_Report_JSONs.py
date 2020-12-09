@@ -37,11 +37,8 @@ for File in JSON_File_Names:
 
         #Section: Read Data from JSON Dictionary
         CSV_Record = {}
-        # CSV_Record['Report_Creator'] contains the Created_By value
-        # CSV_Record['Report_Type'] contains the master report ID
-        # CSV_Record['Source_COUNTER_Namespace'] contains the COUNTER namespace for the source of the report
-        # CSV_Record['Platform'] contains the platform
-
+        CSV_Record['Source_JSON'] = File
+        
         #Subsection: Read Data from Header
         CSV_Record['Report_Creator'] = JSON_Dictionary['Report_Header']['Created_By']
         CSV_Record['Report_Type'] = JSON_Dictionary['Report_Header']['Report_ID']
@@ -71,7 +68,13 @@ for File in JSON_File_Names:
 #Section: Create CSV
 CSV_File_Path = Path('Examples', 'Example_JSONs', 'JSON_Keys.csv')
 CSV = open(CSV_File_Path, 'w', newline='')
-CSV_Writer = csv.DictWriter(CSV, ['Report_Creator', 'Report_Type', 'Source_COUNTER_Namespace', 'Resource_Platform'])
+CSV_Writer = csv.DictWriter(CSV, [
+    'Source_JSON', # Contains the name of the JSON file the data came from
+    'Report_Creator', # Contains the Created_By value
+    'Report_Type', # Contains the master report ID
+    'Source_COUNTER_Namespace', # Contains the COUNTER namespace for the source of the report
+    'Resource_Platform' # Contains the platform
+])
 CSV_Writer.writeheader()
 for Record in CSV_Records:
     CSV_Writer.writerow(Record)

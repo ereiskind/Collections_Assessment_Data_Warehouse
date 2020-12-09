@@ -30,7 +30,7 @@ for Folder, Subfolders, Files in os.walk(Current_Folder):
 #Subsection: Loop Through Opening JSON Files in Folder
 for File in JSON_File_Names:
     File_Path = os.path.dirname(os.path.realpath(__file__)) + "\\" + File
-    with open(File_Path) as JSON_File:
+    with open(File_Path, encoding='utf8') as JSON_File:
         JSON_Dictionary = json.load(JSON_File)
 
 

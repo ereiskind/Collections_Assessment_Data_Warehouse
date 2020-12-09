@@ -42,9 +42,10 @@ for SUSHI_Call_Data in SUSHI_Data:
     #Subsection: Get List of R5 Reports Available
     Reports_URL = SUSHI_Call_Data["URL"] + "reports"
     try:
-        Available_Reports = requests.get(Reports_URL, params=Credentials, timeout=15)
+        Available_Reports = requests.get(Reports_URL, params=Credentials, timeout=90)
     except Timeout as error:
-        print(f"Server didn't respond to request for {Master_Report_Type} after 15 seconds [{format(error)}].")
+        print(f"Server didn't respond to request for {Master_Report_Type} after 90 seconds [{format(error)}].")
+            # Larger reports seem to take longer to respond, so the timeout interval is long
         continue
     
     Available_Master_Reports = [] # This list will contain the dictionaries for the master reports available on the platform, which will be the only reports pulled

@@ -11,6 +11,7 @@ import pymysql
 from sqlalchemy import create_engine
 import Database_Credentials #Alert: From original repository with flat structure; this file is now located at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
 
+
 #Section: Functions
 def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
     """A pandas to_sql function call bracketed by the creation and destruction of a SQLAlchemy session object.
@@ -29,6 +30,18 @@ def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
         index=False
     )
     Connection.close()
+
+
+def Execute_SQL_Statement(SQLStatement, DBConnection):
+    """Executes a SQL statement using a PyMySQL connection object.
+    This function executes a SQL statement using PyMySQL, creating the cursor based off the connection object argument at the beginning and performing the commit method on that connection at the end.
+    Arguments:
+        SQLStatement {string} -- the SQL statement
+        DBConnection {PyMySQL connection} -- connection object for MySQL database
+    """
+    Cursor = DBConnection.cursor()
+    Cursor.execute(SQLStatement)
+    DBConnection.commit()
 
 
 #Section: Collect Information Needed for SUSHI Call

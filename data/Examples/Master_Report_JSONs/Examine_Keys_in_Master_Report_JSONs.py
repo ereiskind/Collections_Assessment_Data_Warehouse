@@ -16,17 +16,6 @@ from pathlib import Path
 import csv
 
 
-#Section: Functions
-def Move_Key_Value_Pairs(Old_Dict, New_Dict):
-    """This function moves all key-value pairs in Old_Dict into New_Dict.
-    Arguments:
-        Old_Dict {dictionary} -- dictionary with key-value pairs to be moved
-        newDict {dictionary} -- dictionary to receive new key-value pairs
-    """
-    for Key, Value in Old_Dict.items():
-        New_Dict[Key] = Value
-
-
 #Section: Initialize Lists
 JSON_File_Names = []
 CSV_Record_List = []

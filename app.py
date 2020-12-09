@@ -5,6 +5,7 @@ import json
 import csv
 import requests
 from requests import HTTPError, Timeout
+import time
 import re
 import pandas
 import pymysql
@@ -108,7 +109,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Subsection: Get List of R5 Reports Available
     Reports_URL = SUSHI_Call_Data["URL"] + "reports" # This API returns a list of the available SUSHI reports
-    #ToDo: Add sleep to accommodate ScholarlyIQ Response: '{"Code":1020,"Severity":"Fatal","Message":"Client has made too many requests","Data":"Please request reports sequentially once per second. Simultaneous requests are not supported."}'
+    time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
     try:
         Available_Reports = requests.get(Reports_URL, params=Credentials, timeout=10)
     except Timeout as error:
@@ -153,11 +154,13 @@ for SUSHI_Call_Data in SUSHI_Data:
         if URL_Report_Path.endswith("/"):
             URL_Report_Path = URL_Report_Path[0:-1]
         Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path
+        time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
         try:
             Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=90)
             # Larger reports seem to take longer to respond, so the initial timeout interval is long
         except Timeout as error:
             try: # Timeout errors seem to be random, so going to try get request again with more time
+                time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
                 Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=120)
             except Timeout as error:
                 #ToDo: Get info for loading into sushierrorreports table--note that SUSHI JSONs for this resource don't have Report_Header sections, so data needs to come from elsewhere

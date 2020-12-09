@@ -3,6 +3,8 @@
 import requests
 import json
 import csv
+import requests
+from requests import HTTPError, Timeout
 
 #Section: Collect Information Needed for SUSHI Call
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
@@ -20,6 +22,22 @@ for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_
 for SUSHI_Call_Data in SUSHI_Data:
     Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"} # This creates another dictionary without the URL to be used in the URL's query string
     #Subsection: Determine SUSHI Availability
+    Status_URL = SUSHI_Call_Data["URL"] + "status"
+    try:
+        Status_Check = requests.get(Status_URL, params=Credentials, timeout=10)
+        Status_Check.raise_for_status()
+    except HTTPError as error:
+        print(f"HTTP Error: {format(error)}")
+        #ToDo: 403 error seems to be invalid credentials--perhaps create specific error message for that?
+        continue
+    except Timeout as error:
+        print(f"Server didn't respond after 10 seconds ({format(error)}).")
+        continue
+    except:
+        print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
+        continue
+
+    print(f"Sucessful request to {Status_URL} got status code {Status_Check}.")
     #ToDo: Run API call for status
     #ToDo: If return value not 200, break and return error message to user
 

@@ -3,7 +3,6 @@
 import requests
 import json
 import csv
-import requests
 from requests import HTTPError, Timeout
 import time
 import pandas
@@ -74,29 +73,28 @@ def enable_download_headless(browser, download_dir):
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r', encoding='utf-8-sig') # Without encoding, characters added to front of first URL, causing API call to fail
 SUSHI_Data = []
 for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns the CSV into a list where each line is a dictionary
-    if Set[4] == "":
-        try: # If none of the credential sets have a platform, the if statement below causes a key error
-            if Set[4] != "":
-                if Set[1] == "":
-                    Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3], platform = Set[4])
-                elif Set[2] == "":
-                    Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3], platform = Set[4])
-                else:
-                    Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3], platform = Set[4])
+    try: # If none of the credential sets have a platform, the if statement below causes a key error
+        if Set[4] != "":
+            if Set[1] == "":
+                Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3], platform = Set[4])
+            elif Set[2] == "":
+                Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3], platform = Set[4])
             else:
-                if Set[1] == "":
-                    Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
-                elif Set[2] == "":
-                    Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
-                else:
-                    Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
-        except:
+                Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3], platform = Set[4])
+        else:
             if Set[1] == "":
                 Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
             elif Set[2] == "":
                 Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
             else:
                 Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
+    except:
+        if Set[1] == "":
+            Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
+        elif Set[2] == "":
+            Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
+        else:
+            Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
     SUSHI_Data.append(Data)
 
 

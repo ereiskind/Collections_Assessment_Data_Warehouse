@@ -8,6 +8,7 @@ from requests import HTTPError, Timeout
 import re
 import pandas
 import pymysql
+from sqlalchemy import create_engine
 
 #Section: Collect Information Needed for SUSHI Call
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
@@ -20,6 +21,18 @@ for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_
     else:
         Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
     SUSHI_Data.append(Data)
+
+
+#Section: Create the SQLAlchemy Engine
+Engine = create_engine(
+    mysql + '+' +
+    pymysql + '://' +
+    username + ':' +
+    password + '@' +
+    host + ':' + str(port) + '/' +
+    testdatawarehouse
+)
+
 
 #Section: Make API Calls
 for SUSHI_Call_Data in SUSHI_Data:

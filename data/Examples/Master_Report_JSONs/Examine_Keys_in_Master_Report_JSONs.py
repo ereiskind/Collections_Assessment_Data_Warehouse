@@ -24,11 +24,17 @@ for File in JSON_File_Names:
 
 
         #Section: Read Data from JSON Dictionary
+        CSV_Record = {}
+
         #Subsection: Read Data from Header
-        Report_Creator = JSON_Dictionary['Report_Header']['Created_By']
-        print(Report_Creator)
-        #ToDo: Get JSON_Dictionary['Institution_ID'], a list of dictionaries, and save the dictionary where "Type": "Proprietary" to a variable
-        #ToDo: From the above variable, get the value for the key 'Value'
+        CSV_Record['Report_Creator'] = JSON_Dictionary['Report_Header']['Created_By']
+        try:
+            for ID in JSON_Dictionary['Report_Header']['Institution_ID']:
+                if ID['Type'] == "Proprietary":
+                    CSV_Record['ID'] = ID['Value']
+        except KeyError:
+            CSV_Record['ID'] = None
+        print(CSV_Record)
 
         #Subsection: Get List of Platforms
         #ToDo: Get JSON_Dictionary['Report_Items'], a list of dictionaries, and save to an iterable
@@ -36,5 +42,5 @@ for File in JSON_File_Names:
         #ToDo: Dedupe list (use list comprehension?)
 
 
-#Section: Create CSV Record
-#ToDo: Create dictionaries representing rows of CSV with report creator, report proprietary ID, and platform by looping through list of platforms and making a record/dictionary for each platform 
+#Section: Create CSV
+#ToDo: Create CSV using CSV_Records

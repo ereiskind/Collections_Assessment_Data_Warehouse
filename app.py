@@ -90,7 +90,9 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         #Section: Read Master Report into Dataframe
         #Subsection: Create Initial Dataframe
-        # Use json_normalize
+        Report_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'])
+        Report_Dataframe.to_csv('Review_Dataframe.csv') # Using to more clearly investigate contents
+        print("Break to look at CSV")
 
         #Subsection: Create Single Time Field
         #ToDo: Confirm that fields for beginning and end of each time interval are for the beginning and end of a single month

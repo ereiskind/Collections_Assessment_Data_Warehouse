@@ -20,6 +20,7 @@ def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
     """A pandas to_sql function call bracketed by the creation and destruction of a SQLAlchemy session object.
     
     This function loads the data contained in Dataframe into DBTable, which is in the MySQL database referenced by DBEngine. Dataframe's record index values aren't included.
+    
     Arguments:
         Dataframe {pandas dataframe} -- dataframe to be loaded into MySQL
         DBTable {string} -- name of the MySQL table (relation) the data's being loaded into
@@ -37,7 +38,9 @@ def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
 
 def Execute_SQL_Statement(SQLStatement, DBConnection):
     """Executes a SQL statement using a PyMySQL connection object.
+    
     This function executes a SQL statement using PyMySQL, creating the cursor based off the connection object argument at the beginning and performing the commit method on that connection at the end.
+    
     Arguments:
         SQLStatement {string} -- the SQL statement
         DBConnection {PyMySQL connection} -- connection object for MySQL database

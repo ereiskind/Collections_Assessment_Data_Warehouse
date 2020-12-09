@@ -169,10 +169,11 @@ for SUSHI_Call_Data in SUSHI_Data:
             # Can include parent info--how is this nested???
             # Desired parent info: Parent_Title, Parent_Data_Type, Parent_DOI, Parent_Propriatary_ID, Parent_ISBN, Parent_Print_ISSN, Parent_Online_ISSN, Parent_URI, Component_Title, Component_Data_Type, Component_DOI, Component_Propriatary_ID, Component_ISBN, Component_Print_ISSN, Component_Online_ISSN, Component_URI
         else:
-            pass # Because of if-elif-else with same Boolean Expressions above, this should never happen
+            pass # This represents Platform Master Reports; the if-elif-else above filters out other reports before they reach this point
         
         #Subsection: Create Initial Dataframe
-        Report_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=Dataframe_Fields)
+        Report_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=Dataframe_Fields, errors='ignore')
+        #ToDo: Above is outputting dataframe where only keys under Report_Header have values--why???
         Report_Dataframe.to_csv('Check_Dataframe.csv', mode='a', index=False) # Using to more clearly investigate contents
         print("Break to look at CSV")
 

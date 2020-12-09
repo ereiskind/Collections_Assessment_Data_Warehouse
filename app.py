@@ -13,7 +13,9 @@ import pymysql
 from sqlalchemy import create_engine
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import Database_Credentials #Alert: FROM ORIGINAL REPOSITORY with flat structure; this file is now located at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
+#Alert: FROM ORIGINAL REPOSITORY with flat structure; these files are now at different locations
+import Database_Credentials # Loaded in from runtime environment repository at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
+import SUSHI_R5_API_Calls # In this repository at Collections_Assessment_Data_Warehouse/helpers/SUSHI_R5_API_Calls.py
 
 
 #Section: Functions
@@ -159,27 +161,8 @@ for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_
 for SUSHI_Call_Data in SUSHI_Data:
     Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"} # This creates another dictionary without the URL to be used in the URL's query string
     #Subsection: Determine SUSHI Availability
-    Status_URL = SUSHI_Call_Data["URL"] + "status"
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    try: # Makes the initial API call
-        Status_Check = requests.get(Status_URL, params=Credentials_String, timeout=10)
-        Status_Check.raise_for_status()
-    #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
-    except Timeout as error: # If the API request times out
-        print(f"Server didn't respond after 10 seconds ({format(error)}).")
-        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+" Timeout")
-        continue    
-    except HTTPError as error: # If the API request returns a 4XX HTTP code
-        if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
-            Status_Check = Retrieve_Downloaded_JSON_File(Chrome_Browser_Driver, Status_URL + "?" + Credentials_String)
-        else:
-            print(f"HTTP Error: {format(error)}")
-            Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+" HTTP Error")
-            continue
-    except: # If there's some other problem with the API request
-        print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
-        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+" Something Else")
-        continue
+    Status_Check = SUSHI_R5_API_Calls.Status(SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
 
     #Subsection: Check if Status_Check Returns COUNTER Error
     # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes

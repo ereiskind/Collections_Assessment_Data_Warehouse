@@ -201,10 +201,9 @@ for SUSHI_Call_Data in SUSHI_Data:
             
             Error_Log_Dataframe = Error_Log_Dataframe.join(
                 Foreign_Key_Dataframe,
-                on='Report_Matching_Index'
+                on='Report_Matching_Index',
+                how='inner'
             )
-            #ToDo: Fix FK column containing only NaN
-            print(Error_Log_Dataframe)
             
             #Subsection: Load Error Log into MySQL
             Error_Log_Dataframe.rename(columns={

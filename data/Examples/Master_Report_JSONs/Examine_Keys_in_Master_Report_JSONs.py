@@ -66,7 +66,7 @@ for File in JSON_File_Names:
         #Subsection: Get List of Platforms
         if len(JSON_Dictionary['Report_Items']) == 0: # If the Report_Items section is empty
             CSV_Record['Resource_Platform'] = "Empty report"
-            #ToDo: Write CSV_Record to CSV
+            CSV_File_Writer.writerow(CSV_Record)
             continue
 
         Platform_List = []
@@ -77,5 +77,4 @@ for File in JSON_File_Names:
         
         for Found_Platform in Platform_List:
             CSV_Record['Resource_Platform'] = Found_Platform
-            
-            #ToDo: Write CSV_Record to CSV
+            CSV_File_Writer.writerow(CSV_Record)

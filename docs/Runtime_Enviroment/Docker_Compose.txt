@@ -1,0 +1,18 @@
+version: "3.8"
+# Network name: private-collections_assessment_data_warehouse_default
+services:
+  program: # The container for the Python program
+    build: . # The path to the folder containing the Dockerfile for the Python container
+    container_name: python-container # This names the container
+    tty: true # This allows the container to be run in detached mode, keeping the container running even if a specific process isn't running
+    ports:
+      - "5000:5000" # Default port for Flask
+  database: # The container for the MySQL database
+    build: ./mysql # The path to folder containing the Dockerfile for the MySQL container
+    container_name: mysql-container # This names the container
+    restart: always
+    # Accessing the container via the CLI requires going to Docker GUI to restart container. Is this a problem otherwise? How should it be handled?
+    environment:
+      MYSQL_ROOT_PASSWORD: password # This isn't actually the password
+    ports:
+      - "3306:3306" # Default port for MySQL--this won't work if host has local instance of MySQL Server installed

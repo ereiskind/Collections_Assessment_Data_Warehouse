@@ -1,0 +1,11 @@
+FROM python
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN git clone https://github.com/ereiskind/Collections_Assessment_Data_Warehouse.git ./root/Collections_Assessment_Data_Warehouse
+
+# Add Docker files to Runtime_Enviroment folder
+COPY ./Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Enviroment/Python_Dockerfile.txt
+COPY ./mysql/Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Enviroment/MySQL_Dockerfile.txt
+COPY ./docker-compose.yml ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Enviroment/Docker_Compose.txt

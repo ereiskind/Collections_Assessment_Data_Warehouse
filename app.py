@@ -185,24 +185,17 @@ for SUSHI_Call_Data in SUSHI_Data:
     # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes
     try: # Status_Check is JSON-like dictionary with Report_Header and information about the error
         Status_Check_Error = Status_Check["Exception"]["Severity"]
-        if Status_Check_Error == "Error":
-            Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check["Exception"]["Message"], Status_Check["Exception"]["Code"])
-            continue
-        #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
+        Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check_Error, Status_Check["Exception"]["Message"], Status_Check["Exception"]["Code"])
+        continue
     except:
         try: # Status_Check is JSON-like dictionary with nothing but information about the error
             Status_Check_Error = Status_Check["Severity"]
-            if Status_Check_Error == "Error":
-                Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check["Message"], Status_Check["Code"])
-                continue
-            #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
-        except:
+            Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check_Error, Status_Check["Message"], Status_Check["Code"])
+        except: #Alert: Not known if functional
             try: # Status_Check is a list containing a JSON-like dictionary with nothing but information about the error
                 Status_Check_Error = Status_Check[0]["Severity"]
-                if Status_Check_Error == "Error":
-                    Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check[0]["Message"], Status_Check[0]["Code"])
-                    continue
-                #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
+                Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check_Error, Status_Check[0]["Message"], Status_Check[0]["Code"])
+                continue
             except:
                 pass # If the status check passes, a KeyError is returned
 

@@ -182,6 +182,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                 print(f"{Master_Report_URL} returned no data.")
                 continue
 
+        #ToDo: Error handling for JSON decoding errors--is there a way to take the text and transform it to valid JSON-like Python data structures? The rest of the code relies on Report_JSON being a dictionary.
         Report_JSON = Master_Report_Response.json()
         #Alert: Confirm that empty report is no usage
         

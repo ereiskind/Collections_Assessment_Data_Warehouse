@@ -103,8 +103,9 @@ for SUSHI_Call_Data in SUSHI_Data:
     #ToDo: Check if both Requestor ID and API Key are in credentials; if so, uses Selenium to get JSONs
     #Subsection: Determine SUSHI Availability
     Status_URL = SUSHI_Call_Data["URL"] + "status"
+    Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
     try:
-        Status_Check = requests.get(Status_URL, params=Credentials, timeout=10)
+        Status_Check = requests.get(Status_URL, params=Credentials_String, timeout=10)
         Status_Check.raise_for_status()
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         print(f"HTTP Error: {format(error)}")
@@ -146,9 +147,10 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Subsection: Get List of R5 Reports Available
     Reports_URL = SUSHI_Call_Data["URL"] + "reports" # This API returns a list of the available SUSHI reports
+    Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
     time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
     try:
-        Available_Reports = requests.get(Reports_URL, params=Credentials, timeout=10)
+        Available_Reports = requests.get(Reports_URL, params=Credentials_String, timeout=10)
     except Timeout as error:
         print(f"Server didn't respond to request for {Master_Report_Type} after 10 seconds [{format(error)}].")
             #ToDo: Add platform and error to Platforms_Not_Collected
@@ -194,14 +196,15 @@ for SUSHI_Call_Data in SUSHI_Data:
             continue
         
         Master_Report_URL = SUSHI_Call_Data["URL"] + "reports/" + Master_Report_Type.lower()
+        Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
         time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
         try:
-            Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=90)
+            Master_Report_Response = requests.get(Master_Report_URL, params=Credentials_String, timeout=90)
             # Larger reports seem to take longer to respond, so the initial timeout interval is long
         except Timeout as error:
             try: # Timeout errors seem to be random, so going to try get request again with more time
                 time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
-                Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=120)
+                Master_Report_Response = requests.get(Master_Report_URL, params=Credentials_String, timeout=120)
             except Timeout as error:
                 #ToDo: Get info for loading into sushierrorreports table--note that SUSHI JSONs for this resource don't have Report_Header sections, so data needs to come from elsewhere
                 #ToDo: Load above data into a record in SUSHIErrorReports

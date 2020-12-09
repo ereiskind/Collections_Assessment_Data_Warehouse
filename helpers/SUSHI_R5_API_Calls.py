@@ -86,7 +86,7 @@ def Status(URL, Parameters, WebDriver):
         if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
             Status_Check = Retrieve_Downloaded_JSON_File(WebDriver, Status_URL + "?" + Parameters)
             if Status_Check == []:
-                return URL + f"{format(error)}"
+                return URL + f"|{format(error)}"
         else:
             print(f"HTTP Error: {format(error)}")
             return URL + f"|{format(error)}"

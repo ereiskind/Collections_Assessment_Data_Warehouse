@@ -5,5 +5,10 @@ CREATE TABLE SUSHIErrorLog (
 ); 
 
 CREATE TABLE SUSHIErrorReports (
-
+    SUSHIErrorReports_ID SERIAL,
+    COUNTER_Namespace VARCHAR(10),
+    Match VARCHAR(100) UNIQUE,
+    Time_Report_Run DATETIME,
+    Report_Source VARCHAR(50),
+    Report_Type VARCHAR(45)
 ); 

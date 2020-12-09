@@ -17,8 +17,16 @@ import csv
 
 
 #Section: Create CSV
-#ToDo: Create CSV and open it
-#ToDo: Create CSV Dictwriter with headers
+CSV_File_Path = Path('Examples', 'Example_JSONs', 'test', 'Comparison.csv')
+CSV_File = open(CSV_File_Path, 'w', newline='')
+CSV_File_Writer = csv.DictWriter(CSV_File, [
+    'Source_JSON',
+    'Report_Creator',
+    'Report_Type',
+    'Source_COUNTER_Namespace',
+    'Resource_Platform'
+])
+CSV_File_Writer.writeheader()
 
 
 #Section: Open JSON

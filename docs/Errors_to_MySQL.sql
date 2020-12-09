@@ -4,13 +4,13 @@ CREATE SCHEMA `testdatawarehouse`;
 
 CREATE TABLE SUSHIErrorLog (
     SUSHIErrorLog_ID SERIAL,
-    Report_ID BIGINT,
+    Report_ID BIGINT UNSIGNED,
     Error_Code VARCHAR(4),
     Error_Details VARCHAR(75),
     Error_Name VARCHAR(65),
     Severity VARCHAR(10),
     INDEX Report_ID_index (Report_ID),
-    CONSTRAINT Report_ID_FK FOREIGN KEY Report_ID_index (Report_ID),
+    CONSTRAINT Report_ID_FK FOREIGN KEY Report_ID_index (Report_ID)
         REFERENCES SUSHIErrorReports(SUSHIErrorReports_ID)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT

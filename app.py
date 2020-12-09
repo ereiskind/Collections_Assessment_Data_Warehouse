@@ -145,8 +145,12 @@ for SUSHI_Call_Data in SUSHI_Data:
             ])
             Error_Reports_Dataframe.drop(Error_Reports_Dataframe[Error_Reports_Dataframe.Type != "Proprietary"].index, inplace=True)
             Error_Reports_Dataframe.drop(columns='Type', inplace=True)
+            # The to_string operation seems to be truncating the value in Error_Reports_Dataframe['Report_Header:Institution_ID'] and leaving an ellipse at the end; since the content of the key-value pair with the key "Type" is not needed for the matching, it's being removed
+            for i in range(len(Error_Reports_Dataframe['Report_Header:Institution_ID'])):
+                del Error_Reports_Dataframe['Report_Header:Institution_ID'].iloc[i]["Type"]
             Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe['Report_Header:Institution_ID'].to_string()
             Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe.Report_Matching_Index.str.slice(start=1) + Error_Reports_Dataframe['Report_Header:Report_ID']
+            Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe.Report_Matching_Index.str.strip()
             Error_Reports_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
             Error_Reports_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
             Error_Reports_Dataframe['COUNTER_Namespace'] = Error_Reports_Dataframe.Value.str.split(":").str[0]
@@ -188,6 +192,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe['Report_Header:Institution_ID'].to_string()
             Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe.Report_Matching_Index.str.slice(start=1) + Error_Log_Dataframe['Report_Header:Report_ID']
             # Above assumes that there won't be more than 10 rows (error codes) returned for a given report
+            Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe['Report_Header:Institution_ID'].str.strip()
             Error_Log_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
             Error_Log_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
             

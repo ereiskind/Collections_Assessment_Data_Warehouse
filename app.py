@@ -145,6 +145,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type|Section_Type"
         elif Master_Report_Type.startswith("Item Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
+            # If either of the below isn't used, it's presence will add a 3050 warning to the JSON; since there's no good way to tell which IRs use which parameter, using both and letting the warning pass silently is the best option
             Credentials["include_parent_details"] = "True"
             Credentials["include_component_details"] = "True"
         else:
@@ -181,6 +182,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         #Section: Handle Reports Returning Errors
         #Subsection: Determine if Report is an Error Report
         #ToDo: Change this to looking for "Report_Items" in top level of keys in Report_JSON  and to checking that its value isn't an empty list
+        #Alert: An empty Report_Header means no usage to report, and a number of platforms with no databases offer DR. How should the program distinguish between valid no usage, erroneous empty reports, and reports that aren't appropriate for the platform?
         # In error responses, no data is being reported, so Report_Header is the only top-level key; when data is returned, it's joined by Report_Items
         Top_Level_Keys = 0
         for value in Report_JSON.values():

@@ -197,7 +197,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         Available_Reports = requests.get(Reports_URL, params=Credentials_String, timeout=10)
     except Timeout as error:
         print(f"Server didn't respond to request for {Master_Report_Type} after 10 seconds [{format(error)}].")
-            #ToDo: Add platform and error to Platforms_Not_Collected
+        #ToDo: Add platform and error to Platforms_Not_Collected
         continue
     
     Available_Master_Reports = [] # This list will contain the dictionaries from the JSON for the master reports available on the platform, which will be the only reports pulled
@@ -209,7 +209,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         # If the master reports aren't offered, should the standard views be retrieved with this script?
         print(f"{SUSHI_Call_Data['URL']} doesn't offer any master reports.")
         continue
-    
+
     #Subsection: Collect Individual Master Reports
     #ToDo: Allow system or user to change dates
     Credentials["begin_date"] = "2020-01-01"
@@ -221,7 +221,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         if "include_parent_details" in Credentials:
             del Credentials["include_parent_details"]
             del Credentials["include_component_details"]
-        
+
         # This cycles through each of the master reports offered by the platform, adding the URL query parameters needed to get the most granular version of the given master report
         if Master_Report_Type == "PR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
@@ -238,7 +238,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         else:
             print("Invalid Master Report Type: " + Master_Report["Report_Name"])
             continue
-        
+
         Master_Report_URL = SUSHI_Call_Data["URL"] + "reports/" + Master_Report_Type.lower()
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
         time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
@@ -267,6 +267,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         #ToDo: Error handling for JSON decoding errors--is there a way to take the text and transform it to valid JSON-like Python data structures? The rest of the code relies on Report_JSON being a dictionary.
         Report_JSON = Master_Report_Response.json()
         #Alert: Confirm that empty report is no usage
+        #ToDo: Sanity check that no usage empty report makes sense here vs. empty report as indication of an issue?
         
 
         #Section: Handle Reports Returning Errors

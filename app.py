@@ -92,7 +92,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Top_Level_Keys += 1
 
         if Top_Level_Keys == 1:
-            Error_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], meta=[
+            Error_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
                 ['Report_Header', 'Created'],
                 ['Report_Header', 'Created_By'],
                 ['Report_Header', 'Institution_ID'],
@@ -142,7 +142,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             pass # Because of if-elif-else with same Boolean Expressions above, this should never happen
         
         #Subsection: Create Initial Dataframe
-        Report_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'])
+        Report_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=Dataframe_Fields)
         Report_Dataframe.to_csv('Check_Dataframe.csv') # Using to more clearly investigate contents
         print("Break to look at CSV")
 

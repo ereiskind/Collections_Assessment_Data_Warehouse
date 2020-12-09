@@ -5,6 +5,27 @@ import requests
 import json
 import csv
 
+#Section: Collect Information Needed for SUSHI Call
+#ToDo: Get SUSHI creds, possible name of file to be saved from external file of type TBD
+#ToDo: Save SUSHI creds for use in multiple API calls
+# Methiod for saving creds should also handle if call needs requestor ID and/or API key
+
+
+#Section: Determine Reports Available
+#Subsection: Determine SUSHI Availability
+#ToDo: Run API call for status
+#ToDo: If return value not 200, break and return error message to user
+
+#Subsection: Get List of R5 Reports Available
+#ToDo: Run API call for list of available R5 reports
+#ToDo: Save results into a tuple
+
+
+#Section: Collect Reports
+#ToDo: For each item in available reports tuple, request report with as much detail as possible
+#ToDo: Save reports
+
+
 #Section: Class "Collection Category"
 #This class assumes all are SUSHI R5 compliant--actual dashboard backend will have master class and subclasses for each type of collection
 class Collection_Category:

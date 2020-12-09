@@ -10,7 +10,7 @@ import re
 #Section: Collect Information Needed for SUSHI Call
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
 SUSHI_Data = []
-for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns each line oc the CSV into a dictionary within a list
+for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns the CSV into a list where each line is a dictionary
     if Set[1] == "":
         Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
     elif Set[2] == "":
@@ -27,20 +27,20 @@ for SUSHI_Call_Data in SUSHI_Data:
     try:
         Status_Check = requests.get(Status_URL, params=Credentials, timeout=10)
         Status_Check.raise_for_status()
-    except HTTPError as error:
+    except HTTPError as error: # If the API request returns a 4XX HTTP code
         print(f"HTTP Error: {format(error)}")
         #ToDo: 403 error seems to be invalid credentials--perhaps create specific error message for that?
         continue
-    except Timeout as error:
+    except Timeout as error: # If the API request times out
         print(f"Server didn't respond after 10 seconds ({format(error)}).")
         continue
-    except:
+    except: # If there's some other problem with the API request
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
         continue
     #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself; as a result, requests can't find the data
 
     #Subsection: Get List of R5 Reports Available
-    Reports_URL = SUSHI_Call_Data["URL"] + "reports"
+    Reports_URL = SUSHI_Call_Data["URL"] + "reports" # This API returns a list of the available SUSHI reports
     try:
         Available_Reports = requests.get(Reports_URL, params=Credentials, timeout=90)
     except Timeout as error:
@@ -48,7 +48,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             # Larger reports seem to take longer to respond, so the timeout interval is long
         continue
     
-    Available_Master_Reports = [] # This list will contain the dictionaries for the master reports available on the platform, which will be the only reports pulled
+    Available_Master_Reports = [] # This list will contain the dictionaries from the JSON for the master reports available on the platform, which will be the only reports pulled
     for Report in json.loads(Available_Reports.text):
         if "Master Report" in Report["Report_Name"]:
             Available_Master_Reports.append(Report)
@@ -58,8 +58,8 @@ for SUSHI_Call_Data in SUSHI_Data:
     #ToDo: Allow system or user to change dates
     Credentials["begin_date"] = "2020-01-01"
     Credentials["end_date"] = "2020-01-31"
-    for Master_Report in Available_Master_Reports:
-        Master_Report_Type = Master_Report["Report_Name"]
+    for Master_Report in Available_Master_Reports: # This cycles through each of the master reports offered by the platform
+        Master_Report_Type = Master_Report["Report_Name"] # This adds all of the possible attributes for a given master report to the URL used to request that master report
         if Master_Report_Type == "Platform Master Report":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
         elif Master_Report_Type == "Database Master Report":
@@ -73,7 +73,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             #ToDo: Determine if "continue" is appropriate keyword to move on to next Master_Report in Available_Master_Reports
             continue
         
-        Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path.findall(Master_Report["Path"])[0]
+        Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path.findall(Master_Report["Path"])[0] # This uses a regex to construct the API URL so only the piece of the path related to the report requested is included (some platforms have a "Path" attribute that include the domain as well)
         try:
             Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=10)
         except Timeout as error:

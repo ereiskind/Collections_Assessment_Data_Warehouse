@@ -64,7 +64,7 @@ def enable_download_headless(browser, download_dir):
 
 #Section: Initialize Variables for Reports Not Captured
 #ToDo: Save the current time to variable Script_Start_Time
-#ToDo: Create variable (what data type?) Platforms_Not_Collected for saving data about the platforms where reports aren't collected and the specific missing master reports can't be identified
+Platforms_Not_Collected = [] # This will contain the URLs for failed API calls
 
 
 #Section: Collect Information Needed for SUSHI Call
@@ -140,28 +140,27 @@ chrome_options.add_argument('--disable-software-rasterizer')
 #Section: Make API Calls
 for SUSHI_Call_Data in SUSHI_Data:
     Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"} # This creates another dictionary without the URL to be used in the URL's query string
-    #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself--leads to requests getting a 403 error on a URL that works generates JSON download without a problem when used manually
-    #ToDo: Check if both Requestor ID and API Key are in credentials; if so, uses Selenium to get JSONs
-    #Alert: Sheridan PubFactory returns "403 Client Error: Forbidden for url" with URLs that are fine when entered manually
-    #ToDo: If "403 Client Error: Forbidden for url" is the result, try again with Selenium
     #Subsection: Determine SUSHI Availability
     Status_URL = SUSHI_Call_Data["URL"] + "status"
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    try:
+    try: # Makes the initial API call
         Status_Check = requests.get(Status_URL, params=Credentials_String, timeout=10)
         Status_Check.raise_for_status()
-    except HTTPError as error: # If the API request returns a 4XX HTTP code
-        print(f"HTTP Error: {format(error)}")
-        #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
-        #ToDo: Add platform and error to Platforms_Not_Collected
-        continue
+    #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
     except Timeout as error: # If the API request times out
         print(f"Server didn't respond after 10 seconds ({format(error)}).")
-        #ToDo: Add platform and error to Platforms_Not_Collected
+        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+"\tTimeout")
+        continue    
+    except HTTPError as error: # If the API request returns a 4XX HTTP code
+        if format(error.response) == "<Response [403]>":
+            print("Response 403")
+        else:
+            print(f"HTTP Error: {format(error)}")
+            Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+"\tHTTP Error")
         continue
     except: # If there's some other problem with the API request
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
-        #ToDo: Add platform and error to Platforms_Not_Collected
+        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+"\tSomething Else")
         continue
 
     #Subsection: Check if Status_Check Returns COUNTER Error

@@ -20,9 +20,23 @@ import SUSHI_R5_API_Calls # In this repository at Collections_Assessment_Data_Wa
 
 #Section: Functions
 #Subsection: Messages
-def Handle_Status_Check_Error(URL, Message, Code):
-    #ToDo: Add platform and error to Platforms_Not_Collected
+def Handle_Status_Check_Error(URL, Error, Message, Code):
+    """Prints a message that the SUSHI API call for status returned a SUSHI error message.
+    #ToDo: Potentially try again if message severity is "fatal"
+
+    Arguments:
+        URL {string} -- the SUSHI API URL
+        Error {string} -- the SUSHI error severity
+        Message {string} -- the SUSHI error message
+        Code {string} -- the SUSHI error code
+    
+    Returns:
+        None
+    """
+    if Status_Check_Error == "Warning":
+        print("Data is available, but there may be a problem with it.")
     print(f"Reports from {URL} not available because {Message} (error code {Code}).")
+    Platforms_Not_Collected.append(URL + "|" + Message)
 
 
 def API_Download_Not_Empty():

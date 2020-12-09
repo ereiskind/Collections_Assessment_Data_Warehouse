@@ -12,6 +12,7 @@ with open(File_Name, 'w') as writeJSON:
 
 import os
 import json
+import csv
 
 #Section: Initialize Lists
 JSON_File_Names = []
@@ -67,4 +68,8 @@ for File in JSON_File_Names:
                     CSV_Records.append(CSV_Record)
 
 #Section: Create CSV
-#ToDo: Create CSV using CSV_Records
+CSV = open('JSON_Keys.csv', 'w', newline='')
+CSV_Writer = csv.DictWriter(CSV, ['Report_Creator', 'Report_Type', 'Source_COUNTER_Namespace', 'Resource_Platform'])
+CSV_Writer.writeheader()
+for Record in CSV_Records:
+    CSV_Writer.writerow(Record)

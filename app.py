@@ -105,11 +105,15 @@ for SUSHI_Call_Data in SUSHI_Data:
         continue
 
     #Subsection: Confirm Returned Data Means OK to Continue
-    if "Exception" in Status_Check.json():
-        #ToDo: Add platform and error to Platforms_Not_Collected
-        print(f"Reports from {SUSHI_Call_Data['URL']} not available because {Status_Check.json()['Exception']['Message']} (error code {Status_Check.json()['Exception']['Code']}).")
-        # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes
-        continue
+    # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes
+    #ToDo: If statement for JSON-like dictionaries with top-level keys "Report_Header" and "Exception"
+    #ToDo: If statement for dictionary with keys "Code", "Severity", "Message" where Code="Error"
+    #ToDo: If statement for list containing single dictionary with keys "Code", "Severity", "Message" where Code="Error"
+    #ToDo: Within block:
+        #ToDo: Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Message, Code)
+        # Message= reference to value for key "Message"
+        # Code= reference to value for key "Code"
+        #ToDo: continue
 
     #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself--believed this meant requests couldn't find the data, needs to be confirmed
     #ToDo: Possibly handle above by checking if Status_Check.json() is empty

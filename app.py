@@ -124,6 +124,15 @@ for SUSHI_Call_Data in SUSHI_Data:
             # Columns (in order): Code, Data, Message, Severity, Report_Matching_Index
             Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
 
+            connection = pymysql.connect(host='localhost', user='root', password='password', db='usage_test')
+            cursor = connection.cursor()
+            cursor.execute(
+                """SQL Statement"""
+            )
+            cursor.fetchall()
+            connection.commit()
+            connection.close()
+
             #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated
             #ToDo: Read PK and index back from MySQL
             #ToDo: Add reports PK to log dataframe as another field
@@ -185,13 +194,3 @@ for SUSHI_Call_Data in SUSHI_Data:
 
 
         #Section: Export Dataframe to MySQL
-
-#Testing MySQL Export
-connection = pymysql.connect(host='localhost', user='root', password='password', db='usage_test')
-cursor = connection.cursor()
-cursor.execute(
-    """INSERT INTO usage_table (column1, column2) VALUES ("row 1, column 1", "row 1, column 2")"""
-)
-cursor.fetchall()
-connection.commit()
-connection.close()

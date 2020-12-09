@@ -6,6 +6,7 @@ import csv
 import requests
 from requests import HTTPError, Timeout
 import re
+import pymysql
 
 #Section: Collect Information Needed for SUSHI Call
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
@@ -84,5 +85,18 @@ for SUSHI_Call_Data in SUSHI_Data:
         # JSONs are truncated when output to terminal 
         print(json.loads(Master_Report_Response.text))
 
-    #ToDo: Save reports into Pandas (?)
-    #ToDo: Export Dataframe(?) to MySQL
+
+        #Section: Read Master Report into Dataframe
+
+
+        #Section: Export Dataframe to MySQL
+
+#Testing MySQL Export
+connection = pymysql.connect(host='localhost', user='root', password='password', db='usage_test')
+cursor = connection.cursor()
+cursor.execute(
+    """INSERT INTO usage_table (column1, column2) VALUES ("row 1, column 1", "row 1, column 2")"""
+)
+cursor.fetchall()
+connection.commit()
+connection.close()

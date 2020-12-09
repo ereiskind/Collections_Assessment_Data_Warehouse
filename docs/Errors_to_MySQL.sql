@@ -18,9 +18,9 @@ CREATE TABLE SUSHIErrorLog (
 
 CREATE TABLE SUSHIErrorReports (
     SUSHIErrorReports_ID SERIAL,
-    COUNTER_Namespace VARCHAR(10),
+    COUNTER_Namespace VARCHAR(10),-- If ability to query to see what SUSHI APIs are returning errors is desired, Alma interface ID of credentials would be better here
     Matching VARCHAR(100) UNIQUE,
     Time_Report_Run TIMESTAMP,
-    Report_Source VARCHAR(50),
+    Report_Source VARCHAR(50),-- For platforms using third-party backends (e.g. Atypon), backend company name shows as provider, so field is of limited usefulness
     Report_Type VARCHAR(45)
 ); 

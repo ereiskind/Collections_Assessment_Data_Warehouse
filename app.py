@@ -148,11 +148,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             try: # Timeout errors seem to be random, so going to try get request again with more time
                 Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=120)
             except Timeout as error:
-                #ToDo: Get following info
-                    # COUNTER namespace for the provider of the report: COUNTER_Namespace [extracted from Report_Header:Institution_ID]--derived by matching to URL
-                    # Time the attempt to run the report was made: Time_Report_Run [Report_Header:Created]--timestamp?
-                    # Platform that created the report: Report_Source [Report_Header:Created_By]--derived by matching to URL
-                    # Full name of the master report: Report_Type [Report_Header:Report_Name] = Master_Report_Type
+                #ToDo: Get info for loading into sushierrorreports table--note that SUSHI JSONs for this resource don't have Report_Header sections, so data needs to come from elsewhere
                 #ToDo: Load above data into a record in SUSHIErrorReports
                 print(f"Server didn't respond to request for {Master_Report_Type} after second request of 120 seconds [{format(error)}].")
                 #ToDo: except: 
@@ -174,13 +170,14 @@ for SUSHI_Call_Data in SUSHI_Data:
         #Subsection: Clean Data for Error Reports
         #ToDo: Change below to if "Report_Items" isn't found in top level of Report_JSON keys
         if Top_Level_Keys == 1:
-        #ToDo: Wrap below in try block with except KeyError that redoes the function without the Report_Header
+            #ToDo: Institution_ID for COUNTER namespace (collected from report_path), Created_By don't contain helpful data
+            #ToDo: Wrap below in try block with except KeyError that redoes the function without the Report_Header
             Error_Reports_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=[
                 ['Report_Header', 'Created'],
                 ['Report_Header', 'Created_By'],
                 ['Report_Header', 'Institution_ID'],
                 ['Report_Header', 'Report_ID'],
-                ['Report_Header', 'Report_Name']
+                ['Report_Header', 'Report_Name'] #ToDo: Should this be kept, or should info on which report always use ID and be stored in Char(2)?
             ]) #ToDo: Potentially move all fields to save to meta keyword argument
             Error_Reports_Dataframe.drop(Error_Reports_Dataframe[Error_Reports_Dataframe.Type != "Proprietary"].index, inplace=True)
             Error_Reports_Dataframe.drop(columns='Type', inplace=True)
@@ -270,7 +267,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         
         
         #Section: Read Master Report into Dataframe
-        #Alert: Alma structure so one-to-many between vendors and platforms and each platform has own SUSHI--how is that handled in relation to the model where a single SUSHI can cover multiple platforms? --issue of database schema
+        #Alert: Thought (also in Visio)--Alma interfaces, nested under vendors in one-to-many relationship but only able to store a single SUSHI credential, can be used as backends and connected to frontends here, be used to represent both backends and frontends individually, or should one platform among those that share a SUSHI setup be designated as location for SUSHI data?
         #Subsection: Determine Fields to Import
         Dataframe_Fields = [
             ['Report_Header', 'Created'],
@@ -306,9 +303,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             pass # This represents Platform Master Reports; the if-elif-else above filters out other reports before they reach this point
         
         #Subsection: Create Initial Dataframe
-        #ToDo: Use only meta argument, no record_path
-        Report_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=Dataframe_Fields, errors='ignore')
-        #ToDo: Above is outputting dataframe where only keys under Report_Header have values--why???
+        #ToDo: Possibly put in try block if missing keys are causing problems despite setting 'ignore'
+        Report_Dataframe = pandas.json_normalize(Report_JSON, meta=Dataframe_Fields, sep=":", errors='ignore')
         Report_Dataframe.to_csv('Check_Dataframe.csv', mode='a', index=False) # Using to more clearly investigate contents
         print("Break to look at CSV")
 

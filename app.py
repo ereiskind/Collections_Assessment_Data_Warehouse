@@ -268,116 +268,22 @@ for SUSHI_Call_Data in SUSHI_Data:
         Report_JSON = Master_Report_Response.json()
         #Alert: Confirm that empty report is no usage
         #ToDo: Sanity check that no usage empty report makes sense here vs. empty report as indication of an issue?
+
+        from pathlib import Path
+        try:
+            Namespace = str(Report_JSON['Report_Header']['Institution_ID'][0]['Value']).split(":")[0]
+            File_Name = Path('Examples', 'Example_JSONs', f"{Report_JSON['Report_Header']['Report_ID']}_{Namespace}.json")
+        except KeyError:
+            try:
+                Namespace = str(Report_JSON['Institution_ID'][0]['Value']).split(":")[0]
+                File_Name = Path('Examples', 'Example_JSONs', f"{Report_JSON['Report_ID']}_{Namespace}.json")
+            except KeyError:
+                print(f"No Institution_ID key was found in the {Master_Report_Type} from {Master_Report_URL}.")
+                continue
+        with open(File_Name, 'w') as writeJSON:
+            json.dump(Master_Report_Response.json(), writeJSON)
         
-
-        #Section: Handle Reports Returning Errors
-        #Subsection: Determine if Report is an Error Report
-        #ToDo: Change this to looking for "Report_Items" in top level of keys in Report_JSON  and to checking that its value isn't an empty list
-        #Alert: An empty Report_Header means no usage to report, and a number of platforms with no databases offer DR. How should the program distinguish between valid no usage, erroneous empty reports, and reports that aren't appropriate for the platform?
-        # In error responses, no data is being reported, so Report_Header is the only top-level key; when data is returned, it's joined by Report_Items
-        Top_Level_Keys = 0
-        for value in Report_JSON.values():
-            Top_Level_Keys += 1
-
-        #Subsection: Clean Data for Error Reports
-        #ToDo: Change below to if "Report_Items" isn't found in top level of Report_JSON keys
-        if Top_Level_Keys == 1:
-            #ToDo: Institution_ID for COUNTER namespace (collected from report_path), Created_By don't contain helpful data
-            #ToDo: Wrap below in try block with except KeyError that redoes the function without the Report_Header
-            Error_Reports_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=[
-                ['Report_Header', 'Created'],
-                ['Report_Header', 'Created_By'],
-                ['Report_Header', 'Institution_ID'],
-                ['Report_Header', 'Report_ID'],
-                ['Report_Header', 'Report_Name'] #ToDo: Should this be kept, or should info on which report always use ID and be stored in Char(2)?
-            ]) #ToDo: Potentially move all fields to save to meta keyword argument
-            Error_Reports_Dataframe.drop(Error_Reports_Dataframe[Error_Reports_Dataframe.Type != "Proprietary"].index, inplace=True)
-            Error_Reports_Dataframe.drop(columns='Type', inplace=True)
-            # The to_string operation seems to be truncating the value in Error_Reports_Dataframe['Report_Header:Institution_ID'] and leaving an ellipse at the end; since the content of the key-value pair with the key "Type" is not needed for the matching, it's being removed
-            for i in range(len(Error_Reports_Dataframe['Report_Header:Institution_ID'])):
-                del Error_Reports_Dataframe['Report_Header:Institution_ID'].iloc[i]["Type"]
-            # One-at-a-time record handling not needed as these dataframes by design only have a single record so the overall error log is in 2NF
-            Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe['Report_Header:Institution_ID'].to_string()
-            Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe.Report_Matching_Index.str.slice(start=1) + Error_Reports_Dataframe['Report_Header:Report_ID']
-            Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe.Report_Matching_Index.str.strip()
-            Error_Reports_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
-            Error_Reports_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
-            Error_Reports_Dataframe['COUNTER_Namespace'] = Error_Reports_Dataframe.Value.str.split(":").str[0]
-            Error_Reports_Dataframe.drop(columns='Value', inplace=True)
-            
-            #Subsection: Load Error Reports into MySQL
-            Error_Reports_Dataframe.rename(columns={
-                'Report_Matching_Index': 'Matching',
-                'Report_Header:Created_By': 'Report_Source',
-                'Report_Header:Report_Name': 'Report_Type'
-            }, inplace=True)
-            # Import requires explicit conversion to datetime format here and timestamp data type in table
-            Error_Reports_Dataframe['Time_Report_Run'] = pandas.to_datetime(Error_Reports_Dataframe['Report_Header:Created'], infer_datetime_format=True)
-            # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
-            Error_Reports_Dataframe = Error_Reports_Dataframe[[
-                'COUNTER_Namespace',
-                'Matching',
-                'Time_Report_Run',
-                'Report_Source',
-                'Report_Type'
-            ]]
-            Load_Dataframe_into_MySQL(Error_Reports_Dataframe, 'sushierrorreports', Engine)
-
-            #Subsection: Get New Error Reports Primary Keys from MySQL
-            # The sushierrorreports table contains all the API calls for master reports that returned errors. Those records that haven't been connected to items in the sushierrorlog table contain the information needed to make this connection in the "Matching" field; reports that have been connected have a null "Matching" field.
-            Query_for_Foreign_Keys = "SELECT SUSHIErrorReports_ID, Matching FROM sushierrorreports WHERE Matching IS NOT null;"
-            Foreign_Key_Dataframe = pandas.read_sql(
-                Query_for_Foreign_Keys,
-                con=Engine,
-                index_col='Matching',
-                columns='SUSHIErrorReports_ID'
-            )
-
-            #Subsection: Clean Data for Error Log
-            #ToDo: Wrap below in try block with except KeyError that redoes the function without the Report_Header
-            Error_Log_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
-                ['Report_Header', 'Institution_ID'],
-                ['Report_Header', 'Report_ID'],
-            ]) #ToDo: Potentially move all fields to save to meta keyword argument
-            Error_Log_Dataframe['Report_Matching_Index'] = None
-            for i in range(len(Error_Log_Dataframe['Report_Header:Institution_ID'])):
-                Error_Log_Dataframe['Report_Matching_Index'].iloc[i] = str(Error_Log_Dataframe['Report_Header:Institution_ID'].iloc[i])
-                Error_Log_Dataframe['Report_Matching_Index'].iloc[i] = Error_Log_Dataframe['Report_Matching_Index'].iloc[i] + Error_Log_Dataframe['Report_Header:Report_ID'].iloc[i]
-            Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe['Report_Matching_Index'].str.strip()
-            Error_Log_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
-            Error_Log_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
-            
-            Error_Log_Dataframe = Error_Log_Dataframe.join(
-                Foreign_Key_Dataframe,
-                on='Report_Matching_Index',
-                how='inner'
-            )
-            
-            #Subsection: Load Error Log into MySQL
-            Error_Log_Dataframe.rename(columns={
-                'Code': 'Error_Code',
-                'Data': 'Error_Details',
-                'Message': 'Error_Name',
-                'SUSHIErrorReports_ID': 'Report_ID'
-            }, inplace=True)
-            # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
-            Error_Log_Dataframe = Error_Log_Dataframe[[
-                'Report_ID',
-                'Error_Code',
-                'Error_Details',
-                'Error_Name',
-                'Severity'
-            ]]
-            Load_Dataframe_into_MySQL(Error_Log_Dataframe, 'sushierrorlog', Engine)
-
-            #Subsection: Null Values Used to Designate New Primary Keys in Error Report
-            Query_for_Clearing = f"UPDATE sushierrorreports SET Matching = null WHERE SUSHIErrorReports_ID = {Foreign_Key_Dataframe.SUSHIErrorReports_ID.iloc[0]};"
-            Execute_SQL_Statement(Query_for_Clearing, Connection)
-
-            print("The report returned an error. See the SUSHI error reports log in the data warehouse for more details.")
-            continue
-        
-        
+        """
         #Section: Read Master Report into Dataframe
         #Alert: Thought (also in Visio)--Alma interfaces, nested under vendors in one-to-many relationship but only able to store a single SUSHI credential, can be used as backends and connected to frontends here, be used to represent both backends and frontends individually, or should one platform among those that share a SUSHI setup be designated as location for SUSHI data?
         #Subsection: Determine Fields to Import
@@ -438,6 +344,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
 
         #Section: Export Dataframe to MySQL
+        """
 
 
 #Section: Retrieve List of Failed Reports

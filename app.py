@@ -125,7 +125,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated
             #ToDo: Read PK and index back from MySQL
             #ToDo: Add reports PK to log dataframe as another field
-            #ToDo: Load log dataframe to MySQL
+            #ToDo: Remove index column from dataframe
+            #ToDo: Create transaction to load log dataframe to MySQL and null values in "Match" column of SUSHIErrorReports table
 
             print("The report returned an error. See the SUSHI error reports log in the data warehouse for more details.")
             continue

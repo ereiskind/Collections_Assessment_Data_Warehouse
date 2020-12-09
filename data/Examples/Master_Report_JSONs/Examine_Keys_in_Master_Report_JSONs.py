@@ -29,7 +29,7 @@ def Move_Key_Value_Pairs(Old_Dict, New_Dict):
 
 #Section: Initialize Lists
 JSON_File_Names = []
-CSV_Records = []
+CSV_Record_List = []
 
 
 #Section: Open JSON
@@ -67,26 +67,24 @@ for File in JSON_File_Names:
 
         #Subsection: Get List of Platforms
         if len(JSON_Dictionary['Report_Items']) == 0: # If the Report_Items section is empty
+            CSV_Record = {}
+            Move_Key_Value_Pairs(Header_Data, CSV_Record)
             CSV_Record['Resource_Platform'] = "Empty report"
-            CSV_Records.append(CSV_Record)
+            CSV_Record_List.append(CSV_Record)
             continue
 
+        Platform_List = []
         for Platforms in JSON_Dictionary['Report_Items']:
             for Key, Value in Platforms.items():
                 if Key == "Platform":
-                    CSV_Record['Resource_Platform'] = Value
-                    CSV_Records.append(CSV_Record)
+                    Platform_List.append(Value)
+        
+        CSV_Record = {}
+        Move_Key_Value_Pairs(Header_Data, CSV_Record)
+        for Found_Platform in Platform_List:
+            CSV_Record['Resource_Platform'] = Found_Platform
+            #ToDo: When the above step runs, the 'Resource_Platform' values within both CSV_Record and all the dictionaries within CSV_Record_List change--desired behavior is only the former changes
 
 #Section: Create CSV
-CSV_File_Path = Path('Examples', 'Example_JSONs', 'JSON_Keys.csv')
-CSV = open(CSV_File_Path, 'w', newline='')
-CSV_Writer = csv.DictWriter(CSV, [
-    'Source_JSON', # Contains the name of the JSON file the data came from
-    'Report_Creator', # Contains the Created_By value
-    'Report_Type', # Contains the master report ID
-    'Source_COUNTER_Namespace', # Contains the COUNTER namespace for the source of the report
-    'Resource_Platform' # Contains the platform
-])
-CSV_Writer.writeheader()
-for Record in CSV_Records:
-    CSV_Writer.writerow(Record)
+for Record in CSV_Record_List:
+    print(Record)

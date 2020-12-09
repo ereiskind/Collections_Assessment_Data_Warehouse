@@ -99,6 +99,8 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         #Subsection: Other Possible Changes to Dataframe
         # Should Access_Method be manipulated into a Boolean that would allow for exclusion of TDM, or should potential of other Access_Method options be kept?
+        # Resource identifiers (DOI, ISBN, ect.) come as a list of dictionaries where all the dictionaries have the keys "Type" for the type of identifier and "Value" for the identifier itself; putting the whole list in the dataframe will be simpler and will more readily convert to a relational system where data about individual resources is in a seperate relation
+        # IR records might not have parent item elements--if that's the case, can DOI be fed to API to get info needed to establish relation to its parent item?
 
 
         #Section: Export Dataframe to MySQL

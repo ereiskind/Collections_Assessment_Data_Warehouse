@@ -137,6 +137,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type|Section_Type"
         elif Master_Report_Type.startswith("Item Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
+            # list all attributes marked with ‘O’ in tables 4.b, 4.f, 4.k and 4.p except the Parent and Component elements in attributes_to_show, separated by ‘|’. For including the Parent and Component elements in IR add include_parent_details=True and include_component_details=True. This is explained in section 3.3.8.
         else:
             print("Invalid Master Report Type: " + Master_Report_Type)
             continue
@@ -306,6 +307,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             # About Parent Info
                 # Optional fields containing info that can provide useful information: Parent_Title, Parent_Data_Type, Parent_DOI, Parent_Proprietary_ID, Parent_ISBN, Parent_Print_ISSN, Parent_Online_ISSN, Parent_URI, Component_Title, Component_Data_Type, Component_DOI, Component_Proprietary_ID, Component_ISBN, Component_Print_ISSN, Component_Online_ISSN, Component_URI
                 # Unable to find item report containing this information, thus unsure how it's nested
+                # list all attributes marked with ‘O’ in tables 4.b, 4.f, 4.k and 4.p except the Parent and Component elements in attributes_to_show, separated by ‘|’. For including the Parent and Component elements in IR add include_parent_details=True and include_component_details=True. This is explained in section 3.3.8.
         else:
             pass # This represents Platform Master Reports; the if-elif-else above filters out other reports before they reach this point
         

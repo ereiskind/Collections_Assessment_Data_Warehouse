@@ -38,6 +38,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         continue
 
     print(f"Sucessful request to {Status_URL} got status code {Status_Check}.")
+    #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself; as a result, requests can't find the data
     #ToDo: Run API call for status
     #ToDo: If return value not 200, break and return error message to user
 

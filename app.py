@@ -219,18 +219,18 @@ for SUSHI_Call_Data in SUSHI_Data:
     #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
     except Timeout as error: # If the API request times out
         print(f"Server didn't respond after 10 seconds ({format(error)}).")
-        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+"\tTimeout")
+        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+" Timeout")
         continue    
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
             Status_Check = Retrieve_Downloaded_JSON_File(Chrome_Browser_Driver, Status_URL + "?" + Credentials_String)
         else:
             print(f"HTTP Error: {format(error)}")
-            Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+"\tHTTP Error")
-        continue
+            Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+" HTTP Error")
+            continue
     except: # If there's some other problem with the API request
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
-        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+"\tSomething Else")
+        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"]+" Something Else")
         continue
 
     #Subsection: Check if Status_Check Returns COUNTER Error

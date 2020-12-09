@@ -176,8 +176,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             Foreign_Key_Dataframe = pandas.read_sql(
                 Query_for_Foreign_Keys,
                 con=Engine,
-                index_col='SUSHIErrorReports_ID',
-                columns='Matching'
+                index_col='Matching',
+                columns='SUSHIErrorReports_ID'
             )
 
             #Subsection: Clean Data for Error Log
@@ -190,14 +190,20 @@ for SUSHI_Call_Data in SUSHI_Data:
             # Above assumes that there won't be more than 10 rows (error codes) returned for a given report
             Error_Log_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
             Error_Log_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
-            #ToDo: Add reports PK to log dataframe as field named "Report_ID" by matching on field Report_Matching_Index
-            #ToDo: Remove Report_Matching_Index column from dataframe
+            
+            Error_Log_Dataframe = Error_Log_Dataframe.join(
+                Foreign_Key_Dataframe,
+                on='Report_Matching_Index'
+            )
+            #ToDo: Fix FK column containing only NaN
+            print(Error_Log_Dataframe)
             
             #Subsection: Load Error Log into MySQL
             Error_Log_Dataframe.rename(columns={
                 'Code': 'Error_Code',
                 'Data': 'Error_Details',
-                'Message': 'Error_Name'
+                'Message': 'Error_Name',
+                'SUSHIErrorReports_ID': 'Report_ID'
             }, inplace=True)
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
             Error_Log_Dataframe = Error_Log_Dataframe[[

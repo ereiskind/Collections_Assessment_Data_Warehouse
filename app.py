@@ -1,12 +1,13 @@
 #API repository: https://app.swaggerhub.com/apis/COUNTER/counter-sushi_5_0_api/1.0.0
 
 from pathlib import Path
-import requests
 import json
 import csv
-from requests import HTTPError, Timeout
 import time
 import os
+import sys
+import requests
+from requests import HTTPError, Timeout
 import pandas
 import pymysql
 from sqlalchemy import create_engine

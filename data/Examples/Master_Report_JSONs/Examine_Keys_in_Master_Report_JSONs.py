@@ -4,12 +4,15 @@ import os
 import json
 
 #Section: Initialize List
-#ToDo: Create list that will hold rows of CSV
+CSV_Records = []
 
 
 #Section: Open JSON
-Folder = os.getcwd()
-#ToDo: Iterate through all items in Folder that end in ".json"
+Current_Folder = os.path.dirname(os.path.realpath(__file__)) # Goes down to this specific subfolder--getcwd pulls all folders, including git
+for Folder, Subfolders, Files in os.walk(Current_Folder):
+    for File in Files:
+        if File.endswith(".json"):
+            CSV_Records.append(File)
 
 
 #Section: Read Data from JSON Dictionary

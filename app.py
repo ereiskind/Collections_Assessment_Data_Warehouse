@@ -241,7 +241,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Dataframe_Fields.append(['Report_Items', 'Item'])
             # Excluded attributes: Authors, Publication_Date, Article_Version, Parent_Authors, Parent_Publication_Date, Parent_Article_Version, Component_Authors, Component_Publication_Date
             # Can include parent info--how is this nested???
-            # Desired parent info: Parent_Title, Parent_Data_Type, Parent_DOI, Parent_Propriatary_ID, Parent_ISBN, Parent_Print_ISSN, Parent_Online_ISSN, Parent_URI, Component_Title, Component_Data_Type, Component_DOI, Component_Propriatary_ID, Component_ISBN, Component_Print_ISSN, Component_Online_ISSN, Component_URI
+            # Desired parent info: Parent_Title, Parent_Data_Type, Parent_DOI, Parent_Proprietary_ID, Parent_ISBN, Parent_Print_ISSN, Parent_Online_ISSN, Parent_URI, Component_Title, Component_Data_Type, Component_DOI, Component_Proprietary_ID, Component_ISBN, Component_Print_ISSN, Component_Online_ISSN, Component_URI
         else:
             pass # This represents Platform Master Reports; the if-elif-else above filters out other reports before they reach this point
         
@@ -258,7 +258,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         #Subsection: Other Possible Changes to Dataframe
         # Should Access_Method be manipulated into a Boolean that would allow for exclusion of TDM, or should potential of other Access_Method options be kept?
-        # Resource identifiers (DOI, ISBN, ect.) come as a list of dictionaries where all the dictionaries have the keys "Type" for the type of identifier and "Value" for the identifier itself; putting the whole list in the dataframe will be simpler and will more readily convert to a relational system where data about individual resources is in a seperate relation
+        # Resource identifiers (DOI, ISBN, ect.) come as a list of dictionaries where all the dictionaries have the keys "Type" for the type of identifier and "Value" for the identifier itself; putting the whole list in the dataframe will be simpler and will more readily convert to a relational system where data about individual resources is in a separate relation
         # IR records might not have parent item elements--if that's the case, can DOI be fed to API to get info needed to establish relation to its parent item?
         # YOP of 0001 means unknown, YOP of 9999 means articles in press--need way to indicate this in outputting results
 

@@ -44,6 +44,10 @@ def Execute_SQL_Statement(SQLStatement, DBConnection):
     DBConnection.commit()
 
 
+#Section: Get Current Time
+#ToDo: Save the current time to variable Script_Start_Time
+
+
 #Section: Collect Information Needed for SUSHI Call
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
 SUSHI_Data = []
@@ -310,5 +314,10 @@ for SUSHI_Call_Data in SUSHI_Data:
 
 
         #Section: Export Dataframe to MySQL
+
+
+#Section: Retrieve List of Failed Reports
+#ToDo: SELECT COUNTER_Namespace, Report_Source, Report_Type FROM sushierrorreports WHERE Time_Report_Run > Script_Start_Time (aka created after the script started running)
+#ToDo: Output the results of the above to an Excel file
 
 Connection.close()

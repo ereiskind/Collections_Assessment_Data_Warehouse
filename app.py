@@ -55,12 +55,13 @@ for SUSHI_Call_Data in SUSHI_Data:
     #Subsection: Collect Reports
     URL_Report_Path = re.compile(r'reports/\w{2}')
     for Master_Report in Available_Master_Reports:
+        Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path.findall(Master_Report["Path"])[0]
         try:
-            Master_Report_Response = requests.get(Master_Report["Path"], params=Credentials, timeout=10)
+            Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=10)
         except Timeout as error:
-            print(f"Server didn't respond to request for {Master_Report["Report_Name"]} after 10 seconds ({format(error)}).")
+            print(f"Server didn't respond to request for master report after 10 seconds ({format(error)}).")
             continue
-        print(Master_Report_Response)
+        print(json.loads(Master_Report_Response.text))
     #ToDo: For each item in available reports tuple, request report with as much detail as possible
     #ToDo: Save reports
 

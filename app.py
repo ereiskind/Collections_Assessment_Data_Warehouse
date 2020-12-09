@@ -168,7 +168,6 @@ for SUSHI_Call_Data in SUSHI_Data:
                 'Report_Source',
                 'Report_Type'
             ]]
-            Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
             Load_Dataframe_into_MySQL(Error_Reports_Dataframe, 'sushierrorreports', Engine)
 
             #Subsection: Get New Error Reports Primary Keys from MySQL

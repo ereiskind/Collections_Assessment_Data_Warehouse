@@ -40,6 +40,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
         continue
     #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself; as a result, requests can't find the data
+    #ToDo: Determine way to output platforms that aren't checked for reports
 
     #Subsection: Get List of R5 Reports Available
     Reports_URL = SUSHI_Call_Data["URL"] + "reports" # This API returns a list of the available SUSHI reports

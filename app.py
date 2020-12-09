@@ -155,10 +155,12 @@ for SUSHI_Call_Data in SUSHI_Data:
                 #ToDo: Get info for loading into sushierrorreports table--note that SUSHI JSONs for this resource don't have Report_Header sections, so data needs to come from elsewhere
                 #ToDo: Load above data into a record in SUSHIErrorReports
                 print(f"Server didn't respond to request for {Master_Report_Type} after second request of 120 seconds [{format(error)}].")
-                #ToDo: except: 
-                    #ToDo: Get same data as above and load into SUSHIErrorReports
-                #ToDo: If Master_Report_Response.json() is empty, get above data and load into record in SUSHIErrorReports
                 continue
+            #ToDo: except:
+                #ToDo: print(f"An error occurred while requesting {Master_Report_Type} [{format(error)}].")
+                #ToDo: Get same data as above and load into SUSHIErrorReports
+                #ToDo: continue
+            #ToDo: If Master_Report_Response.json() is empty, get above data and load into record in SUSHIErrorReports
 
         Report_JSON = Master_Report_Response.json()
         

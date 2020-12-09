@@ -122,6 +122,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                     # Full name of the master report: Report_Type [Report_Header:Report_Name] = Master_Report_Type
                 #ToDo: Load above data into a record in SUSHIErrorReports
                 print(f"Server didn't respond to request for {Master_Report_Type} after second request of 120 seconds [{format(error)}].")
+                #ToDo: Handling for other errors and for retruning an empty JSON?
                 continue
 
         Report_JSON = json.loads(Master_Report_Response.text)

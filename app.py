@@ -44,6 +44,11 @@ def Execute_SQL_Statement(SQLStatement, DBConnection):
     DBConnection.commit()
 
 
+def Handle_Status_Check_Error(URL, Message, Code):
+    #ToDo: Add platform and error to Platforms_Not_Collected
+    print(f"Reports from {URL} not available because {Message} (error code {Code}).")
+
+
 #Section: Initialize Variables for Reports Not Captured
 #ToDo: Save the current time to variable Script_Start_Time
 #ToDo: Create variable (what data type?) Platforms_Not_Collected for saving data about the platforms where reports aren't collected and the specific missing master reports can't be identified

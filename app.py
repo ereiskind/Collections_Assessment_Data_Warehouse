@@ -149,6 +149,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             # The to_string operation seems to be truncating the value in Error_Reports_Dataframe['Report_Header:Institution_ID'] and leaving an ellipse at the end; since the content of the key-value pair with the key "Type" is not needed for the matching, it's being removed
             for i in range(len(Error_Reports_Dataframe['Report_Header:Institution_ID'])):
                 del Error_Reports_Dataframe['Report_Header:Institution_ID'].iloc[i]["Type"]
+            # One-at-a-time record handling not needed as these dataframes by design only have a single record so the overall error log is in 2NF
             Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe['Report_Header:Institution_ID'].to_string()
             Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe.Report_Matching_Index.str.slice(start=1) + Error_Reports_Dataframe['Report_Header:Report_ID']
             Error_Reports_Dataframe['Report_Matching_Index'] = Error_Reports_Dataframe.Report_Matching_Index.str.strip()

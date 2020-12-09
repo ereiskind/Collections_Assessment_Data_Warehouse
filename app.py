@@ -16,15 +16,8 @@ for Set in [SUSHI_Credential_Set.rstrip().split(",") for SUSHI_Credential_Set in
         Credentials = dict(URL = Set[0], RequestorID = Set[1], APIKey = Set[2], CustomerID = Set[3])
     SUSHI_Credentials.append(Credentials)
 
-# print(SUSHI_Creds_File.readline())
-# print("something")
-# print(SUSHI_Creds_File.readline())
-
-#ToDo: Save SUSHI creds for use in multiple API calls
-# Methiod for saving creds should also handle if call needs requestor ID and/or API key
-
-
-#Section: Determine Reports Available
+#Section: Make API Calls
+#ToDo: Initiate for loop looking at dictionaries within SUSHI_Credentials
 #Subsection: Determine SUSHI Availability
 #ToDo: Run API call for status
 #ToDo: If return value not 200, break and return error message to user
@@ -33,8 +26,7 @@ for Set in [SUSHI_Credential_Set.rstrip().split(",") for SUSHI_Credential_Set in
 #ToDo: Run API call for list of available R5 reports
 #ToDo: Save results into a tuple
 
-
-#Section: Collect Reports
+#Subsection: Collect Reports
 #ToDo: For each item in available reports tuple, request report with as much detail as possible
 #ToDo: Save reports
 

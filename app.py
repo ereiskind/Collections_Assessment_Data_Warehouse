@@ -138,7 +138,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         elif Master_Report_Type.startswith("Item Master Report"):
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
         else:
-            print("Invalid Master Report Type: "+Master_Report_Type)
+            print("Invalid Master Report Type: " + Master_Report_Type)
             continue
         
         URL_Report_Path = URL_Report_Path_Regex.findall(Master_Report["Path"])[0]

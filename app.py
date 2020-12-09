@@ -92,21 +92,32 @@ for SUSHI_Call_Data in SUSHI_Data:
             Top_Level_Keys += 1
 
         if Top_Level_Keys == 1:
-            Error_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
+            Error_Reports_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=[
                 ['Report_Header', 'Created'],
                 ['Report_Header', 'Created_By'],
                 ['Report_Header', 'Institution_ID'],
                 ['Report_Header', 'Report_ID'],
                 ['Report_Header', 'Report_Name']
-            ]) # for some reasion, including "['Report_Header', 'Institution_ID', 'Type']" or "['Report_Header', 'Institution_ID', 'Value']" led to "TypeError: list indices must be integers or slices, not strings"
-            Error_COUNTER_Namespaces = Error_Dataframe['Report_Header:Institution_ID'].replace(r"\{'Type': 'Proprietary', 'Value': '([\w\d]*):([\w\d]*)'\}", r"\{'Type': 'Proprietary', 'Value': '([\w\d]*):([\w\d]*)'\}"[0], regex=True)
-            Error_Dataframe['Namespace'] = Error_COUNTER_Namespaces
-            #ToDo: Use regex on value of Error_Dataframe['Report_Header.Institution_ID'] to isolate the namespace
-            #ToDo sample text: "{'Type': 'Proprietary', 'Value': 'MUSE:institution16849'}" looking to isolate "MUSE"
-            # Is it worth exporting this to the datbase into two seperate tables for the purpose of more readily generating a list of reports not pulled without duplicates but retaining all the error codes?
-            Error_Dataframe.to_csv('Check_Dataframe.csv', mode='a', header=False, index=False)
-            #ToDo: Create seperate CSV to serve as error log--should it be in gitignore?
-            print("The report returned an error. See the error log in Report_Errors.csv for more details.")
+            ])
+            #ToDo: Create COUNTER namespace field with Error_Reports_Dataframe.Value.str.split(":")[0] and append it to dataframe
+            Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
+
+            Error_Log_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
+                ['Report_Header', 'Created'],
+                ['Report_Header', 'Created_By'],
+                ['Report_Header', 'Institution_ID'],
+                ['Report_Header', 'Report_ID'],
+                ['Report_Header', 'Report_Name']
+            ])
+            Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
+
+            #ToDo: Create record index for both dataframes combining Institution_ID and Report_ID
+            #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated
+            #ToDo: Read PK and index back from MySQL
+            #ToDo: Add reports PK to log dataframe as another field
+            #ToDo: Load log dataframe to MySQL
+
+            print("The report returned an error. See the SUSHI error reports log in the data warehouse for more details.")
             continue
         
         #Subsection: Determine Fields to Import

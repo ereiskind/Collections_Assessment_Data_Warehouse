@@ -9,6 +9,7 @@ import re
 import pandas
 import pymysql
 from sqlalchemy import create_engine
+import Database_Credentials #Alert: From original repository with flat structure; this file is now located at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
 
 #Section: Collect Information Needed for SUSHI Call
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
@@ -27,9 +28,9 @@ for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_
 Engine = create_engine(
     mysql + '+' +
     pymysql + '://' +
-    username + ':' +
-    password + '@' +
-    host + ':' + str(port) + '/' +
+    Database_Credentials.Username + ':' +
+    Database_Credentials.Password + '@' +
+    Database_Credentials.Host + ':' + str(Database_Credentials.Post) + '/' +
     testdatawarehouse
 )
 

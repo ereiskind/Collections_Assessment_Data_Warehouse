@@ -25,6 +25,9 @@ for File in JSON_File_Names:
 
         #Section: Read Data from JSON Dictionary
         CSV_Record = {}
+        # CSV_Record['Report_Creator'] contains the Created_By value
+        # CSV_Record['ID'] contains the COUNTER namespace
+        # CSV_Record['Platform'] contains the platform
 
         #Subsection: Read Data from Header
         CSV_Record['Report_Creator'] = JSON_Dictionary['Report_Header']['Created_By']
@@ -37,12 +40,15 @@ for File in JSON_File_Names:
 
         #Subsection: Get List of Platforms
         for Platforms in JSON_Dictionary['Report_Items']:
-            for Platform in Platforms:
+            List_of_Platforms = []
+            for Key, Value in Platforms.items():
                 print(CSV_Record)
-                print(Platform['Platform']) #Got "indices must be interger" error
-        #ToDo: Get , a list of dictionaries, and save to an iterable
-        #ToDo: Iterate through the above, pulling the value for the key 'Platform' and saving it to a list
-        #ToDo: Dedupe list (use list comprehension?)
+                if Key == "Platform":
+                    List_of_Platforms.append(Value)
+                print(List_of_Platforms)
+        #ToDo: Dedupe list (use list comprehension?)--all the List_of_Platform values for the samples contain a single platform--inspect SAGE/CQ and Oxford, get a mix of types of master reports
+
+    print("\n\n")
 
 
 #Section: Create CSV

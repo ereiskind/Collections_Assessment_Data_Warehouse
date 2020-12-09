@@ -170,23 +170,23 @@ for SUSHI_Call_Data in SUSHI_Data:
     #Subsection: Check if Status_Check Returns COUNTER Error
     # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes
     try: # Status_Check is JSON-like dictionary with Report_Header and information about the error
-        Status_Check_Error = Status_Check.json()["Exception"]["Severity"]
+        Status_Check_Error = Status_Check["Exception"]["Severity"]
         if Status_Check_Error == "Error":
-            Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.json()["Exception"]["Message"], Status_Check.json()["Exception"]["Code"])
+            Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check["Exception"]["Message"], Status_Check["Exception"]["Code"])
             continue
         #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
     except:
         try: # Status_Check is JSON-like dictionary with nothing but information about the error
-            Status_Check_Error = Status_Check.json()["Severity"]
+            Status_Check_Error = Status_Check["Severity"]
             if Status_Check_Error == "Error":
-                Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.json()["Message"], Status_Check.json()["Code"])
+                Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check["Message"], Status_Check["Code"])
                 continue
             #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
         except:
             try: # Status_Check is a list containing a JSON-like dictionary with nothing but information about the error
-                Status_Check_Error = Status_Check.text[0].json()["Severity"]
+                Status_Check_Error = Status_Check[0]["Severity"]
                 if Status_Check_Error == "Error":
-                    Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.text[0].json()["Message"], Status_Check.text[0].json()["Code"])
+                    Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check[0]["Message"], Status_Check[0]["Code"])
                     continue
                 #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
             except:

@@ -55,6 +55,10 @@ for File in JSON_File_Names:
                 CSV_Record['ID'] = "No COUNTER Namespace"
 
         #Subsection: Get List of Platforms
+        if len(JSON_Dictionary['Report_Items']) == 0: # If the Report_Items section is empty
+            CSV_Record['Platform'] = "Empty report"
+            continue
+        
         for Platforms in JSON_Dictionary['Report_Items']:
             List_of_Platforms = []
             for Key, Value in Platforms.items():

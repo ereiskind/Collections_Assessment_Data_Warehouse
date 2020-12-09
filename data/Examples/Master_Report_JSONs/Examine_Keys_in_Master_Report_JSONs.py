@@ -25,7 +25,8 @@ for File in JSON_File_Names:
 
         #Section: Read Data from JSON Dictionary
         #Subsection: Read Data from Header
-        #ToDo: Get JSON_Dictionary['Report_Header']['Created_By'], a string, and save as the report creator
+        Report_Creator = JSON_Dictionary['Report_Header']['Created_By']
+        print(Report_Creator)
         #ToDo: Get JSON_Dictionary['Institution_ID'], a list of dictionaries, and save the dictionary where "Type": "Proprietary" to a variable
         #ToDo: From the above variable, get the value for the key 'Value'
 

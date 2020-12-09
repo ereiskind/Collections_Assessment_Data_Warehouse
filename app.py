@@ -111,15 +111,28 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Subsection: Check if Status_Check Returns COUNTER Error
     # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes
-    if Status_Check.json()["Exception"]["Severity"] == "Error": # Status_Check is JSON-like dictionary with Report_Header and information about the error
-        Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.json()["Exception"]["Message"], Status_Check.json()["Exception"]["Code"])
-        continue
-    if Status_Check.json()["Severity"] == "Error": # Status_Check is JSON-like dictionary with nothing but information about the error
-        Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.json()["Message"], Status_Check.json()["Code"])
-        continue
-    if Status_Check.text[0].json()["Severity"] == "Error": # Status_Check is a list containing a JSON-like dictionary with nothing but information about the error
-        Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.text[0].json()["Message"], Status_Check.text[0].json()["Code"])
-        continue to value for key "Code"
+    try: # Status_Check is JSON-like dictionary with Report_Header and information about the error
+        Status_Check_Error = Status_Check.json()["Exception"]["Severity"]
+        if Status_Check_Error == "Error":
+            Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.json()["Exception"]["Message"], Status_Check.json()["Exception"]["Code"])
+            continue
+        #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
+    except:
+        try: # Status_Check is JSON-like dictionary with nothing but information about the error
+            Status_Check_Error = Status_Check.json()["Severity"]
+            if Status_Check_Error == "Error":
+                Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.json()["Message"], Status_Check.json()["Code"])
+                continue
+            #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
+        except:
+            try: # Status_Check is a list containing a JSON-like dictionary with nothing but information about the error
+                Status_Check_Error = Status_Check.text[0].json()["Severity"]
+                if Status_Check_Error == "Error":
+                    Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.text[0].json()["Message"], Status_Check.text[0].json()["Code"])
+                    continue
+                #ToDo: Potentially retry for == "Fatal" or block for == "Warning"?
+            except:
+                pass # If the status check passes, a KeyError is returned
 
     #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself--believed this meant requests couldn't find the data, needs to be confirmed
     #ToDo: Possibly handle above by checking if Status_Check.json() is empty

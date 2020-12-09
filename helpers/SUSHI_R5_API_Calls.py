@@ -76,22 +76,22 @@ def Status(URL, Parameters, WebDriver):
     """
     Status_URL = URL + "status"
     try: # Makes the initial API call
-        Status_Check = requests.get(Status_URL, params=Parameters, timeout=10)
-        Status_Check.raise_for_status()
+        Status = requests.get(Status_URL, params=Parameters, timeout=10)
+        Status.raise_for_status()
     #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
     except Timeout as error: # If the API request times out
         print(f"Server didn't respond after 10 seconds ({format(error)}).")
-        return URL + f"|{format(error)}"
+        return URL + f"|Status|{format(error)}"
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
-            Status_Check = Retrieve_Downloaded_JSON_File(WebDriver, Status_URL + "?" + Parameters)
-            if Status_Check == []:
-                return URL + f"|{format(error)}"
+            Status = Retrieve_Downloaded_JSON_File(WebDriver, Status_URL + "?" + Parameters)
+            if Status == []:
+                return URL + f"|Status|{format(error)}"
         else:
             print(f"HTTP Error: {format(error)}")
-            return URL + f"|{format(error)}"
+            return URL + f"|Status|{format(error)}"
     except: # If there's some other problem with the API request
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
-        return URL + f"|{format(error)}"
+        return URL + "|Status|Some other error"
 
-    return JSON_to_Python_Data_Types(Status_Check)
+    return JSON_to_Python_Data_Types(Status)

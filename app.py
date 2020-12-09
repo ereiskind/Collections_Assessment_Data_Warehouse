@@ -95,7 +95,9 @@ for Folder, Subfolder, Files in os.walk(API_Download_Path):
 
 #Subsection: Initialize Variables for Reports Not Captured
 #ToDo: Save the current time to variable Script_Start_Time
-Platforms_Not_Collected = [] # This will contain the URLs for failed API calls
+Platforms_Not_Collected = []
+    # This will contain the URLs for failed API calls that prevented any reports from being collected
+    # Format: SUSHI base URL|API call that failed|Error that caused failure
 
 #Subsection: Create the PyMySQL Connection and SQLAlchemy Engine
 Database = 'testdatawarehouse'

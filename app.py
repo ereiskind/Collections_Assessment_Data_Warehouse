@@ -128,6 +128,11 @@ for SUSHI_Call_Data in SUSHI_Data:
     for Report in Available_Reports.json():
         if "Master Report" in Report["Report_Name"]:
             Available_Master_Reports.append(Report)
+    if Available_Master_Reports == []:
+        #ToDo: Add platform and error to Platforms_Not_Collected
+        # If the master reports aren't offered, should the standard views be retrieved with this script?
+        print(f"{SUSHI_Call_Data['URL']} doesn't offer any master reports.")
+        continue
     
     #Subsection: Collect Individual Master Reports
     #ToDo: Allow system or user to change dates

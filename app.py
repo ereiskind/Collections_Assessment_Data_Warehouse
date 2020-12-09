@@ -99,6 +99,8 @@ for SUSHI_Call_Data in SUSHI_Data:
                 ['Report_Header', 'Report_ID'],
                 ['Report_Header', 'Report_Name']
             ]) # for some reasion, including "['Report_Header', 'Institution_ID', 'Type']" or "['Report_Header', 'Institution_ID', 'Value']" led to "TypeError: list indices must be integers or slices, not strings"
+            Error_COUNTER_Namespaces = Error_Dataframe['Report_Header:Institution_ID'].replace(r"\{'Type': 'Proprietary', 'Value': '([\w\d]*):([\w\d]*)'\}", r"\{'Type': 'Proprietary', 'Value': '([\w\d]*):([\w\d]*)'\}"[0], regex=True)
+            Error_Dataframe['Namespace'] = Error_COUNTER_Namespaces
             #ToDo: Use regex on value of Error_Dataframe['Report_Header.Institution_ID'] to isolate the namespace
             #ToDo sample text: "{'Type': 'Proprietary', 'Value': 'MUSE:institution16849'}" looking to isolate "MUSE"
             # Is it worth exporting this to the datbase into two seperate tables for the purpose of more readily generating a list of reports not pulled without duplicates but retaining all the error codes?

@@ -3,9 +3,15 @@
 """To obtain JSONs, the following goes at the very end of the "Make API Calls" section of app.py:
 
 from pathlib import Path
-print(type(Report_JSON))
-Namespace = str(Report_JSON['Report_Header']['Institution_ID'][0]['Value']).split(":")[0]
-File_Name = Path('Examples', 'Example_JSONs', f"{Report_JSON['Report_Header']['Report_ID']}_{Namespace}.json")
+try:
+    Namespace = str(Report_JSON['Report_Header']['Institution_ID'][0]['Value']).split(":")[0]
+    File_Name = Path('Examples', 'Example_JSONs', f"{Report_JSON['Report_Header']['Report_ID']}_{Namespace}.json")
+except KeyError:
+    try:
+        Namespace = str(Report_JSON['Institution_ID'][0]['Value']).split(":")[0]
+        File_Name = Path('Examples', 'Example_JSONs', f"{Report_JSON['Report_ID']}_{Namespace}.json")
+            except KeyError:
+                continue # Means the JSON returned is for an error
 with open(File_Name, 'w') as writeJSON:
     json.dump(Master_Report_Response.json(), writeJSON)
 """

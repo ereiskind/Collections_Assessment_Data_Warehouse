@@ -109,16 +109,17 @@ for SUSHI_Call_Data in SUSHI_Data:
         #ToDo: Add platform and error to Platforms_Not_Collected
         continue
 
-    #Subsection: Confirm Returned Data Means OK to Continue
+    #Subsection: Check if Status_Check Returns COUNTER Error
     # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes
-    #ToDo: If statement for JSON-like dictionaries with top-level keys "Report_Header" and "Exception"
-    #ToDo: If statement for dictionary with keys "Code", "Severity", "Message" where Code="Error"
-    #ToDo: If statement for list containing single dictionary with keys "Code", "Severity", "Message" where Code="Error"
-    #ToDo: Within block:
-        #ToDo: Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Message, Code)
-        # Message= reference to value for key "Message"
-        # Code= reference to value for key "Code"
-        #ToDo: continue
+    if Status_Check.json()["Exception"]["Severity"] == "Error": # Status_Check is JSON-like dictionary with Report_Header and information about the error
+        Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.json()["Exception"]["Message"], Status_Check.json()["Exception"]["Code"])
+        continue
+    if Status_Check.json()["Severity"] == "Error": # Status_Check is JSON-like dictionary with nothing but information about the error
+        Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.json()["Message"], Status_Check.json()["Code"])
+        continue
+    if Status_Check.text[0].json()["Severity"] == "Error": # Status_Check is a list containing a JSON-like dictionary with nothing but information about the error
+        Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check.text[0].json()["Message"], Status_Check.text[0].json()["Code"])
+        continue to value for key "Code"
 
     #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself--believed this meant requests couldn't find the data, needs to be confirmed
     #ToDo: Possibly handle above by checking if Status_Check.json() is empty

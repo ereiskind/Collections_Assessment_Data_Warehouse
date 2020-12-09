@@ -20,7 +20,7 @@ CREATE TABLE SUSHIErrorReports (
     SUSHIErrorReports_ID SERIAL,
     COUNTER_Namespace VARCHAR(10),
     Matching VARCHAR(100) UNIQUE,
-    Time_Report_Run DATETIME,
+    Time_Report_Run TIMESTAMP,
     Report_Source VARCHAR(50),
     Report_Type VARCHAR(45)
 ); 

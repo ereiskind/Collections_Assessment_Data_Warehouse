@@ -15,7 +15,7 @@ import Database_Credentials #Alert: From original repository with flat structure
 def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
     """A pandas to_sql function call bracketed by the creation and destruction of a SQLAlchemy session object.
     
-    This function loads the data contained in Dataframe, a pandas dataframe, into DBTable, a table (relation) in the MySQL database which is being called by DBEngine, a SQLAlchemy engine object. Dataframe's record index values aren't included
+    This function loads the data contained in Dataframe, a pandas dataframe, into DBTable, a table (relation) in the MySQL database which is being called by DBEngine, a SQLAlchemy engine object. Dataframe's record index values aren't included.
     """
     Connection = DBEngine.connect()
     Dataframe.to_sql(
@@ -155,10 +155,11 @@ for SUSHI_Call_Data in SUSHI_Data:
             #Subsection: Load Error Reports into MySQL
             Error_Reports_Dataframe.rename(columns={
                 'Report_Matching_Index': 'Matching',
-                'Report_Header:Created': 'Time_Report_Run',
                 'Report_Header:Created_By': 'Report_Source',
                 'Report_Header:Report_Name': 'Report_Type'
             }, inplace=True)
+            # Import requires explicit conversion to datetime format here and timestamp data type in table
+            Error_Reports_Dataframe['Time_Report_Run'] = pandas.to_datetime(Error_Reports_Dataframe['Report_Header:Created'], infer_datetime_format=True)
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
             Error_Reports_Dataframe = Error_Reports_Dataframe[[
                 'COUNTER_Namespace',
@@ -168,7 +169,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                 'Report_Type'
             ]]
             Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
-            #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated: Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine)
+            Load_Dataframe_into_MySQL(Error_Reports_Dataframe, 'sushierrorreports', Engine)
 
             #Subsection: Get New Error Reports Primary Keys from MySQL
             #ToDo: Read PK and index back from MySQL

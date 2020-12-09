@@ -165,22 +165,23 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         #Section: Handle Reports Returning Errors
         #Subsection: Determine if Report is an Error Report
-        #ToDo: Change this to looking for "Report_Items" in top level of keys in Report_JSON
+        #ToDo: Change this to looking for "Report_Items" in top level of keys in Report_JSON  and to checking that its value isn't an empty list
         # In error responses, no data is being reported, so Report_Header is the only top-level key; when data is returned, it's joined by Report_Items
         Top_Level_Keys = 0
         for value in Report_JSON.values():
             Top_Level_Keys += 1
 
         #Subsection: Clean Data for Error Reports
+        #ToDo: Change below to if "Report_Items" isn't found in top level of Report_JSON keys
         if Top_Level_Keys == 1:
-        #ToDo: Change above to if "Report_Items" isn't found in top level of Report_JSON keys
+        #ToDo: Wrap below in try block with except KeyError that redoes the function without the Report_Header
             Error_Reports_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=[
                 ['Report_Header', 'Created'],
                 ['Report_Header', 'Created_By'],
                 ['Report_Header', 'Institution_ID'],
                 ['Report_Header', 'Report_ID'],
                 ['Report_Header', 'Report_Name']
-            ])
+            ]) #ToDo: Potentially move all fields to save to meta keyword argument
             Error_Reports_Dataframe.drop(Error_Reports_Dataframe[Error_Reports_Dataframe.Type != "Proprietary"].index, inplace=True)
             Error_Reports_Dataframe.drop(columns='Type', inplace=True)
             # The to_string operation seems to be truncating the value in Error_Reports_Dataframe['Report_Header:Institution_ID'] and leaving an ellipse at the end; since the content of the key-value pair with the key "Type" is not needed for the matching, it's being removed
@@ -224,10 +225,11 @@ for SUSHI_Call_Data in SUSHI_Data:
             )
 
             #Subsection: Clean Data for Error Log
+            #ToDo: Wrap below in try block with except KeyError that redoes the function without the Report_Header
             Error_Log_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
                 ['Report_Header', 'Institution_ID'],
                 ['Report_Header', 'Report_ID'],
-            ])
+            ]) #ToDo: Potentially move all fields to save to meta keyword argument
             Error_Log_Dataframe['Report_Matching_Index'] = None
             for i in range(len(Error_Log_Dataframe['Report_Header:Institution_ID'])):
                 Error_Log_Dataframe['Report_Matching_Index'].iloc[i] = str(Error_Log_Dataframe['Report_Header:Institution_ID'].iloc[i])

@@ -6,7 +6,6 @@ import csv
 import requests
 from requests import HTTPError, Timeout
 import time
-import re
 import pandas
 import pymysql
 from sqlalchemy import create_engine
@@ -131,8 +130,6 @@ for SUSHI_Call_Data in SUSHI_Data:
             Available_Master_Reports.append(Report)
     
     #Subsection: Collect Individual Master Reports
-    # A regex is used to construct the API URL so only the appropriate part of the "Path" attribute is added to the base URL (some platforms have a "Path" attribute that include the domain, others include a trailing slash)
-    URL_Report_Path_Regex = re.compile(r'reports/\w{2}/?$')
     #ToDo: Allow system or user to change dates
     Credentials["begin_date"] = "2020-01-01"
     Credentials["end_date"] = "2020-01-31"
@@ -149,7 +146,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
         elif Master_Report_Type == "DR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method"
-         elif Master_Report_Type == "TR":
+        elif Master_Report_Type == "TR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type|Section_Type"
         elif Master_Report_Type == "IR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
@@ -161,10 +158,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             print("Invalid Master Report Type: " + Master_Report["Report_Name"])
             continue
         
-        URL_Report_Path = URL_Report_Path_Regex.findall(Master_Report["Path"])[0] #Alert: KeyError 'Path' possible here
-        if URL_Report_Path.endswith("/"):
-            URL_Report_Path = URL_Report_Path[0:-1]
-        Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path
+        Master_Report_URL = SUSHI_Call_Data["URL"] + "reports/" + Master_Report_Type.lower()
         time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
         try:
             Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=90)

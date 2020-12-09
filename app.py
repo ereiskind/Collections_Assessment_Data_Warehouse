@@ -107,6 +107,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error_Reports_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
             Error_Reports_Dataframe['COUNTER_Namespace'] = Error_Reports_Dataframe.Value.str.split(":").str[0]
             Error_Reports_Dataframe.drop(columns='Value', inplace=True)
+            #Alert: If import to MySQL relies on fields in certain order, dataframe may not have that
             # Columns (in order): Report_Header:Created, Report_Header:Created_By, Report_Header:Report_Name, Report_Matching_Index, COUNTER_Namespace
             Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
 
@@ -119,6 +120,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             # Above assumes that there won't be more than 10 rows (error codes) returned for a given report
             Error_Log_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
             Error_Log_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
+            #Alert: If import to MySQL relies on fields in certain order, dataframe may not have that
             # Columns (in order): Code, Data, Message, Severity, Report_Matching_Index
             Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
 

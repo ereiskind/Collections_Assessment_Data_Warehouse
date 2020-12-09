@@ -108,8 +108,8 @@ for SUSHI_Call_Data in SUSHI_Data:
     if "Exception" in Status_Check.json():
         #ToDo: Add platform and error to Platforms_Not_Collected
         print(f"Reports from {SUSHI_Call_Data['URL']} not available because {Status_Check.json()['Exception']['Message']} (error code {Status_Check.json()['Exception']['Code']}).")
+        # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes
         continue
-    #ToDo: Check if returned JSON is for a status code that indicates credentials that don't work (see https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ for those codes)
 
     #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself--believed this meant requests couldn't find the data, needs to be confirmed
     #ToDo: Possibly handle above by checking if Status_Check.json() is empty

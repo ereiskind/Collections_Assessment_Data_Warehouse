@@ -149,13 +149,13 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error_Reports_Dataframe['COUNTER_Namespace'] = Error_Reports_Dataframe.Value.str.split(":").str[0]
             Error_Reports_Dataframe.drop(columns='Value', inplace=True)
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
-            Error_Reports_Dataframe = Error_Reports_Dataframe[
-                ['COUNTER_Namespace'],
-                ['Report_Matching_Index'],
-                ['Report_Header:Created'],
-                ['Report_Header:Created_By'],
-                ['Report_Header:Report_Name']
-            ]
+            Error_Reports_Dataframe = Error_Reports_Dataframe[[
+                'COUNTER_Namespace',
+                'Report_Matching_Index',
+                'Report_Header:Created',
+                'Report_Header:Created_By',
+                'Report_Header:Report_Name'
+            ]]
             Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
 
             #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated
@@ -173,13 +173,13 @@ for SUSHI_Call_Data in SUSHI_Data:
             #ToDo: Add reports PK to log dataframe as another field by matching on field Report_Matching_Index
             #ToDo: Remove Report_Matching_Index column from dataframe
             # MySQL import relies on fields being in specific order, but not all providers order the fields in the same way, so fields are put in specific order for loading here
-            Error_Log_Dataframe = Error_Log_Dataframe[
+            Error_Log_Dataframe = Error_Log_Dataframe[[
                 # Report_ID FK column goes here
-                ['Code'],
-                ['Data'], #Details
-                ['Message'], #Name
-                ['Severity']
-            ]
+                'Code',
+                'Data', #Details
+                'Message', #Name
+                'Severity'
+            ]]
             Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
 
             #ToDo: Load log dataframe to MySQL, where PK is autogenenerated

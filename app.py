@@ -1,5 +1,6 @@
 #API repository: https://app.swaggerhub.com/apis/COUNTER/counter-sushi_5_0_api/1.0.0
 
+from pathlib import Path
 import requests
 import json
 import csv
@@ -10,7 +11,7 @@ import pymysql
 from sqlalchemy import create_engine
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import Database_Credentials #Alert: From original repository with flat structure; this file is now located at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
+import Database_Credentials #Alert: FROM ORIGINAL REPOSITORY with flat structure; this file is now located at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
 
 
 #Section: Functions
@@ -136,6 +137,10 @@ chrome_options.add_experimental_option("prefs", {
 })
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-software-rasterizer')
+
+#Alert: FROM ORIGINAL REPOSITORY; path to chromedriver probably needs to be changed, probably to "../usr/local/bin/"
+Path_to_ChromeDriver = Path('..', 'AppData', 'Local', 'chromedriver.exe') # For this path to work, the repo must be in the directory named for the user, and the "Local" directory must be in PATH
+Chrome_Browser_Driver = webdriver.Chrome(options=chrome_options, executable_path=Path_to_ChromeDriver)
 
 #Section: Make API Calls
 for SUSHI_Call_Data in SUSHI_Data:

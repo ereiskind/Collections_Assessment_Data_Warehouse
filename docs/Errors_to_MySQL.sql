@@ -2,11 +2,16 @@
 
 CREATE TABLE SUSHIErrorLog (
     SUSHIErrorLog_ID SERIAL,
-    Report_ID BIGINT,-- Foreign key connected to SUSHIErrorReports.SUSHIErrorReports_ID
+    Report_ID BIGINT,
     Error_Code VARCHAR(4),
     Error_Details VARCHAR(75),
     Error_Name VARCHAR(65),
-    Severity VARCHAR(10)
+    Severity VARCHAR(10),
+    INDEX Report_ID_index (Report_ID),
+    CONSTRAINT Report_ID_FK FOREIGN KEY Report_ID_index (Report_ID),
+        REFERENCES SUSHIErrorReports(SUSHIErrorReports_ID)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
 ); 
 
 CREATE TABLE SUSHIErrorReports (

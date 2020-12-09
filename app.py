@@ -89,6 +89,16 @@ for SUSHI_Call_Data in SUSHI_Data:
 
 
         #Section: Read Master Report into Dataframe
+        #Subsection: Create Initial Dataframe
+        # Use json_normalize
+
+        #Subsection: Create Single Time Field
+        #ToDo: Confirm that fields for beginning and end of each time interval are for the beginning and end of a single month
+        #ToDo: Create a field for that month and/or change name of beginning date field (as ISO for first date of that month)
+        #ToDo: Remove unneeded date fields
+
+        #Subsection: Other Possible Changes to Dataframe
+        # Should Access_Method be manipulated into a Boolean that would allow for exclusion of TDM, or should potential of other Access_Method options be kept?
 
 
         #Section: Export Dataframe to MySQL

@@ -164,6 +164,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             #ToDo: If Master_Report_Response.json() is empty, get above data and load into record in SUSHIErrorReports
 
         Report_JSON = Master_Report_Response.json()
+        #Alert: Confirm that empty report is no usage
         
 
         #Section: Handle Reports Returning Errors

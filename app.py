@@ -9,6 +9,8 @@ import time
 import pandas
 import pymysql
 from sqlalchemy import create_engine
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import Database_Credentials #Alert: From original repository with flat structure; this file is now located at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
 
 
@@ -49,6 +51,18 @@ def Handle_Status_Check_Error(URL, Message, Code):
     print(f"Reports from {URL} not available because {Message} (error code {Code}).")
 
 
+def enable_download_headless(browser, download_dir):
+    """From source: "function to take care of downloading file"
+    Function taken from https://medium.com/@moungpeter/how-to-automate-downloading-files-using-python-selenium-and-headless-chrome-9014f0cdd196
+    Arguments:
+        browser {WebDriver} -- Selenium WebDriver used to access internet
+        download_dir {File path} -- location the file should be downloaded to
+    """
+    browser.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+    params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dir}}
+    browser.execute("send_command", params)
+
+
 #Section: Initialize Variables for Reports Not Captured
 #ToDo: Save the current time to variable Script_Start_Time
 #ToDo: Create variable (what data type?) Platforms_Not_Collected for saving data about the platforms where reports aren't collected and the specific missing master reports can't be identified
@@ -86,7 +100,8 @@ for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_
     SUSHI_Data.append(Data)
 
 
-#Section: Create the PyMySQL Connection and SQLAlchemy Engine
+#Section: Create Connectors
+#Subsection: Create the PyMySQL Connection and SQLAlchemy Engine
 Database = 'testdatawarehouse'
 
 Connection = pymysql.connect(
@@ -105,6 +120,24 @@ Engine = create_engine(
     echo=False
 )
 
+#Subsection: Create Options Object for Chrome WebDriver
+# From source: "instantiate a chrome options object so you can set the size and headless preference"
+# Taken from https://medium.com/@moungpeter/how-to-automate-downloading-files-using-python-selenium-and-headless-chrome-9014f0cdd196
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--window-size=1920x1080")
+chrome_options.add_argument("--disable-notifications")
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--verbose')
+chrome_options.add_experimental_option("prefs", {
+        "download.default_directory": "Downloads",
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+        "safebrowsing_for_trusted_sources_enabled": False,
+        "safebrowsing.enabled": False
+})
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--disable-software-rasterizer')
 
 #Section: Make API Calls
 for SUSHI_Call_Data in SUSHI_Data:

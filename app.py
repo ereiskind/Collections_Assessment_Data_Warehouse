@@ -189,10 +189,11 @@ for SUSHI_Call_Data in SUSHI_Data:
                 ['Report_Header', 'Institution_ID'],
                 ['Report_Header', 'Report_ID'],
             ])
-            Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe['Report_Header:Institution_ID'].to_string()
-            Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe.Report_Matching_Index.str.slice(start=1) + Error_Log_Dataframe['Report_Header:Report_ID']
-            # Above assumes that there won't be more than 10 rows (error codes) returned for a given report
-            Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe['Report_Header:Institution_ID'].str.strip()
+            Error_Log_Dataframe['Report_Matching_Index'] = None
+            for i in range(len(Error_Log_Dataframe['Report_Header:Institution_ID'])):
+                Error_Log_Dataframe['Report_Matching_Index'].iloc[i] = str(Error_Log_Dataframe['Report_Header:Institution_ID'].iloc[i])
+                Error_Log_Dataframe['Report_Matching_Index'].iloc[i] = Error_Log_Dataframe['Report_Matching_Index'].iloc[i] + Error_Log_Dataframe['Report_Header:Report_ID'].iloc[i]
+            Error_Log_Dataframe['Report_Matching_Index'] = Error_Log_Dataframe['Report_Matching_Index'].str.strip()
             Error_Log_Dataframe.drop(columns='Report_Header:Institution_ID', inplace=True)
             Error_Log_Dataframe.drop(columns='Report_Header:Report_ID', inplace=True)
             

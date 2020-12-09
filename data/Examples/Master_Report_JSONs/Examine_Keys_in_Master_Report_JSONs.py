@@ -31,7 +31,7 @@ for File in JSON_File_Names:
         try:
             for ID in JSON_Dictionary['Report_Header']['Institution_ID']:
                 if ID['Type'] == "Proprietary":
-                    CSV_Record['ID'] = ID['Value']
+                    CSV_Record['ID'] = ID['Value'].split(":")[0]
         except KeyError:
             CSV_Record['ID'] = None
         print(CSV_Record)

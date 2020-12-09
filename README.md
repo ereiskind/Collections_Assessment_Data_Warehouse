@@ -1,6 +1,15 @@
 # Collections Assessment Data Warehouse
 A program for performing collections assessment in academic libraries.
 
+## Goals of this program
+
+- Use SUSHI API to automatically harvest R5 COUNTER stats and save to a database
+  - Get SUSHI credentials from CORAL/Alma ERM
+- Store COUNTER R4, COUNTER R5, non-standard usage stats in a database
+- Use relational database model to connect KBART, R4, R5 info
+- Provide visualizations of statistics
+- Has GUI
+
 ## Information on This Repository
 
 ### History

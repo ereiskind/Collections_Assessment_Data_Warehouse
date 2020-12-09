@@ -9,11 +9,11 @@ SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
 SUSHI_Data = []
 for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns each line oc the CSV into a dictionary within a list
     if Set[1] == "":
-        Data = dict(URL = Set[0], APIKey = Set[2], CustomerID = Set[3])
+        Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
     elif Set[2] == "":
-        Data = dict(URL = Set[0], RequestorID = Set[1], CustomerID = Set[3])
+        Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
     else:
-        Data = dict(URL = Set[0], RequestorID = Set[1], APIKey = Set[2], CustomerID = Set[3])
+        Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
     SUSHI_Data.append(Data)
 
 #Section: Make API Calls

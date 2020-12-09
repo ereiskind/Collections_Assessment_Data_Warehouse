@@ -6,6 +6,7 @@ import json
 import csv
 from requests import HTTPError, Timeout
 import time
+import os
 import pandas
 import pymysql
 from sqlalchemy import create_engine
@@ -51,16 +52,36 @@ def Handle_Status_Check_Error(URL, Message, Code):
     print(f"Reports from {URL} not available because {Message} (error code {Code}).")
 
 
-def enable_download_headless(browser, download_dir):
-    """From source: "function to take care of downloading file"
-    Function taken from https://medium.com/@moungpeter/how-to-automate-downloading-files-using-python-selenium-and-headless-chrome-9014f0cdd196
+def Retrieve_Downloaded_JSON_File(WebDriver, URL):
+    """Reads a JSON downloaded by an API call into memory.
+    
+    Some of the SUSHI API calls, most notable Silverchair, generate a JSON file download, which requests returns as a 403 error. This function captures the downloaded file and reads its contents into memory so the function can be used. Functionality related to downloading the file taken from https://medium.com/@moungpeter/how-to-automate-downloading-files-using-python-selenium-and-headless-chrome-9014f0cdd196.
+
     Arguments:
         browser {WebDriver} -- Selenium WebDriver used to access internet
         download_dir {File path} -- location the file should be downloaded to
+        WebDriver {WebDriver} -- Selenium WebDriver used to access internet
+        URL {string} -- the URL for performing the API call
+    
+    Returns:
+        dictionary -- the API response JSON file transformed into Python data types
     """
-    browser.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
-    params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dir}}
-    browser.execute("send_command", params)
+    API_Download_Folder = Path('.', 'API_Download') # There's no apparent way to get the name of the file that gets downloaded, so this file path will need to be just for the downloaded file and hold one file at a time
+
+    # From source: "function to handle setting up headless download"
+    WebDriver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+    params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': str(API_Download_Folder)}}
+    WebDriver.execute("send_command", params)
+    WebDriver.get(URL) # From source: "get request to target the site selenium is active on"
+
+    for Folder, Subfolder, Files in os.walk(API_Download_Folder): #ToDo: Determine why this loop isn't running
+        print(Files)
+        with open(Files) as File:
+            JSON_File_Data = json.load(File)
+        os.unlink(API_Download_Folder + Files)
+
+    return "The dictionary with the data from the downloaded JSON file"
+
 
 
 #Section: Initialize Variables for Reports Not Captured

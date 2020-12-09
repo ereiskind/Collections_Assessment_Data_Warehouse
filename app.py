@@ -121,7 +121,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             Available_Master_Reports.append(Report)
     
     #Subsection: Collect Reports
-    URL_Report_Path = re.compile(r'reports/\w{2}$') #ToDo: Handle trailing slash by adding it with a ? here, then creating a variable that removes it if it exists
+    # A regex is used to construct the API URL so only the appropriate part of the "Path" attribute is added to the base URL (some platforms have a "Path" attribute that include the domain, others include a trailing slash)
+    URL_Report_Path_Regex = re.compile(r'reports/\w{2}/?$')
     #ToDo: Allow system or user to change dates
     Credentials["begin_date"] = "2020-01-01"
     Credentials["end_date"] = "2020-01-31"
@@ -139,8 +140,10 @@ for SUSHI_Call_Data in SUSHI_Data:
             print("Invalid Master Report Type: "+Master_Report_Type)
             continue
         
-        Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path.findall(Master_Report["Path"])[0]
-        # This uses a regex to construct the API URL so only the piece of the path related to the report requested is included (some platforms have a "Path" attribute that include the domain as well)
+        URL_Report_Path = URL_Report_Path_Regex.findall(Master_Report["Path"])[0]
+        if URL_Report_Path.endswith("/"):
+            URL_Report_Path = URL_Report_Path[0:-1]
+        Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path
         try:
             Master_Report_Response = requests.get(Master_Report_URL, params=Credentials, timeout=90)
             # Larger reports seem to take longer to respond, so the initial timeout interval is long

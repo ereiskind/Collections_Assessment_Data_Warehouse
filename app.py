@@ -17,6 +17,12 @@ import Database_Credentials #Alert: FROM ORIGINAL REPOSITORY with flat structure
 
 
 #Section: Functions
+#Subsection: Messages
+def Handle_Status_Check_Error(URL, Message, Code):
+    #ToDo: Add platform and error to Platforms_Not_Collected
+    print(f"Reports from {URL} not available because {Message} (error code {Code}).")
+
+
 def API_Download_Not_Empty():
     """Prints a message indicating that the "API_Download" folder isn't empty and that it needs to be for the program to work properly, then exits the program.
     
@@ -27,6 +33,7 @@ def API_Download_Not_Empty():
     sys.exit()
 
 
+#Subsection: Database Interactions
 def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
     """A pandas to_sql function call bracketed by the creation and destruction of a SQLAlchemy session object.
     
@@ -61,11 +68,7 @@ def Execute_SQL_Statement(SQLStatement, DBConnection):
     DBConnection.commit()
 
 
-def Handle_Status_Check_Error(URL, Message, Code):
-    #ToDo: Add platform and error to Platforms_Not_Collected
-    print(f"Reports from {URL} not available because {Message} (error code {Code}).")
-
-
+#Subsection: Data Retrieval from Web
 def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     """Reads a JSON downloaded by an API call into memory.
     

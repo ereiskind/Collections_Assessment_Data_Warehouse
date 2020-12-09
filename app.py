@@ -44,11 +44,13 @@ def Execute_SQL_Statement(SQLStatement, DBConnection):
     DBConnection.commit()
 
 
-#Section: Get Current Time
+#Section: Initialize Variables for Reports Not Captured
 #ToDo: Save the current time to variable Script_Start_Time
+#ToDo: Create variable (what data type?) Platforms_Not_Collected for saving data about the platforms where reports aren't collected and the specific missing master reports can't be identified
 
 
 #Section: Collect Information Needed for SUSHI Call
+# Later, this will be replaced with a call to the Alma API--see Credentials_Through_Alma_API.py
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
 SUSHI_Data = []
 for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns the CSV into a list where each line is a dictionary
@@ -91,28 +93,30 @@ for SUSHI_Call_Data in SUSHI_Data:
         Status_Check.raise_for_status()
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         print(f"HTTP Error: {format(error)}")
-        #ToDo: 403 error seems to be invalid credentials--perhaps create specific error message for that?
+        #ToDo: Add platform and error to Platforms_Not_Collected
         continue
     except Timeout as error: # If the API request times out
         print(f"Server didn't respond after 10 seconds ({format(error)}).")
+        #ToDo: Add platform and error to Platforms_Not_Collected
         continue
     except: # If there's some other problem with the API request
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
+        #ToDo: Add platform and error to Platforms_Not_Collected
         continue
     #Alert: Silverchair, which uses both Requestor ID and API Key, generates a download when the SUSHI URL is entered rather than returning the data on the page itself; as a result, requests can't find the data
-    #ToDo: Determine way to output platforms that aren't checked for reports
+    #ToDo: Possibly handle above by checking if Status_Check.json() is empty
 
     #Subsection: Get List of R5 Reports Available
     Reports_URL = SUSHI_Call_Data["URL"] + "reports" # This API returns a list of the available SUSHI reports
     try:
-        Available_Reports = requests.get(Reports_URL, params=Credentials, timeout=90)
+        Available_Reports = requests.get(Reports_URL, params=Credentials, timeout=10)
     except Timeout as error:
-        print(f"Server didn't respond to request for {Master_Report_Type} after 90 seconds [{format(error)}].")
-            # Larger reports seem to take longer to respond, so the timeout interval is long
+        print(f"Server didn't respond to request for {Master_Report_Type} after 10 seconds [{format(error)}].")
+            #ToDo: Add platform and error to Platforms_Not_Collected
         continue
     
     Available_Master_Reports = [] # This list will contain the dictionaries from the JSON for the master reports available on the platform, which will be the only reports pulled
-    for Report in json.loads(Available_Reports.text):
+    for Report in Available_Reports.json():
         if "Master Report" in Report["Report_Name"]:
             Available_Master_Reports.append(Report)
     
@@ -132,8 +136,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         elif Master_Report_Type == "Item Master Report":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
         else:
-            print("Invalid Master Report Type")
-            #ToDo: Determine if "continue" is appropriate keyword to move on to next Master_Report in Available_Master_Reports
+            print("Invalid Master Report Type: "+Master_Report_Type)
             continue
         
         Master_Report_URL = SUSHI_Call_Data["URL"] + URL_Report_Path.findall(Master_Report["Path"])[0]
@@ -152,22 +155,25 @@ for SUSHI_Call_Data in SUSHI_Data:
                     # Full name of the master report: Report_Type [Report_Header:Report_Name] = Master_Report_Type
                 #ToDo: Load above data into a record in SUSHIErrorReports
                 print(f"Server didn't respond to request for {Master_Report_Type} after second request of 120 seconds [{format(error)}].")
-                #ToDo: Handling for other errors and for retruning an empty JSON?
+                #ToDo: except: 
+                    #ToDo: Get same data as above and load into SUSHIErrorReports
+                #ToDo: If Master_Report_Response.json() is empty, get above data and load into record in SUSHIErrorReports
                 continue
 
-        Report_JSON = json.loads(Master_Report_Response.text)
+        Report_JSON = Master_Report_Response.json()
         
 
         #Section: Handle Reports Returning Errors
         #Subsection: Determine if Report is an Error Report
+        #ToDo: Change this to looking for "Report_Items" in top level of keys in Report_JSON
         # In error responses, no data is being reported, so Report_Header is the only top-level key; when data is returned, it's joined by Report_Items
         Top_Level_Keys = 0
         for value in Report_JSON.values():
             Top_Level_Keys += 1
 
         #Subsection: Clean Data for Error Reports
-        #ToDo: EBSCO error report not wrapped in "Report_Header"--instance of malformed JSON that should be reported?
         if Top_Level_Keys == 1:
+        #ToDo: Change above to if "Report_Items" isn't found in top level of Report_JSON keys
             Error_Reports_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=[
                 ['Report_Header', 'Created'],
                 ['Report_Header', 'Created_By'],
@@ -297,6 +303,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             pass # This represents Platform Master Reports; the if-elif-else above filters out other reports before they reach this point
         
         #Subsection: Create Initial Dataframe
+        #ToDo: Use only meta argument, no record_path
         Report_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Institution_ID'], sep=":", meta=Dataframe_Fields, errors='ignore')
         #ToDo: Above is outputting dataframe where only keys under Report_Header have values--why???
         Report_Dataframe.to_csv('Check_Dataframe.csv', mode='a', index=False) # Using to more clearly investigate contents

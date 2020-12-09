@@ -17,7 +17,7 @@ import csv
 
 
 #Section: Create CSV
-CSV_File_Path = Path('Examples', 'Example_JSONs', 'test', 'Comparison.csv')
+CSV_File_Path = Path('Examples', 'Example_JSONs', 'JSON_Keys.csv')
 CSV_File = open(CSV_File_Path, 'w', newline='')
 CSV_File_Writer = csv.DictWriter(CSV_File, [
     'Source_JSON',

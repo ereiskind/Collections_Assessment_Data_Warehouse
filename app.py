@@ -26,12 +26,12 @@ for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_
 
 #Section: Create the SQLAlchemy Engine
 Engine = create_engine(
-    mysql + '+' +
-    pymysql + '://' +
+    'mysql+pymysql://' +
     Database_Credentials.Username + ':' +
     Database_Credentials.Password + '@' +
     Database_Credentials.Host + ':' + str(Database_Credentials.Post) + '/' +
-    testdatawarehouse
+    'testdatawarehouse',
+    echo=False
 )
 
 

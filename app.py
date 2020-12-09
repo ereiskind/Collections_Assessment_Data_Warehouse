@@ -99,19 +99,19 @@ for SUSHI_Call_Data in SUSHI_Data:
                 ['Report_Header', 'Report_ID'],
                 ['Report_Header', 'Report_Name']
             ])
+            #ToDo: Filter out records where Error_Reports_Dataframe != "Proprietary"
+            #ToDo: Remove Error_Reports_Dataframe.Type
             #ToDo: Create COUNTER namespace field with Error_Reports_Dataframe.Value.str.split(":")[0] and append it to dataframe
             Error_Reports_Dataframe.to_csv('Check_Dataframe_1.csv', mode='a', index=False)
 
             Error_Log_Dataframe = pandas.json_normalize(Report_JSON, ['Report_Header', 'Exceptions'], sep=":", meta=[
-                ['Report_Header', 'Created'],
-                ['Report_Header', 'Created_By'],
                 ['Report_Header', 'Institution_ID'],
                 ['Report_Header', 'Report_ID'],
-                ['Report_Header', 'Report_Name']
             ])
             Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
 
             #ToDo: Create record index for both dataframes combining Institution_ID and Report_ID
+            #ToDo: Remove Report_ID and Institution_ID fields from both dataframes
             #ToDo: Load reports dataframe to MySQL, where PK is autogenenerated
             #ToDo: Read PK and index back from MySQL
             #ToDo: Add reports PK to log dataframe as another field

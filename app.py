@@ -220,7 +220,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                 'Error_Name',
                 'Severity'
             ]]
-            Error_Log_Dataframe.to_csv('Check_Dataframe_2.csv', mode='a', index=False)
+            Load_Dataframe_into_MySQL(Error_Log_Dataframe, 'sushierrorlog', Engine)
 
             #Subsection: Null Values Used to Designate New Primary Keys in Error Report
             #ToDo: Null values in "Match" column of SUSHIErrorReports table for those reports just loaded

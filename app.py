@@ -11,6 +11,22 @@ import pymysql
 from sqlalchemy import create_engine
 import Database_Credentials #Alert: From original repository with flat structure; this file is now located at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
 
+#Section: Functions
+def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
+    """A pandas to_sql function call bracketed by the creation and destruction of a SQLAlchemy session object.
+    
+    This function loads the data contained in Dataframe, a pandas dataframe, into DBTable, a table (relation) in the MySQL database which is being called by DBEngine, a SQLAlchemy engine object. Dataframe's record index values aren't included
+    """
+    Connection = DBEngine.connect()
+    Dataframe.to_sql(
+        DBTable,
+        con=Connection,
+        if_exists='append',
+        index=False
+    )
+    Connection.close()
+
+
 #Section: Collect Information Needed for SUSHI Call
 SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r')
 SUSHI_Data = []

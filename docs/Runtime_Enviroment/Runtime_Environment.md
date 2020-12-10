@@ -15,3 +15,29 @@ PRIVATE-Collections_Assessment_Data_Warehouse/
 ┗ requirements.txt (the list of Python packages)
 
 The copy statements at the end of docs/Runtime_Environment/Python_Dockerfile.txt can serve as a complete mapping of what files from the above structure are available in this repository and where those files are located.
+
+## Alternate Methods for Accessing Containers
+Below are alternate methods for accessing the contents of the runtime environment containers other than through VSCode.
+
+### Accessing the MySQL Container via CLI
+1. Open the host CLI
+2. `docker exec -it mysql-container --user=root --password`
+3. Enter the password for the root user set in the MySQL Dockerfile
+
+### Accessing the MySQL Container via MySQL Workbench
+1. Open the MySQL container in the CLI
+2. SQL prompt: `CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';` where "user" and "password" are the desired username and password
+3. SQL prompt: `GRANT ALL PRIVILEGES ON * . * TO 'user'@'localhost';`
+4. SQL prompt: `UPDATE mysql.user SET host = '%' WHERE user = 'user';`
+5. SQL prompt: `exit`
+6. `docker restart mysql-container`
+7. Open MySQL Workbench and click the plus icon
+8. Add a Connection Name
+9.  Change the Hostname to "localhost"
+10. Change the Username to the value of "user" created in step four
+11. Add the password created in step two to the vault
+
+### Accessing the Python Container via CLI
+1. Open the host CLI
+2. `docker exec -it python-container bash`
+3. Bash prompt: `python`

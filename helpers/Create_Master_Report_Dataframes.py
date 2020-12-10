@@ -15,20 +15,20 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
     if  Master_Report_Type == "PR":
-        Partial_Dataframe = Create_PR_Dataframe(Interface, Master_Report_JSON)
+        Dataframe = Create_PR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "DR":
-        Partial_Dataframe = Create_DR_Dataframe(Interface, Master_Report_JSON)
+        Dataframe = Create_DR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "TR":
-        Partial_Dataframe = Create_TR_Dataframe(Interface, Master_Report_JSON)
+        Dataframe = Create_TR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "IR":
-        Partial_Dataframe = Create_IR_Dataframe(Interface, Master_Report_JSON)
+        Dataframe = Create_IR_Dataframe(Interface, Master_Report_JSON)
     else:
         #ToDo: If saving data from reports where no master report is available, determine where to send the JSON here
         # Currently, the function should never get here
         return f"Unable to create dataframe|Master report type {Master_Report_Type} not recognized for creating a dataframe"
     
-    if str(type(Partial_Dataframe)) == "<class 'str'>": # Meaning one of the values exceeded the max length for the field
-        return Partial_Dataframe
+    if str(type(Dataframe)) == "<class 'str'>": # Meaning one of the values exceeded the max length for the field
+        return Dataframe
     
     # Dataframe to MySQL--two hashes means in all reports
         ## "Interface" int64 --> Interface INT
@@ -56,72 +56,110 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         ## "R5_Count" int64 --> R5_Count MEDIUMINT
         ## "Report_Creation_Date" datetime64 --> Report_Creation_Date DATE
     
-    Dataframe = Partial_Dataframe[['Interface', 'Report', 'Platform', 'Data_Type', 'Access_Method', 'Metric_Type', 'R5_Month', 'R5_Count', 'Report_Creation_Date']]
+    #ToDo: Make following type changes with https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.astype.html#pandas.DataFrame.astype
+        # "Interface" int64
+        # "Report" string
+        # "Platform" string
+        # "Data_Type" string
+        # "Access_Method" string
+        # "Metric_Type" string
+        # "R5_Count" int64
+
+    pandas.to_datetime( #ToDo: Doesn't seem to be changing type or raising error
+        Dataframe['R5_Month'],
+        errors='raise', # If ‘raise’, then invalid parsing will raise an exception; If ‘coerce’, then invalid parsing will be set as NaT; If ‘ignore’, then invalid parsing will return the input
+        format='%Y-%m-%d'
+    )
+    pandas.to_datetime( #ToDo: Doesn't seem to be changing type or raising error
+        Dataframe['Report_Creation_Date'],
+        errors='raise', # If ‘raise’, then invalid parsing will raise an exception; If ‘coerce’, then invalid parsing will be set as NaT; If ‘ignore’, then invalid parsing will return the input
+        format='%Y-%m-%dT',
+        exact=False # Some dates use the timezone (indicated by "Z") while others use UTC offset, so the format just has the ISO date format
+    )
 
     try:
-        Dataframe['Resource_Name'] = Partial_Dataframe['Resource_Name']
+        #ToDo: Dataframe.['Resource_Name'] to string
+        # Should there be a sanity/data check here that all DR, TR, IR records have a Resource_Name value?
     except KeyError:
         Dataframe['Resource_Name'] = None
 
     try:
-        Dataframe['Publisher'] = Partial_Dataframe['Publisher']
+        #ToDo: Dataframe['Publisher'] to string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Publisher'] = None
 
     #Publisher_ID would go here
 
     try:
-        Dataframe['DOI'] = Partial_Dataframe['DOI']
+        #ToDo: Dataframe['DOI'] to string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['DOI'] = None
 
     try:
-        Dataframe['Proprietary_ID'] = Partial_Dataframe['Proprietary_ID']
+        #ToDo: Dataframe['Proprietary_ID'] to string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Proprietary_ID'] = None
 
     try:
-        Dataframe['ISBN'] = Partial_Dataframe['ISBN']
+        #ToDo: Dataframe['ISBN'] to string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['ISBN'] = None
 
     try:
-        Dataframe['Print_ISSN'] = Partial_Dataframe['Print_ISSN']
+        #ToDo: Dataframe['Print_ISSN'] as string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Print_ISSN'] = None
 
     try:
-        Dataframe['URI'] = Partial_Dataframe['URI']
+        #ToDo: Dataframe['Online_ISSN'] as string
+        #ToDo: Ensure Python None values are registering as null
+    except KeyError:
+        Dataframe['Online_ISSN'] = None
+
+    try:
+        #ToDo: Dataframe['URI'] as string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['URI'] = None
 
     try:
-        Dataframe['Section_Type'] = Partial_Dataframe['Section_Type']
+        #ToDo: Dataframe['Section_Type'] as string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Section_Type'] = None
 
     try:
-        Dataframe['Parent_Data_Type'] = Partial_Dataframe['Parent_Data_Type']
+        #ToDo: Dataframe['Parent_Data_Type'] as string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Parent_Data_Type'] = None
 
     try:
-        Dataframe['Parent_DOI'] = Partial_Dataframe['Parent_DOI']
+        #ToDo: Dataframe['Parent_DOI'] as string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Parent_DOI'] = None
 
     try:
-        Dataframe['Parent_Proprietary_ID'] = Partial_Dataframe['Parent_Proprietary_ID']
+        #ToDo: Dataframe['Parent_Proprietary_ID'] as string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Parent_Proprietary_ID'] = None
 
     try:
-        Dataframe['YOP'] = Partial_Dataframe['YOP']
+        #ToDo: Dataframe['YOP'] as int32
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['YOP'] = None
 
     try:
-        Dataframe['Access_Type'] = Partial_Dataframe['Access_Type']
+        #ToDo: Dataframe['Access_Type'] as string
+        #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Access_Type'] = None
     

@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %
 
 
 #Section: Functions
-#Subsection: Messages
+#Subsection: Error Handling
 def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
     """Handles results of SUSHI API call for status that countain an error or alert by presenting the message and asking if the interface's stats should be collected.
     
@@ -38,7 +38,7 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
         Source {string} -- the JSON name for the current interface
         Message {string} -- the SUSHI error message or the SUSHI alert value
         Error {string} -- the SUSHI error severity; default None for SUSHI alerts
-        Type {string} -- the SUSHI error code; default "Alert" for SUSHI alerts
+        Type {int or string} -- the SUSHI error code; default "Alert" for SUSHI alerts
     
     Returns:
         None
@@ -58,7 +58,7 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
             Details = Problem_Message,
         )
         Platforms_Not_Collected.append(Capture_Problem)
-        logging.info("Added to Platforms_Not_Collected: " + Problem_Message)
+        logging.info(f"Added to Platforms_Not_Collected: {Source}|{Report}|{Problem_Message}")
         return True
     return False
 

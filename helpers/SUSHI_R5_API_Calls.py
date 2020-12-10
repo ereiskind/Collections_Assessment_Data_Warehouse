@@ -86,7 +86,7 @@ def Single_Element_API_Call(Path_Addition, URL, Parameters, WebDriver):
         string -- the root URL for the SUSHI API, a pipe, what was being requested, a pipe, and the reason for the failure
     """
     API_Call_URL = URL + Path_Addition
-    time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
+    time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
     try: # Makes the initial API call
         API_Response = requests.get(API_Call_URL, params=Parameters, timeout=15, headers=Chrome_User_Agent)
         API_Response.raise_for_status()
@@ -123,14 +123,14 @@ def Master_Report_API_Call(Report_ID, URL, Parameters, WebDriver):
         string -- the root URL for the SUSHI API, a pipe, what was being requested, a pipe, and the reason for the failure
     """
     API_Call_URL = URL + "reports/" + Report_ID.lower()
-    time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
+    time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
     try: # Makes the initial API call
         API_Response = requests.get(API_Call_URL, params=Parameters, timeout=90, headers=Chrome_User_Agent)
         # Larger reports seem to take longer to respond, so the initial timeout interval is long
         API_Response.raise_for_status()
     except Timeout as error: # If the API request times out
         try: # Timeout errors seem to be random, so going to try get request again with more time
-            time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
+            time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
             API_Response = requests.get(API_Call_URL, params=Parameters, timeout=120, headers=Chrome_User_Agent)
             API_Response.raise_for_status()
         except Timeout as error:

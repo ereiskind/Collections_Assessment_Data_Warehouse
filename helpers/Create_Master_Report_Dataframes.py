@@ -45,6 +45,7 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
     
     Returns:
         dataframe -- the master report data in a dataframe
+        string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
     global Platform_Length
     Update_Max_Platform_Length = False
@@ -95,6 +96,7 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
     
     Returns:
         dataframe -- the master report data in a dataframe
+        string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
     global Platform_Length
     global Resource_Name_Length
@@ -177,6 +179,7 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
     
     Returns:
         dataframe -- the master report data in a dataframe
+        string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
     #Subsection: Create Dataframe
     Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
@@ -239,6 +242,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
     
     Returns:
         dataframe -- the master report data in a dataframe
+        string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
     #Subsection: Create Dataframe
     Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[

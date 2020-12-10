@@ -296,6 +296,11 @@ for SUSHI_Call_Data in SUSHI_Data:
             continue
 
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
+
+        #Subsection: Check for Exceptions in Returned Report
+        #ToDo: In returned report, check if list ["Report_Header"]["Exceptions"] has any content
+        #ToDo: If above is yes, see what type of exception it is and throw up some sort of error message if it's something to pay attention to
+
         #ToDo: If len(Master_Report_Response["Report_Items"]) == 0 (aka no usage reported), possible sanity check on that?
 
         #Subsection: Save Individual Reports as JSON

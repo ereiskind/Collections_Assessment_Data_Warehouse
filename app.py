@@ -159,16 +159,21 @@ Chrome_Browser_Driver = webdriver.Chrome(options=chrome_options, executable_path
 
 #Section: Collect Information Needed for SUSHI Call
 # Later, this will be replaced with a call to the Alma API--see Credentials_Through_Alma_API.py
-#ToDo: SUSHI_Data_File = Open JSON with SUSHI credentials--file is structured as a list of JSON objects similar to what would be returned by the Alma API
-SUSHI_Data = []
-#ToDo: Iterate through SUSHI_Data_File, and for each interface (set of SUSHI credentials) in the file, append to SUSHI_Data a dictionary that has (if not empty string in original data):
-    #ToDo: URL = [iterator]["interface"][interface iterator]["statistics"]["online_location"]
-    #ToDo: requestor_id = [iterator]["interface"][interface iterator]["statistics"]["user_password"]
-    #ToDo: api_key = [iterator]["interface"][interface iterator]["statistics"]["delivery_address"]
-    #ToDo: customer_id = [iterator]["interface"][interface iterator]["statistics"]["user_id"]
-    #ToDo: platform = [iterator]["interface"][interface iterator]["statistics"]["locally_stored"]
-    #ToDo: JSON_Name = [iterator]["interface"][interface iterator]["name"]
-#ToDo: Will require nested iterators--one iterating through the vendor JSON objects, another through the interfaces for each vendor
+with open('SUSHI_R5_Credentials.json') as JSON_File:
+    SUSHI_Data_File = json.load(JSON_File)
+    SUSHI_Data = []
+    for Vendor in SUSHI_Data_File:
+        for Interface in Vendor["interface"]:
+            Set = dict(
+                URL = Interface["statistics"]["online_location"],
+                JSON_Name = Interface["name"]
+                #ToDo: requestor_id = Interface["statistics"]["user_password"] if that value != "" else None
+                #ToDo: api_key = Interface["statistics"]["delivery_address"]  if that value != "" else None
+                #ToDo: customer_id = Interface["statistics"]["user_id"]  if that value != "" else None
+                #ToDo: platform = Interface["statistics"]["locally_stored"]  if that value != "" else None
+            )
+            SUSHI_Data.append(Set)
+            logging.info(f"Credentials for {SUSHI_Data[-1]['JSON_Name']} added to SUSHI_Data")
 
 
 #Section: Make API Calls

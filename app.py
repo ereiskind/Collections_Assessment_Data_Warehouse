@@ -212,6 +212,14 @@ for SUSHI_Call_Data in SUSHI_Data:
                 continue
             except: # If the status check passes, a KeyError is returned
                 logging.info(f"Status check successful: {Status_Check}")
+    
+    #Subsection: Check Status Check for Alerts
+    try:
+        Status_Alert = Status_Check["Alerts"]
+        #ToDo: Display Status_Alert and ask if platform should be skipped
+        #ToDo: If skip is selected, add to Platforms_Not_Collected and continue
+    except:
+        pass # An alert wasn't included in the status check, so nothing needs to be done
 
     #Subsection: Get List of R5 Reports Available
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())

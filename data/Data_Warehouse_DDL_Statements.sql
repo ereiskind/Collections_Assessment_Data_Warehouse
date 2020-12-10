@@ -139,6 +139,7 @@ CREATE TABLE R5_Usage (
     Metric_Type VARCHAR(30) NOT NULL,
     R5_Month DATE NOT NULL,
     R5_Count MEDIUMINT UNSIGNED NOT NULL,
+    Report_Creation_Date DATE NOT NULL,
     INDEX INDX_Interface (Interface),
     CONSTRAINT FK_R5Usage_Interface FOREIGN KEY INDX_Interface (Interface)
         REFERENCES Interfaces(Interface_ID)

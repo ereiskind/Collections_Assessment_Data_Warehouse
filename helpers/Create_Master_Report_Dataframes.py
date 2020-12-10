@@ -52,47 +52,28 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
 
     Report = Master_Report_JSON['Report_Header']['Report_ID']
     Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
-    #ToDo: Loop through list Report_Items
-    Platform = 1
-    Data_Type = 1
-    Access_Method = 1
-    Metric_Type = 1
-    R5_Month = 1
-    R5_Count = 1
-
-    Dataframe_Records.append({
-        #"key": "value"
-        "Report": Report,
-        "Report_Creation_Date": Report_Creation_Date,
-    })
-
-    #Subsection: Create Dataframe
-    '''Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
-        Interface, # Interface
-        Master_Report_JSON['Report_Header']['Report_ID'], # Report
-        Master_Report_JSON['Report_Items', 'Platform'], # Platform
-        Master_Report_JSON['Report_Items', 'Data_Type'], # Data_Type
-        Master_Report_JSON['Report_Items', 'Access_Method'], # Access_Method
-        Master_Report_JSON['Report_Items', 'Performance', 'Instance', 'Metric_Type'], # Metric_Type
-        Master_Report_JSON['Report_Items', 'Performance', 'Period', 'Begin_Date'], # R5_Month
-        Master_Report_JSON['Report_Items', 'Performance', 'Instance', 'Count'], # R5_Count
-        Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
-    ])'''
-    #ToDo: Revise below for SUSHI and to perform checks on field length constraints
-    '''
-    vals = []
-
-    for item in Master_Report_JSON: # This captures each of the highest-level dicts in the list
-        unit_code = item['unitCode'] # This saves the single value at the end of the key path ['unitCode']
-        for col in item['columns']: # This iterates through the list at the end of the key path ['columns']
-            for hd in col['hoverDetails']:# This iterates through the list at the end of the key path ['columns']['hoverDetails']
-                vals.append({'unitCode': unit_code, col['id']: hd['value']})
-                # Creates dict and adds it to list of dicts
-                    # literal string "unitcode" = value of variable unit_code
-                    # value at end of key path ['columns']['id'] = value at the end of key path ['columns']['hoverDetails']['value']
-    Dataframe = pandas.DataFrame(vals)
-    '''
-    #print(Dataframe.head())
+    for Item in Master_Report_JSON['Report_Items']:
+        Platform = Item['Platform']
+        #ToDo: Check platform length
+        Data_Type = Item['Data_Type']
+        Access_Method = Item['Access_Method']
+        for Time_Period in Item['Performance']:
+            R5_Month = Time_Period['Period']['Begin_Date']
+            for Statstic in Time_Period['Instance']:
+                Metric_Type = Statstic['Metric_Type']
+                R5_Count = Statstic['Count']
+                Dataframe_Records.append({
+                    "Interface": Interface,
+                    "Report": Report,
+                    "Report_Creation_Date": Report_Creation_Date,
+                    "Platform": Platform,
+                    "Data_Type": Data_Type,
+                    "Access_Method": Access_Method,
+                    "R5_Month": R5_Month,
+                    "Metric_Type": Metric_Type,
+                    "R5_Count": R5_Count,
+                })
+    Dataframe = pandas.DataFrame(Dataframe_Records)
 
     #Subsection: Check Field Length Constraints
     #ToDo: Have the below loop through all values at the dictionary key path

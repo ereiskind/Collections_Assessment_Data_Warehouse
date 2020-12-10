@@ -267,13 +267,30 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                 except UnboundLocalError: # There wasn't a Proprietary_ID
                     Record["Proprietary_ID"] = None #ToDo: Confirm this is registering as a null value
 
-                #ToDo: For the variables below, do the same try-except UnboundLocalError as above
-                    # Proprietary_ID
-                    # DOI
-                    # ISBN
-                    # Print_ISSN
-                    # Online_ISSN
-                    # URI
+                try:
+                    Record["DOI"] = DOI
+                except UnboundLocalError: # There wasn't a DOI
+                    Record["DOI"] = None #ToDo: Confirm this is registering as a null value
+
+                try:
+                    Record["ISBN"] = ISBN
+                except UnboundLocalError: # There wasn't an ISBN
+                    Record["ISBN"] = None #ToDo: Confirm this is registering as a null value
+
+                try:
+                    Record["Print_ISSN"] = Print_ISSN
+                except UnboundLocalError: # There wasn't a Print_ISSN
+                    Record["Print_ISSN"] = None #ToDo: Confirm this is registering as a null value
+
+                try:
+                    Record["Online_ISSN"] = Online_ISSN
+                except UnboundLocalError: # There wasn't an Online_ISSN
+                    Record["Online_ISSN"] = None #ToDo: Confirm this is registering as a null value
+
+                try:
+                    Record["URI"] = URI
+                except UnboundLocalError: # There wasn't an URI
+                    Record["URI"] = None #ToDo: Confirm this is registering as a null value
 
                 Dataframe_Records.append(Record)
     Dataframe = pandas.DataFrame(Dataframe_Records)

@@ -384,6 +384,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 Connection.close()
 
 #Section: Output Platforms_Not_Collected
+#Alert: The CSV below needs to be written to the data folder
 FileIO = open('Platforms_Not_Collected.csv', 'w', newline='')
 CSV_Writer = csv.DictWriter(FileIO, [
     #ToDo: Decide if there are better column names to use and/or if more columns are needed
@@ -400,3 +401,4 @@ for Platform in Platforms_Not_Collected:
 
 FileIO.close()
 os.startfile('Platforms_Not_Collected.csv')
+#ToDo: Figure out how to make CSV say open when program finishes 

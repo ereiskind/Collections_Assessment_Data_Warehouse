@@ -1,5 +1,6 @@
 #API repository: https://app.swaggerhub.com/apis/COUNTER/counter-sushi_5_0_api/1.0.0
 
+import logging
 from pathlib import Path
 import json
 import csv
@@ -18,6 +19,13 @@ import Database_Credentials # Loaded in from runtime environment repository at C
 import SUSHI_R5_API_Calls # In this repository at Collections_Assessment_Data_Warehouse/helpers/SUSHI_R5_API_Calls.py
 
 
+#Section: Set Up Logging
+# Status/progress checks are set to output at INFO level, activities performed by requests module output without logging statement at DEBUG level
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
+# logging.disable(logging.DEBUG) # Uncomment to hide logging output for actions performed by requests module
+# logging.disable(logging.CRITICAL) # Uncomment to hide all logging output
+
+
 #Section: Functions
 #Subsection: Messages
 def Handle_Status_Check_Error(URL, Error, Message, Code):
@@ -34,9 +42,9 @@ def Handle_Status_Check_Error(URL, Error, Message, Code):
         None
     """
     if Status_Check_Error == "Warning":
-        print("Data is available, but there may be a problem with it.")
+        print(f"Data is available for {URL}, but there may be a problem with it.")
     Platforms_Not_Collected.append(URL + f"|{Message} (error code {Code})")
-    print("Added to Platforms_Not_Collected: " + URL + f"|{Message} (error code {Code})")
+    logging.info("Added to Platforms_Not_Collected: " + URL + f"|{Message} (error code {Code})")
 
 
 def API_Download_Not_Empty():
@@ -176,12 +184,14 @@ for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_
 #Section: Make API Calls
 for SUSHI_Call_Data in SUSHI_Data:
     Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"} # This creates another dictionary without the URL to be used in the URL's query string
+    logging.info(f"Making API calls starting with {SUSHI_Call_Data['URL']}")
+
     #Subsection: Determine SUSHI Availability
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
     Status_Check = SUSHI_R5_API_Calls.Status(SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Status_Check)) == "<class 'str'>": # Meaning the API call returned an error
         Platforms_Not_Collected.append(Status_Check)
-        print("Added to Platforms_Not_Collected: " + Status_Check)
+        logging.info("Added to Platforms_Not_Collected: " + Status_Check)
         continue
 
     #Subsection: Check if Status_Check Returns COUNTER Error
@@ -200,15 +210,15 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Status_Check_Error = Status_Check[0]["Severity"]
                 Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check_Error, Status_Check[0]["Message"], Status_Check[0]["Code"])
                 continue
-            except:
-                pass # If the status check passes, a KeyError is returned
+            except: # If the status check passes, a KeyError is returned
+                logging.info(f"Status check successful: {Status_Check}")
 
     #Subsection: Get List of R5 Reports Available
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
     Available_Reports = SUSHI_R5_API_Calls.Reports(SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Available_Reports)) == "<class 'str'>": # Meaning the API call returned an error
         Platforms_Not_Collected.append(Available_Reports)
-        print("Added to Platforms_Not_Collected: " + Available_Reports)
+        logging.info("Added to Platforms_Not_Collected: " + Available_Reports)
         continue
     
     Available_Master_Reports = [] # This list will contain the dictionaries from the JSON for the master reports available on the platform, which will be the only reports pulled
@@ -217,8 +227,9 @@ for SUSHI_Call_Data in SUSHI_Data:
             Available_Master_Reports.append(Report)
     if Available_Master_Reports == []:
         Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
-        print("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
+        logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
         continue
+    logging.info(f"Master report list collection successful: {Available_Master_Reports}")
 
     #Subsection: Collect Individual Master Reports
     #ToDo: Allow system or user to change dates

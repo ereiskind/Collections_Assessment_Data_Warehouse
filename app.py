@@ -407,33 +407,18 @@ for SUSHI_Call_Data in SUSHI_Data:
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
 
 
-        #Section: Read Master Report into Dataframe
-        #Subsection: Create Dataframe
-        #ToDo: Create pandas dataframe with following fields
-            # Interface #Alert: Need to make SUSHI_R5_Credentials.json["interface"]["name"] (aka SUSHI_Call_Data['JSON_Name']) = PK in MySQL "interfaces" table
-            # Report = Master_Report_Response['Report_Header']['Report_ID']
-            # Resource_Name (len=150)
-            # Publisher (len=100)
-            # Publisher_ID (len=50)
-            # Platform (not null) (len=75)
-            # DOI (len=50)
-            # Proprietary_ID (len=50)
-            # ISBN
-            # Print_ISSN
-            # Online_ISSN
-            # URI (len=50)
-            # Data_Type (not null)
-            # Section_Type
-            # Parent_Data_Type
-            # Parent_DOI (len=50)
-            # Parent_Proprietary_ID (len=50)
-            # YOP (YOP unknown is "0001" and articles-in-press is "9999", so data type YEAR can't be used)
-            # Access_Type
-            # Access_Method (not null)
-            # Metric_Type (not null)
-            # R5_Month (not null)
-            # R5_Count (not null)
-            # Report_Creation_Date
+        #Section: Load Master Report into MySQL
+        #Subsection: Read Master Report into Dataframe
+        Master_Report_Dataframe = Create_Master_Report_Dataframes.Create_Dataframe(SUSHI_Call_Data['JSON_Name'], Master_Report_Type, Master_Report_Response)
+        if Master_Report_Dataframe == "ERROR: Master_Report_Type":
+            Master_Report_Response_Problem = dict(
+                Interface = SUSHI_Call_Data["JSON_Name"],
+                Type = "Unable to create dataframe",
+                Details = f"Master report type {Master_Report_Type} not recognized in function Create_Master_Report_Dataframes.Create_Dataframe",
+            )
+            Platforms_Not_Collected.append(Master_Report_Response_Problem)
+            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|Unable to create dataframe|Master report type {Master_Report_Type} not recognized in function Create_Master_Report_Dataframes.Create_Dataframe")
+            continue
         
         #Subsection: Import Relevant Data from JSON into Dataframe
         '''
@@ -473,13 +458,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             pass # This represents Platform Master Reports; the if-elif-else above filters out other reports before they reach this point
         '''
 
-        #Subsection: Create Single Time Field
-        #ToDo: Confirm that fields for beginning and end of each time interval are for the beginning and end of a single month
-        #ToDo: Create a field for that month and/or change name of beginning date field (as ISO for first date of that month)
-        #ToDo: Remove unneeded date fields
-
-
-        #Section:Load Master Report into MySQL
+        #Subsection:Load Dataframe into MySQL
         #ToDo: Load dataframe into MySQL
 
 Connection.close()

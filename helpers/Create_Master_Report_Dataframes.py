@@ -1,18 +1,36 @@
 import pandas
 
-def Create_Dataframe(Interface, Master_Report_JSON):
+def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     """This creates a pandas dataframe based on the result of a SUSHI API call for a COUNTER R5 master report.
     
     Arguments:
         Interface {int} -- the ID for the interface
+        Master_Report_Type {string} -- the ID for the master report type
         Master_Report_JSON {dict} -- the SUSHI API response in native Python data types
     
     Returns:
         dataframe -- the SUSHI API response data in a dataframe
+        string -- the Master_Report_Type wasn't for a master report
     """
-    #ToDo: Determine master report type
+    if  Master_Report_Type == "PR":
+        Create_PR_Dataframe(Interface, Master_Report_JSON)
+    elif Master_Report_Type == "DR":
+        Create_DR_Dataframe(Interface, Master_Report_JSON)
+    elif Master_Report_Type == "TR":
+        Create_TR_Dataframe(Interface, Master_Report_JSON)
+    elif Master_Report_Type == "IR":
+        Create_IR_Dataframe(Interface, Master_Report_JSON)
+    else:
+        #ToDo: If saving data from reports where no master report is available, determine where to send the JSON here
+        # Currently, the function should never get here
+        return "ERROR: Master_Report_Type"
     #ToDo: Send inputs to appropriate function for master report type
     #ToDo: Make other adjustments
+    
+    #Subsection: Create Single Time Field
+        #ToDo: Confirm that fields for beginning and end of each time interval are for the beginning and end of a single month
+        #ToDo: Create a field for that month and/or change name of beginning date field (as ISO for first date of that month)
+        #ToDo: Remove unneeded date fields
 
 
 def Create_PR_Dataframe(Interface, Master_Report_JSON):

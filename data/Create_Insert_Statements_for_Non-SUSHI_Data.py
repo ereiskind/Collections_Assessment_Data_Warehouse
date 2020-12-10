@@ -1,25 +1,136 @@
 # This script can generate MySQL insert statements for the tables in Schema_Creation_Statements other than R5_Usage based on CSVs of the same name as the tables in the subfolder "data/DML_CSVs". The CSVs cannot contain a header row and the columns must be in the order in which the fields are listed in the insert statements.
 # The columns must be listed in the same order as the field names are, where the ith column is represented by Record[i]. So, if the first field listed corresponds to the values in the third column of the CSV, the first item listed in the VALUES clause must be Record[3].
-    # All non-numeric values are encapsulated in parentheses, then in single quotes, like ('Record[i]'), so that any commas within the values are retained.
+    # All string values are encapsulated in parentheses, then in single quotes, like ('Record[i]'), so that any commas within the values are retained.
 # The script handles escaping all apostrophes in the CSV, replaces empty strings in the insert statements with null values, and condenses the INSERT statements, which are written across multiple lines here for clarity, into a single line.
 
 from pathlib import Path
 import csv
 
-'''Example:
-print("-- Table <table>")
-CSV_Path = Path('.', 'DML_CSVs', '<table>.csv')
+print("-- Table Vendors")
+
+CSV_Path = Path('.', 'DML_CSVs', 'Vendors.csv')
 with open(CSV_Path) as CSVfile:
     for Record in list(csv.reader(CSVfile)):
         for i in range(len(Record)):
             Record[i] = Record[i].replace("'", "''")
         Insert_Statement = f"""
-            INSERT INTO <table> (
-                <list of table's fields here>
+            INSERT INTO Vendors (
+                CORAL_ID,
+                Vendor_Name
+            )
+            VALUES(
+                {Record[0]},
+                ('{Record[1]}')
+            );
+        """
+        Insert_Statement = Insert_Statement.replace("('')", "NULL")
+
+        Temp_List = Insert_Statement.split()
+        Insert_Statement = " ".join(Temp_List)
+        Temp_List = Insert_Statement.split("( ")
+        Insert_Statement = "(".join(Temp_List)
+        Temp_List = Insert_Statement.split(" )")
+        Insert_Statement = ")".join(Temp_List)
+
+        print(Insert_Statement)
+
+
+print("-- Table Interfaces")
+
+CSV_Path = Path('.', 'DML_CSVs', 'Interfaces.csv')
+with open(CSV_Path) as CSVfile:
+    for Record in list(csv.reader(CSVfile)):
+        for i in range(len(Record)):
+            Record[i] = Record[i].replace("'", "''")
+        Insert_Statement = f"""
+            INSERT INTO Interfaces (
+                Interface_Name,
+                COUNTER_R4_Compliant,
+                SUSHI_R5_Compliant,
+                Has_Usage_Portal,
+                Email_for_Usage,
+                Vendor,
             )
             VALUES(
                 ('{Record[0]}'),
-                {Record[1]}
+                {Record[1]},
+                {Record[2]},
+                {Record[3]},
+                ('{Record[4]}'),
+                {Record[5]}
+            );
+        """
+        Insert_Statement = Insert_Statement.replace("('')", "NULL")
+
+        Temp_List = Insert_Statement.split()
+        Insert_Statement = " ".join(Temp_List)
+        Temp_List = Insert_Statement.split("( ")
+        Insert_Statement = "(".join(Temp_List)
+        Temp_List = Insert_Statement.split(" )")
+        Insert_Statement = ")".join(Temp_List)
+
+        print(Insert_Statement)
+
+
+print("-- Table Fiscal_Years")
+
+CSV_Path = Path('.', 'DML_CSVs', 'Fiscal_Years.csv')
+with open(CSV_Path) as CSVfile:
+    for Record in list(csv.reader(CSVfile)):
+        for i in range(len(Record)):
+            Record[i] = Record[i].replace("'", "''")
+        Insert_Statement = f"""
+            INSERT INTO Fiscal_Years (
+                Fiscal_Year
+            )
+            VALUES(
+                ('{Record[0]}')
+            );
+        """
+        Insert_Statement = Insert_Statement.replace("('')", "NULL")
+
+        Temp_List = Insert_Statement.split()
+        Insert_Statement = " ".join(Temp_List)
+        Temp_List = Insert_Statement.split("( ")
+        Insert_Statement = "(".join(Temp_List)
+        Temp_List = Insert_Statement.split(" )")
+        Insert_Statement = ")".join(Temp_List)
+
+        print(Insert_Statement)
+
+#Alert: Stats_Collection_Info needs PK from Interfaces, which is an auto-increment field
+
+print("-- Table Stats_Collection_Info")
+
+CSV_Path = Path('.', 'DML_CSVs', 'Stats_Collection_Info.csv')
+with open(CSV_Path) as CSVfile:
+    for Record in list(csv.reader(CSVfile)):
+        for i in range(len(Record)):
+            Record[i] = Record[i].replace("'", "''")
+        Insert_Statement = f"""
+            INSERT INTO Stats_Collection_Info (
+                Interface,
+                Fiscal_Year,
+                Collection_Required,
+                Manual_Collection_Required,
+                Manual_Collection_Completed,
+                Note,
+                In_eBooks_Report,
+                In_eJournals_Report,
+                In_Databases_Report,
+                In_Multimedia_Report
+            )
+            VALUES(
+                {Record[0]},
+                {Record[1]},
+                {Record[2]},
+                {Record[3]},
+                {Record[4]},
+                ('{Record[5]}'),
+                ('{Record[6]}'),
+                ('{Record[7]}'),
+                ('{Record[8]}'),
+                ('{Record[9]}')
             );
         """
         Insert_Statement = Insert_Statement.replace("('')", "NULL")
@@ -32,82 +143,94 @@ with open(CSV_Path) as CSVfile:
         Insert_Statement = ")".join(Temp_List)
         
         print(Insert_Statement)
-'''
 
-"""
-CREATE TABLE Vendors (
-    CORAL_ID INT PRIMARY KEY NOT NULL,
-    Vendor_Name VARCHAR(75) NOT NULL
-);
-CREATE TABLE Interfaces (
-    Interface_ID INT PRIMARY KEY NOT NULL, -- Should this be pre-supplied to ensure matching with JSON and mimic production, where values from Alma will likely be used?
-    Interface_Name VARCHAR(75) NOT NULL,
-    COUNTER_R4_Compliant BOOLEAN NOT NULL,
-    SUSHI_R5_Compliant BOOLEAN NOT NULL,
-    Has_Usage_Portal BOOLEAN NOT NULL,
-    Email_for_Usage VARCHAR(50),
-    Vendor INT NOT NULL,
-    INDEX INDX_Vendor (Vendor),
-    CONSTRAINT FK_Interfaces_Vendor FOREIGN KEY INDX_Vendor (Vendor)
-        REFERENCES Vendors(CORAL_ID)
-        ON UPDATE cascade
-        ON DELETE restrict
-);
-CREATE TABLE Fiscal_Year (
-    Fiscal_Year_ID INT PRIMARY KEY NOT NULL,
-    Fiscal_Year CHAR(9) NOT NULL
-);
-CREATE TABLE Stats_Collection_Info (
-    Interface INT NOT NULL,
-    Fiscal_Year INT NOT NULL,
-    Manual_Collection_Required BOOLEAN NOT NULL,
-    Manual_Collection_Completed BOOLEAN,
-    Note TEXT,
-    In_eBooks_Report BOOLEAN NOT NULL,
-    In_eJournals_Report BOOLEAN NOT NULL,
-    In_Databases_Report BOOLEAN NOT NULL,
-    In_Multimedia_Report BOOLEAN NOT NULL,
-    PRIMARY KEY (Interface, Fiscal_Year),
-    INDEX INDX_Interface (Interface),
-    CONSTRAINT FK_SCInfo_Interface FOREIGN KEY INDX_Interface (Interface)
-        REFERENCES Interfaces(Interface_ID)
-        ON UPDATE restrict
-        ON DELETE restrict,
-    INDEX INDX_FY (Fiscal_Year),
-    CONSTRAINT FK_SCInfo_FY FOREIGN KEY INDX_FY (Fiscal_Year)
-        REFERENCES Fiscal_Year(Fiscal_Year_ID)
-        ON UPDATE restrict
-        ON DELETE restrict
-);
-CREATE TABLE Platforms (
-    Platform_ID INT PRIMARY KEY NOT NULL,
-    Interface INT NOT NULL,
-    Platform_Name VARCHAR(50) NOT NULL,
-    Platform_Homepage_Permalink TINYTEXT,
-    INDEX INDX_Interface (Interface),
-    CONSTRAINT FK_Platforms_Interface FOREIGN KEY INDX_Interface (Interface)
-        REFERENCES Interfaces(Interface_ID)
-        ON UPDATE cascade
-        ON DELETE restrict
-);
-CREATE TABLE Platform_Notes (
-    Platform_Notes_ID INT PRIMARY KEY NOT NULL,
-    Platform INT NOT NULL,
-    Note TEXT,
-    INDEX INDX_Platform (Platform),
-    CONSTRAINT FK_PlatformNotes_Platform FOREIGN KEY INDX_Platform (Platform)
-        REFERENCES Platforms(Platform_ID)
-        ON UPDATE restrict
-        ON DELETE restrict
-);
-CREATE TABLE Historical_Aleph (
-    Historical_Aleph_ID INT PRIMARY KEY NOT NULL,
-    Platform INT NOT NULL,
-    Aleph_Order_Number VARCHAR(25),
-    INDEX INDX_Platform (Platform),
-    CONSTRAINT FK_HistoricalAleph_Platform FOREIGN KEY INDX_Platform (Platform)
-        REFERENCES Platforms(Platform_ID)
-        ON UPDATE restrict
-        ON DELETE restrict
-);
-"""
+
+print("-- Table Platforms")
+
+CSV_Path = Path('.', 'DML_CSVs', 'Platforms.csv')
+with open(CSV_Path) as CSVfile:
+    for Record in list(csv.reader(CSVfile)):
+        for i in range(len(Record)):
+            Record[i] = Record[i].replace("'", "''")
+        Insert_Statement = f"""
+            INSERT INTO Platforms (
+                Interface,
+                Platform_Name,
+                Platform_Homepage_Permalink
+            )
+            VALUES(
+                {Record[0]},
+                ('{Record[1]}'),
+                ('{Record[2]}')
+            );
+        """
+        Insert_Statement = Insert_Statement.replace("('')", "NULL")
+
+        Temp_List = Insert_Statement.split()
+        Insert_Statement = " ".join(Temp_List)
+        Temp_List = Insert_Statement.split("( ")
+        Insert_Statement = "(".join(Temp_List)
+        Temp_List = Insert_Statement.split(" )")
+        Insert_Statement = ")".join(Temp_List)
+
+        print(Insert_Statement)
+
+
+print("-- Table Platform_Notes")
+
+CSV_Path = Path('.', 'DML_CSVs', 'Platform_Notes.csv')
+with open(CSV_Path) as CSVfile:
+    for Record in list(csv.reader(CSVfile)):
+        for i in range(len(Record)):
+            Record[i] = Record[i].replace("'", "''")
+        Insert_Statement = f"""
+            INSERT INTO Platform_Notes (
+                Platform,
+                Note
+            )
+            VALUES(
+                {Record[0]},
+                ('{Record[1]}')
+            );
+        """
+        Insert_Statement = Insert_Statement.replace("('')", "NULL")
+
+        Temp_List = Insert_Statement.split()
+        Insert_Statement = " ".join(Temp_List)
+        Temp_List = Insert_Statement.split("( ")
+        Insert_Statement = "(".join(Temp_List)
+        Temp_List = Insert_Statement.split(" )")
+        Insert_Statement = ")".join(Temp_List)
+
+        print(Insert_Statement)
+
+
+print("-- Table Historical_Aleph")
+
+CSV_Path = Path('.', 'DML_CSVs', 'Historical_Aleph.csv')
+with open(CSV_Path) as CSVfile:
+    for Record in list(csv.reader(CSVfile)):
+        for i in range(len(Record)):
+            Record[i] = Record[i].replace("'", "''")
+        Insert_Statement = f"""
+            INSERT INTO Historical_Aleph (
+                Platform,
+                Aleph_Order_Number,
+                ERS_Spreadsheet_Year
+            )
+            VALUES(
+                {Record[0]},
+                ('{Record[1]}'),
+                ('{Record[2]}')
+            );
+        """
+        Insert_Statement = Insert_Statement.replace("('')", "NULL")
+
+        Temp_List = Insert_Statement.split()
+        Insert_Statement = " ".join(Temp_List)
+        Temp_List = Insert_Statement.split("( ")
+        Insert_Statement = "(".join(Temp_List)
+        Temp_List = Insert_Statement.split(" )")
+        Insert_Statement = ")".join(Temp_List)
+
+        print(Insert_Statement)

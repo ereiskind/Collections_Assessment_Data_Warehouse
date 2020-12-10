@@ -417,8 +417,9 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Details = Master_Report_Dataframe.split("|")[1],
             )
             Platforms_Not_Collected.append(Master_Report_Dataframe_Problem)
-            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Response)
+            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Dataframe)
             continue
+        logging.info(Master_Report_Dataframe.head())
 
         #Subsection:Load Dataframe into MySQL
         #ToDo: Load dataframe into MySQL

@@ -9,6 +9,8 @@ from requests import HTTPError, Timeout
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+Chrome_User_Agent = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'} # Using this in the header makes the URL request appear to come from a Chrome browser and not the requests module; some platforms return 403 errors with the standard requests header
+
 #Subsection: Helper Functions
 def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     """Reads a JSON downloaded by an API call into memory.
@@ -79,7 +81,6 @@ def Single_Element_API_Call(Path_Addition, URL, Parameters, WebDriver):
         string -- the root URL for the SUSHI API, a pipe, what was being requested, a pipe, and the reason for the failure
     """
     API_Call_URL = URL + Path_Addition
-    Chrome_User_Agent = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'} # Using this in the header makes the URL request appear to come from a Chrome browser and not the requests module; some platforms return 403 errors with the standard requests header
     time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
     try: # Makes the initial API call
         API_Response = requests.get(API_Call_URL, params=Parameters, timeout=15, headers=Chrome_User_Agent)

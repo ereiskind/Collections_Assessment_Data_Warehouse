@@ -405,8 +405,10 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
 
-        #Section:Load Master Report into MySQL
-        #ToDo: Load master report JSON into pandas dataframe with following fields (as appropriate)
+
+        #Section: Read Master Report into Dataframe
+        #Subsection: Create Dataframe
+        #ToDo: Create pandas dataframe with following fields
             # Interface #Alert: Need to make SUSHI_R5_Credentials.json["interface"]["name"] (aka SUSHI_Call_Data['JSON_Name']) = PK in MySQL "interfaces" table
             # Report = Master_Report_Response['Report_Header']['Report_ID']
             # Resource_Name (len=150)
@@ -420,7 +422,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             # Online_ISSN
             # URI (len=50)
             # Data_Type (not null)
-            # `Section_Type
+            # Section_Type
             # Parent_Data_Type
             # Parent_DOI (len=50)
             # Parent_Proprietary_ID (len=50)
@@ -431,12 +433,9 @@ for SUSHI_Call_Data in SUSHI_Data:
             # R5_Month (not null)
             # R5_Count (not null)
             # Report_Creation_Date
-        #ToDo: Load dataframe into MySQL
-
-        """
-        #Section: Read Master Report into Dataframe
-        #Alert: Thought (also in Visio)--Alma interfaces, nested under vendors in one-to-many relationship but only able to store a single SUSHI credential, can be used as backends and connected to frontends here, be used to represent both backends and frontends individually, or should one platform among those that share a SUSHI setup be designated as location for SUSHI data?
-        #Subsection: Determine Fields to Import
+        
+        #Subsection: Import Relevant Data from JSON into Dataframe
+        '''
         Dataframe_Fields = [
             ['Report_Header', 'Created'],
             ['Report_Items', 'Platform'],
@@ -447,7 +446,6 @@ for SUSHI_Call_Data in SUSHI_Data:
             ['Report_Items', 'Access_Method'],
             ['Report_Items', 'Data_Type'] #ToDo: Determine if issues with some of the reports returning errors are actually issues with missing keys and json_normalize (which shouldn't be happening since errors='ignore')
         ]
-
         if Master_Report_Type == "DR":
             Dataframe_Fields.append(['Report_Items', 'Database'])
             Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
@@ -472,29 +470,16 @@ for SUSHI_Call_Data in SUSHI_Data:
             #ToDo: Map paths for Parent_Title, Parent_Data_Type, Parent_DOI, Parent_Proprietary_ID, Parent_ISBN, Parent_Print_ISSN, Parent_Online_ISSN, Parent_URI, Component_Title, Component_Data_Type, Component_DOI, Component_Proprietary_ID, Component_ISBN, Component_Print_ISSN, Component_Online_ISSN, Component_URI
         else:
             pass # This represents Platform Master Reports; the if-elif-else above filters out other reports before they reach this point
-        
-        #Subsection: Create Initial Dataframe
-        #ToDo: Possibly put in try block if missing keys are causing problems despite setting 'ignore'
-        Report_Dataframe = pandas.json_normalize(Report_JSON, meta=Dataframe_Fields, sep=":", errors='ignore')
-        Report_Dataframe.to_csv('Check_Dataframe.csv', mode='a', index=False) # Using to more clearly investigate contents
-        print("Break to look at CSV")
+        '''
 
         #Subsection: Create Single Time Field
         #ToDo: Confirm that fields for beginning and end of each time interval are for the beginning and end of a single month
         #ToDo: Create a field for that month and/or change name of beginning date field (as ISO for first date of that month)
         #ToDo: Remove unneeded date fields
 
-        #Subsection: Other Possible Changes to Dataframe
-        # Should Access_Method be manipulated into a Boolean that would allow for exclusion of TDM, or should potential of other Access_Method options be kept?
-        # Resource identifiers (DOI, ISBN, ect.) come as a list of dictionaries where all the dictionaries have the keys "Type" for the type of identifier and "Value" for the identifier itself; putting the whole list in the dataframe will be simpler and will more readily convert to a relational system where data about individual resources is in a separate relation
-        # IR records largely lack elements indicating parent titles (thus far, none found)--do we want to try using the DOI API to connect items to titles?
-            # Not all TR contain DOI for journals--is there an API that takes in ISSNs and returns DOIs?
-            # Can that same API handle ISBNs?
-        # YOP of 0001 means unknown, YOP of 9999 means articles in press--need way to indicate this in outputting results
 
-
-        #Section: Export Dataframe to MySQL
-        """
+        #Section:Load Master Report into MySQL
+        #ToDo: Load dataframe into MySQL
 
 Connection.close()
 

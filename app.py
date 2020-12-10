@@ -44,8 +44,11 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
         None
         Boolean -- if keyword continue is triggered
     """
-    if str(type(Type)) == "<class 'int'>": # If "Type" is just a series of digits, meaning that there was an error code
+    # Combined, below tests if "Type" is a series of digits, meaning that it's an error code
+    if str(type(Type)) == "<class 'int'>":
         Type = "error " + str(Type)
+    elif Type.isnumeric():
+        Type = "error " + Type
     Response_to_Problem = messagebox.askyesno(title="Status Check Problem", message=f"The status check for {Source} contained the following {Type}:\n\n{Message}\n\nShould the usage for this platform be collected?")
     if not Response_to_Problem: # This code block needs to run if the answer to the above is no, which produces the Boolean False
         Problem_Message = f"Canceled collection from interface with {Type}: {Message}"

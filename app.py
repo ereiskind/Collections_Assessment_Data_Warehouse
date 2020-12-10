@@ -241,9 +241,10 @@ for SUSHI_Call_Data in SUSHI_Data:
         [Captured_By_Master_Reports.append(Report) for Report in Available_Reports_List if Report[0:2] == Master_Report["Report_ID"]]
     [Not_Captured_By_Master_Reports.append(Report) for Report in Available_Reports_List if Report not in Captured_By_Master_Reports]
     if len(Not_Captured_By_Master_Reports) > 0:
+        for Report in Not_Captured_By_Master_Reports:
+            Platforms_Not_Collected.append(f"{SUSHI_Call_Data['URL']}|{Report}|Standard report based on master report not offered") # The number of these is small, and custom reports will be included in this number, so the list will need to be reviewed manually
         logging.info(f"There were standard reports for {SUSHI_Call_Data['URL']} that didn't correspond to master reports. ({Not_Captured_By_Master_Reports})")
-    #Alert: Should the reports in Not_Captured_By_Master_Reports be requested? Are they a small enough number that having instructions to manually gather those reports output at the end of the script is appropriate?
-
+    
     logging.info(f"Master report list collection successful: {Available_Master_Reports}")
 
     #Subsection: Collect Individual Master Reports

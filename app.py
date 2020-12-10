@@ -299,20 +299,10 @@ for SUSHI_Call_Data in SUSHI_Data:
         #ToDo: If len(Master_Report_Response["Report_Items"]) == 0 (aka no usage reported), possible sanity check on that?
 
         #Subsection: Save Individual Reports as JSON
-        #ToDo: Use SUSHI_Call_Data["JSON_Name"] to name the report
-        try:
-            Namespace = str(Master_Report_Response['Report_Header']['Institution_ID'][0]['Value']).split(":")[0]
-            File_Name = Path('Examples', 'Example_JSONs', f"{Master_Report_Response['Report_Header']['Report_ID']}_{Namespace}.json")
-        except KeyError:
-            try:
-                Namespace = str(Master_Report_Response['Institution_ID'][0]['Value']).split(":")[0]
-                File_Name = Path('Examples', 'Example_JSONs', f"{Master_Report_Response['Report_ID']}_{Namespace}.json")
-            except KeyError:
-                print(f"No Institution_ID key was found in the {Master_Report_Type} from {SUSHI_Call_Data['URL']}.")
-                continue
+        File_Name = Path('Examples', 'Example_JSONs', f"{Master_Report_Response['Report_Header']['Report_ID']}_{SUSHI_Call_Data['JSON_Name']}.json")
         with open(File_Name, 'w') as writeJSON:
             json.dump(Master_Report_Response, writeJSON)
-            print(f"{File_Name} created.")
+            logging.info(f"{File_Name} created.")
         
         """
         #Section: Read Master Report into Dataframe

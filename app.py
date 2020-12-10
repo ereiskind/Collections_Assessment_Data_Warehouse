@@ -244,6 +244,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     # This creates a list of all the reports offered by a platform excluding the consortium reports offered by Silverchair, which have a Report_ID value of "Silverchair:CR_??"
     Available_Reports_List = []
     for Report in Available_Reports:
+        #ToDo: This is raising a KeyError in a small number of interfaces--figure out reason and how to handle the error
         if "Silverchair:CR" not in Report["Report_ID"]:
             Available_Reports_List.append(Report["Report_ID"])
     
@@ -299,7 +300,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Credentials["include_parent_details"] = "True"
             Credentials["include_component_details"] = "True"
         else:
-            logging.info("Invalid Master Report Type: " + Master_Report["Report_Name"])
+            messagebox.showwarning(title="Invalid Master Report Type", message=f"{SUSHI_Call_Data['JSON_Name']} contained a {Master_Report['Report_Name']}. Work out further report type handling.") # This message shouldn't ever appear
             continue
         logging.info(f"Ready to call {SUSHI_Call_Data['URL']} for {Master_Report_Type}.")
 
@@ -411,5 +412,4 @@ for Platform in Platforms_Not_Collected:
     CSV_Writer.writerow(Platform)
 
 FileIO.close()
-os.startfile('Platforms_Not_Collected.csv')
-#ToDo: Figure out how to make CSV say open when program finishes 
+#ToDo: Figure out how to open CSV so it stays open when program exits--os.startfile closes file at program exit

@@ -1,3 +1,68 @@
+import pandas
+
+def Create_Dataframe(Interface, Master_Report_JSON):
+    """This creates a pandas dataframe based on the result of a SUSHI API call for a COUNTER R5 master report.
+    
+    Arguments:
+        Interface {int} -- the ID for the interface
+        Master_Report_JSON {dict} -- the SUSHI API response in native Python data types
+    
+    Returns:
+        dataframe -- the SUSHI API response data in a dataframe
+    """
+    #ToDo: Determine master report type
+    #ToDo: Send inputs to appropriate function for master report type
+    #ToDo: Make other adjustments
+
+
+def Create_PR_Dataframe(Interface, Master_Report_JSON):
+    """This creates a pandas dataframe from a platform master report JSON.
+    
+    Arguments:
+        Interface {int} -- the ID for the interface
+        Master_Report_JSON {dict} -- the master report JSON in native Python data types
+    
+    Returns:
+        dataframe -- the master report data in a dataframe
+    """
+
+
+def Create_DR_Dataframe(Interface, Master_Report_JSON):
+    """This creates a pandas dataframe from a database master report JSON.
+    
+    Arguments:
+        Interface {int} -- the ID for the interface
+        Master_Report_JSON {dict} -- the master report JSON in native Python data types
+    
+    Returns:
+        dataframe -- the master report data in a dataframe
+    """
+
+
+def Create_TR_Dataframe(Interface, Master_Report_JSON):
+    """This creates a pandas dataframe from a title master report JSON.
+    
+    Arguments:
+        Interface {int} -- the ID for the interface
+        Master_Report_JSON {dict} -- the master report JSON in native Python data types
+    
+    Returns:
+        dataframe -- the master report data in a dataframe
+    """
+
+
+def Create_IR_Dataframe(Interface, Master_Report_JSON):
+    """This creates a pandas dataframe from an item master report JSON.
+    
+    Arguments:
+        Interface {int} -- the ID for the interface
+        Master_Report_JSON {dict} -- the master report JSON in native Python data types
+    
+    Returns:
+        dataframe -- the master report data in a dataframe
+    """
+
+
 #Section: JSON Locations
 #Subsection: Interface 
     # SUSHI_Call_Data['JSON_Name']

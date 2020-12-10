@@ -334,14 +334,16 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
     global DOI_Length
     global Proprietary_ID_Length
     global URI_Length
+    global Parent_DOI_Length
+    global Parent_Proprietary_ID_Length
     Update_Max_Platform_Length = False
     Update_Max_Resource_Name_Length = False
     Update_Max_Publisher_Length = False
     Update_Max_DOI_Length = False
     Update_Max_Proprietary_ID_Length = False
     Update_Max_URI_Length = False
-    #ToDo: Parent_DOI_Length
-    #ToDo: Parent_Proprietary_ID_Length
+    Update_Max_Parent_DOI_Length = False
+    Update_Max_Parent_Proprietary_ID_Length = False
 
     Dataframe_Records = []
 
@@ -385,12 +387,16 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         Data_Type = Item['Data_Type']
         Parent_Data_Type = Item['Item_Parent']['Data_Type']
         for Parent_ID in Item['Item_Parent']['Item_ID']:
-            if Parent_ID['Type'] == "Proprietary":
-                Parent_Proprietary_ID = Parent_ID['Value']
-                #ToDo: Check field length
             if Parent_ID['Type'] == "DOI":
                 Parent_DOI = Parent_ID['Value']
-                #ToDo: Check field length
+                if len(Parent_DOI) > Parent_DOI_Length:
+                    Update_Max_Parent_DOI_Length = True
+                    Parent_DOI_Length = len(Parent_DOI)
+            if Parent_ID['Type'] == "Proprietary":
+                Parent_Proprietary_ID = Parent_ID['Value']
+                if len(Parent_Proprietary_ID) > Parent_Proprietary_ID_Length:
+                    Update_Max_Parent_Proprietary_ID_Length = True
+                    Parent_Proprietary_ID_Length = len(Parent_Proprietary_ID)
         YOP = Item['YOP']
         Access_Type = Item['Access_Type']
         Access_Method = Item['Access_Method']
@@ -479,8 +485,12 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
     if Update_Max_URI_Length:
         messagebox.showwarning(title="Max Field Length Exceeded", message=f"The item report for interface {Interface} has values for the field \"URI\" exceeding the field's max character length. Update the field to greater than {URI_Length} characters.")
         return f"Unable to create IR dataframe|Values in \"URI\" are {URI_Length} characters long and would have been truncated on import to MySQL"
-    #ToDo: Parent_DOI_Length
-    #ToDo: Parent_Proprietary_ID_Length
+    if Update_Max_Parent_DOI_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The item report for interface {Interface} has values for the field \"Parent_DOI\" exceeding the field's max character length. Update the field to greater than {Parent_DOI_Length} characters.")
+        return f"Unable to create IR dataframe|Values in \"Parent_DOI\" are {Parent_DOI_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_Parent_Proprietary_ID_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The item report for interface {Interface} has values for the field \"Parent_Proprietary_ID\" exceeding the field's max character length. Update the field to greater than {Parent_Proprietary_ID_Length} characters.")
+        return f"Unable to create IR dataframe|Values in \"Parent_Proprietary_ID\" are {Parent_Proprietary_ID_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe
 

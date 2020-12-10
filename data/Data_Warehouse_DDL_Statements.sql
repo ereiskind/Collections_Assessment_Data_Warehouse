@@ -45,3 +45,15 @@ CREATE TABLE LIB_Stats_Collection_Info (
         ON UPDATE restrict
         ON DELETE restrict
 );
+
+CREATE TABLE LIB_Platforms (
+    Platform_ID INT PRIMARY KEY NOT NULL,
+    Interface INT NOT NULL,
+    Platform_Name VARCHAR(50) NOT NULL,
+    Platform_Homepage_Permalink TINYTEXT,
+    INDEX INDX_Interface (Interface),
+    CONSTRAINT FK_Platforms_Interface FOREIGN KEY INDX_Interface (Interface)
+        REFERENCES LIB_Interfaces(Interface_ID)
+        ON UPDATE restrict
+        ON DELETE restrict
+);

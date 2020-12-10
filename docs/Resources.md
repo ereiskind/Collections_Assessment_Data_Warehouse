@@ -11,6 +11,7 @@ This is a list of resources saved for referencing in the creation of this projec
 - https://towardsdatascience.com/how-to-parse-json-data-with-python-pandas-f84fbd0b1025
 - https://kanoki.org/2019/12/12/how-to-work-with-json-in-pandas/
 - https://medium.com/@moungpeter/how-to-automate-downloading-files-using-python-selenium-and-headless-chrome-9014f0cdd196
+- https://stackoverflow.com/questions/61449460/json-normalize-pandas-with-lists
 
 ## Repositories
 - https://github.com/joyzoursky/docker-python-chromedriver

@@ -49,7 +49,7 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
         dataframe -- the master report data in a dataframe
     """
     #Subsection: Create Dataframe
-    Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
+    '''Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
         Interface, # Interface
         Master_Report_JSON['Report_Header']['Report_ID'], # Report
         Master_Report_JSON['Report_Items', 'Platform'], # Platform
@@ -59,7 +59,16 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
         Master_Report_JSON['Report_Items', 'Performance', 'Period', 'Begin_Date'], # R5_Month
         Master_Report_JSON['Report_Items', 'Performance', 'Instance', 'Count'], # R5_Count
         Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
-    ])
+    ])'''
+    vals = []
+
+    for item in Master_Report_JSON:
+        unit_code = item['unitcode']
+        for col in item['columns']:
+            for hd in col['hoverDetails']:
+                vals.append({'unitCode': unit_code, col['id']: hd['value']})
+    Dataframe = pandas.DataFrame(vals)
+    print(Dataframe.head())
 
     #Subsection: Check Field Length Constraints
     #ToDo: Have the below loop through all values at the dictionary key path

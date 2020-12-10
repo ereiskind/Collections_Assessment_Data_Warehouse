@@ -181,54 +181,96 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
         dataframe -- the master report data in a dataframe
         string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
-    #Subsection: Create Dataframe
-    Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
-        Interface, # Interface
-        Master_Report_JSON['Report_Header']['Report_ID'], # Report
-        Master_Report_JSON['Report_Items', 'Title'], # Resource_Name
-        Master_Report_JSON['Report_Items', 'Publisher'], # Publisher
-        #ToDo: Should "Publisher_ID (len=50)" be kept in addition to or in favor of "Publisher"?
-        Master_Report_JSON['Report_Items', 'Platform'], # Platform
-        Master_Report_JSON['Report_Items', 'Item_ID'], # Proprietary_ID, DOI, ISBN, Print_ISSN, Online_ISSN, URI
-        Master_Report_JSON['Report_Items', 'Data_Type'], # Data_Type
-        Master_Report_JSON['Report_Items', 'Section_Type'], # `Section_Type
-        Master_Report_JSON['Report_Items', 'YOP'], # YOP
-        Master_Report_JSON['Report_Items', 'Access_Type'], # Access_Type
-        Master_Report_JSON['Report_Items', 'Access_Method'], # Access_Method
-        Master_Report_JSON['Report_Items', 'Performance', 'Instance', 'Metric_Type'], # Metric_Type
-        Master_Report_JSON['Report_Items', 'Performance', 'Period', 'Begin_Date'], # R5_Month
-        Master_Report_JSON['Report_Items', 'Performance', 'Instance', 'Count'], # R5_Count
-        Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
-    ])
+    global Platform_Length
+    global Resource_Name_Length
+    global Publisher_Length
+    global DOI_Length
+    global Proprietary_ID_Length
+    global URI_Length
+    Update_Max_Platform_Length = False
+    Update_Max_Resource_Name_Length = False
+    Update_Max_Publisher_Length = False
+    Update_Max_DOI_Length = False
+    Update_Max_Proprietary_ID_Length = False
+    Update_Max_URI_Length = False
 
-    #Subsection: Check Field Length Constraints
-    #ToDo: Have the below loop through all values at the dictionary key path
-    if len(Master_Report_JSON['Report_Items', 'Title']) > Resource_Name_Length:
-        Resource_Name_Length = len(Master_Report_JSON['Report_Items', 'Title'])
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
-    if len(Master_Report_JSON['Report_Items', 'Publisher']) > Publisher_Length:
-        Publisher_Length = len(Master_Report_JSON['Report_Items', 'Publisher'])
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
-    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
-        Platform_Length = len(Master_Report_JSON['Report_Items', 'Platform'])
-        print(Platform_Length) # This should print twice for OSA with the value of Platform_Length set to 5
-        # Ultimately, the above print will be removed
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
-    #if len(insert how to isolate DOI here) > DOI_Length:
-        # DOI_Length = len(insert how to isolate DOI here)
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
-    #if len(insert how to isolate Proprietary_ID here) > Proprietary_ID_Length:
-        # Proprietary_ID_Length = len(insert how to isolate Proprietary_ID here)
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
-    #if len(insert how to isolate URI here) > URI_Length:
-        # URI_Length = len(insert how to isolate URI here)
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    Dataframe_Records = []
+
+    Report = Master_Report_JSON['Report_Header']['Report_ID']
+    Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
+    for Item in Master_Report_JSON['Report_Items']:
+        Resource_Name = Item['Title']
+        if len(Resource_Name) > Resource_Name_Length:
+            Update_Max_Resource_Name_Length = True
+            Resource_Name_Length = len(Resource_Name)
+        Publisher = Item['Publisher']
+        if len(Publisher) > Publisher_Length:
+            Update_Max_Publisher_Length = True
+            Publisher_Length = len(Publisher)
+        Platform = Item['Platform']
+        if len(Platform) > Platform_Length:
+            Update_Max_Platform_Length = True
+            Platform_Length = len(Platform)
+        for ID in Item['Item_ID']:
+            if ID['Type'] == "Proprietary":
+                Proprietary_ID = ID['Value']
+                #ToDo: Check Proprietary_ID_Length
+            if ID['Type'] == "DOI":
+                DOI = ID['Value']
+                #ToDo: Check DOI_Length
+            if ID['Type'] == "ISBN":
+                ISBN = ID['Value']
+            if ID['Type'] == "Print_ISSN":
+                Print_ISSN = ID['Value']
+            if ID['Type'] == "Online_ISSN":
+                Online_ISSN = ID['Value']
+            if ID['Type'] == "URI":
+                URI = ID['Value']
+                #ToDo: Check URI_Length
+        Data_Type = Item['Data_Type']
+        Section_Type = Item['Section_Type']
+        YOP = Item['YOP']
+        Access_Type = Item['Access_Type']
+        Access_Method = Item['Access_Method']
+        for Time_Period in Item['Performance']:
+            R5_Month = Time_Period['Period']['Begin_Date']
+            for Statstic in Time_Period['Instance']:
+                Metric_Type = Statstic['Metric_Type']
+                R5_Count = Statstic['Count']
+
+                Record = {
+                    "Interface": Interface,
+                    "Report": Report,
+                    "Report_Creation_Date": Report_Creation_Date,
+                    "Resource_Name": Resource_Name,
+                    "Publisher": Publisher,
+                    #ToDo: Should "Publisher_ID (len=50)" be kept in addition to or in favor of "Publisher"?
+                    "Platform": Platform,
+                    "Data_Type": Data_Type,
+                    "Section_Type": Section_Type,
+                    "YOP": YOP,
+                    "Access_Type": Access_Type,
+                    "Access_Method": Access_Method,
+                    "R5_Month": R5_Month,
+                    "Metric_Type": Metric_Type,
+                    "R5_Count": R5_Count,
+                }
+
+                try:
+                    Record["Proprietary_ID"] = Proprietary_ID
+                except UnboundLocalError: # There wasn't a Proprietary_ID
+                    Record["Proprietary_ID"] = None #ToDo: Confirm this is registering as a null value
+
+                #ToDo: For the variables below, do the same try-except UnboundLocalError as above
+                    # Proprietary_ID
+                    # DOI
+                    # ISBN
+                    # Print_ISSN
+                    # Online_ISSN
+                    # URI
+
+                Dataframe_Records.append(Record)
+    Dataframe = pandas.DataFrame(Dataframe_Records)
 
     return Dataframe
 

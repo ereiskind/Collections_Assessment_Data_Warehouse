@@ -9,6 +9,7 @@ import os
 import sys
 import requests
 from requests import HTTPError, Timeout
+from tkinter import messagebox
 import pandas
 import pymysql
 from sqlalchemy import create_engine
@@ -216,6 +217,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     #Subsection: Check Status Check for Alerts
     try:
         Status_Alert = Status_Check["Alerts"]
+        Status_Alert_Response = messagebox.askyesno(title="Status Check Contained Alert", message="The status check contained the following alert:\n\n"+Status_Alert+"\n\nShould the usage for this platform be collected?")
         #ToDo: Display Status_Alert and ask if platform should be skipped
         #ToDo: If skip is selected, add to Platforms_Not_Collected and continue
     except:

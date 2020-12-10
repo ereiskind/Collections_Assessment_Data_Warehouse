@@ -83,18 +83,6 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
     Returns:
         dataframe -- the master report data in a dataframe
     """
-    #Subsection: Check Field Length Constraints
-    #ToDo: Do these need to use loop constructs to get to all values at the dictionary key path?
-    if len(Master_Report_JSON['Report_Items', 'Database']) > Resource_Name_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Database'])
-        pass
-    if len(Master_Report_JSON['Report_Items', 'Publisher']) > Publisher_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Publisher'])
-        pass
-    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Platform'])
-        pass
-
     #Subsection: Create Dataframe
     Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
         Interface, # Interface
@@ -112,7 +100,22 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
         Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
     ])
 
-    #ToDo: If any new largest found values were created, create messagebox indicating what the max length for a given field was and presenting the option to not load the dataframe (adding info on report to Platforms_Not_Collected instead by returning string from these functions)
+    #Subsection: Check Field Length Constraints
+    #ToDo: Have the below loop through all values at the dictionary key path
+    if len(Master_Report_JSON['Report_Items', 'Database']) > Resource_Name_Length:
+        Resource_Name_Length = len(Master_Report_JSON['Report_Items', 'Database'])
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    if len(Master_Report_JSON['Report_Items', 'Publisher']) > Publisher_Length:
+        Publisher_Length = len(Master_Report_JSON['Report_Items', 'Publisher'])
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
+        Platform_Length = len(Master_Report_JSON['Report_Items', 'Platform'])
+        print(Platform_Length) # This should print twice for OSA with the value of Platform_Length set to 5
+        # Ultimately, the above print will be removed
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
 
     return Dataframe
 
@@ -127,24 +130,6 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
     Returns:
         dataframe -- the master report data in a dataframe
     """
-    #Subsection: Check Field Length Constraints
-    #ToDo: Do these need to use loop constructs to get to all values at the dictionary key path?
-    if len(Master_Report_JSON['Report_Items', 'Title']) > Resource_Name_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Title'])
-        pass
-    if len(Master_Report_JSON['Report_Items', 'Publisher']) > Publisher_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Publisher'])
-        pass
-    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Platform'])
-        pass
-    #if len(insert how to isolate DOI here) > DOI_Length:
-        #ToDo: Create new variable holding largest found value
-    #if len(insert how to isolate Proprietary_ID here) > Proprietary_ID_Length:
-        #ToDo: Create new variable holding largest found value
-    #if len(insert how to isolate URI here) > URI_Length:
-        #ToDo: Create new variable holding largest found value
-
     #Subsection: Create Dataframe
     Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
         Interface, # Interface
@@ -165,7 +150,34 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
         Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
     ])
 
-    #ToDo: If any new largest found values were created, create messagebox indicating what the max length for a given field was and presenting the option to not load the dataframe (adding info on report to Platforms_Not_Collected instead by returning string from these functions)
+    #Subsection: Check Field Length Constraints
+    #ToDo: Have the below loop through all values at the dictionary key path
+    if len(Master_Report_JSON['Report_Items', 'Title']) > Resource_Name_Length:
+        Resource_Name_Length = len(Master_Report_JSON['Report_Items', 'Title'])
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    if len(Master_Report_JSON['Report_Items', 'Publisher']) > Publisher_Length:
+        Publisher_Length = len(Master_Report_JSON['Report_Items', 'Publisher'])
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
+        Platform_Length = len(Master_Report_JSON['Report_Items', 'Platform'])
+        print(Platform_Length) # This should print twice for OSA with the value of Platform_Length set to 5
+        # Ultimately, the above print will be removed
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    #if len(insert how to isolate DOI here) > DOI_Length:
+        # DOI_Length = len(insert how to isolate DOI here)
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    #if len(insert how to isolate Proprietary_ID here) > Proprietary_ID_Length:
+        # Proprietary_ID_Length = len(insert how to isolate Proprietary_ID here)
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    #if len(insert how to isolate URI here) > URI_Length:
+        # URI_Length = len(insert how to isolate URI here)
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
 
     return Dataframe
 
@@ -180,28 +192,6 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
     Returns:
         dataframe -- the master report data in a dataframe
     """
-    #Subsection: Check Field Length Constraints
-    #ToDo: Do these need to use loop constructs to get to all values at the dictionary key path?
-    if len(Master_Report_JSON['Report_Items', 'Item']) > Resource_Name_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Item'])
-        pass
-    if len(Master_Report_JSON['Report_Items', 'Publisher']) > Publisher_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Publisher'])
-        pass
-    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Platform'])
-        pass
-    #if len(insert how to isolate DOI here) > DOI_Length:
-        #ToDo: Create new variable holding largest found value
-    #if len(insert how to isolate Proprietary_ID here) > Proprietary_ID_Length:
-        #ToDo: Create new variable holding largest found value
-    #if len(insert how to isolate URI here) > URI_Length:
-        #ToDo: Create new variable holding largest found value
-    #if len(insert how to isolate Parent_DOI here) > Parent_DOI_Length:
-        #ToDo: Create new variable holding largest found value
-    #if len(insert how to isolate Parent_Proprietary_ID here) > Parent_Proprietary_ID_Length:
-        #ToDo: Create new variable holding largest found value
-
     #Subsection: Create Dataframe
     Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
         Interface, # Interface
@@ -224,7 +214,42 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
     ])
 
-    #ToDo: If any new largest found values were created, create messagebox indicating what the max length for a given field was and presenting the option to not load the dataframe (adding info on report to Platforms_Not_Collected instead by returning string from these functions)
+    #Subsection: Check Field Length Constraints
+    #ToDo: Have the below loop through all values at the dictionary key path
+    if len(Master_Report_JSON['Report_Items', 'Item']) > Resource_Name_Length:
+        Resource_Name_Length = len(Master_Report_JSON['Report_Items', 'Item'])
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    if len(Master_Report_JSON['Report_Items', 'Publisher']) > Publisher_Length:
+        Publisher_Length = len(Master_Report_JSON['Report_Items', 'Publisher'])
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
+        Platform_Length = len(Master_Report_JSON['Report_Items', 'Platform'])
+        print(Platform_Length) # This should print twice for OSA with the value of Platform_Length set to 5
+        # Ultimately, the above print will be removed
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    #if len(insert how to isolate DOI here) > DOI_Length:
+        # DOI_Length = len(insert how to isolate DOI here)
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    #if len(insert how to isolate Proprietary_ID here) > Proprietary_ID_Length:
+        # Proprietary_ID_Length = len(insert how to isolate Proprietary_ID here)
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    #if len(insert how to isolate URI here) > URI_Length:
+        # URI_Length = len(insert how to isolate URI here)
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    #if len(insert how to isolate Parent_DOI here) > Parent_DOI_Length:
+        # Parent_DOI_Length = len(insert how to isolate Parent_DOI here)
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    #if len(insert how to isolate Parent_Proprietary_ID here) > Parent_Proprietary_ID_Length:
+        # Parent_Proprietary_ID_Length = len(insert how to isolate Parent_Proprietary_ID here)
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
 
     return Dataframe
 

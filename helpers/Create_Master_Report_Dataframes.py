@@ -15,12 +15,16 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     """
     if  Master_Report_Type == "PR":
         Create_PR_Dataframe(Interface, Master_Report_JSON)
+        #ToDo: if a string is returned by the above function, return that string
     elif Master_Report_Type == "DR":
         Create_DR_Dataframe(Interface, Master_Report_JSON)
+        #ToDo: if a string is returned by the above function, return that string
     elif Master_Report_Type == "TR":
         Create_TR_Dataframe(Interface, Master_Report_JSON)
+        #ToDo: if a string is returned by the above function, return that string
     elif Master_Report_Type == "IR":
         Create_IR_Dataframe(Interface, Master_Report_JSON)
+        #ToDo: if a string is returned by the above function, return that string
     else:
         #ToDo: If saving data from reports where no master report is available, determine where to send the JSON here
         # Currently, the function should never get here
@@ -58,13 +62,13 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
     ])
 
     #Subsection: Check Field Length Constraints
-    #ToDo: Do these need to use loop constructs to get to all values at the dictionary key path?
+    #ToDo: Have the below loop through all values at the dictionary key path
     if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
-        New_Platform_Length = len(Master_Report_JSON['Report_Items', 'Platform'])
-        print(New_Platform_Length) # This should print twice
-
-        #ToDo: Create new variable holding largest found value of Platform_Length
-    #ToDo: If any new largest found values were created, create messagebox indicating what the max length for a given field was and presenting the option to not load the dataframe (adding info on report to Platforms_Not_Collected instead by returning string from these functions)
+        Platform_Length = len(Master_Report_JSON['Report_Items', 'Platform'])
+        print(Platform_Length) # This should print twice for OSA with the value of Platform_Length set to 5
+        # Ultimately, the above print will be removed
+        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
+        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
 
     return Dataframe
 

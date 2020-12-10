@@ -54,7 +54,7 @@ CREATE TABLE Platforms (
     INDEX INDX_Interface (Interface),
     CONSTRAINT FK_Platforms_Interface FOREIGN KEY INDX_Interface (Interface)
         REFERENCES Interfaces(Interface_ID)
-        ON UPDATE restrict
+        ON UPDATE cascade
         ON DELETE restrict
 );
 
@@ -77,5 +77,37 @@ CREATE TABLE Historical_Aleph (
     CONSTRAINT FK_HistoricalAleph_Platform FOREIGN KEY INDX_Platform (Platform)
         REFERENCES Platforms(Platform_ID)
         ON UPDATE restrict
+        ON DELETE restrict
+);
+
+CREATE TABLE R5_Usage (
+    R5_Usage_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    Interface INT NOT NULL,
+    Report CHAR(2) NOT NULL,-- If adding standard views without master reports as standard views, this will need to change
+    Resource_Name VARCHAR(150),
+    Publisher VARCHAR(100),
+    Publisher_ID VARCHAR(50),
+    Platform VARCHAR(75) NOT NULL,
+    DOI VARCHAR(50),
+    Proprietary_ID VARCHAR(50),
+    ISBN CHAR(17),
+    Print_ISSN CHAR(9),
+    Online_ISSN CHAR(9),
+    URI VARCHAR(50),
+    Data_Type VARCHAR(25) NOT NULL,
+    Section_Type VARCHAR(10),
+    Parent_Data_Type VARCHAR(25),
+    Parent_DOI VARCHAR(50),
+    Parent_Proprietary_ID VARCHAR(50),
+    YOP SMALLINT,-- YOP unknown is "0001" and articles-in-press is "9999", so data type YEAR can't be used
+    Access_Type VARCHAR(20),
+    Access_Method VARCHAR(10) NOT NULL,
+    Metric_Type VARCHAR(30) NOT NULL,
+    R5_Month DATE NOT NULL,
+    R5_Count MEDIUMINT UNSIGNED NOT NULL,
+    INDEX INDX_Interface (Interface),
+    CONSTRAINT FK_R5Usage_Interface FOREIGN KEY INDX_Interface (Interface)
+        REFERENCES Interfaces(Interface_ID)
+        ON UPDATE cascade
         ON DELETE restrict
 );

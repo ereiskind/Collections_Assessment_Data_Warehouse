@@ -13,12 +13,20 @@ with open('SUSHI_R5_Credentials.json') as JSON_File:
         for Interface in Vendor["interface"]:
             Stats_Source["Platform/Stats Source"] = Interface["description"],
             Stats_Source["Covered Platforms"] = Interface["not from Alma"]["platforms"]
-            Stats_Source["JSON Name"] = Interface["name"] if Interface["name"] != "" else None
-            Stats_Source["Customer ID"] = Interface["statistics"]["user_id"] if Interface["statistics"]["user_id"] != "" else None
-            Stats_Source["Requestor ID"] = Interface["statistics"]["user_password"] if Interface["statistics"]["user_password"] != "" else None
-            Stats_Source["URL"] = Interface["statistics"]["online_location"] if Interface["statistics"]["online_location"] != "" else None
-            Stats_Source["API Key"] = Interface["statistics"]["delivery_address"] if Interface["statistics"]["delivery_address"] != "" else None
-            Stats_Source["SUSHI Platform Code"] = Interface["statistics"]["locally_stored"] if Interface["statistics"]["locally_stored"] != "" else None
-            Stats_Source["Collection Issues"] = Interface["not from Alma"]["issues"] if Interface["not from Alma"]["issues"] != "" else None
-            Stats_Source["Ready Notice Email"] = Interface["not from Alma"]["notification"] if Interface["not from Alma"]["notification"] != "" else None   
+            if Interface["name"] != "":
+                Stats_Source["JSON Name"] = Interface["name"]
+            if Interface["statistics"]["user_id"] != "":
+                Stats_Source["Customer ID"] = Interface["statistics"]["user_id"]
+            if Interface["statistics"]["user_password"] != "":
+                Stats_Source["Requestor ID"] = Interface["statistics"]["user_password"]
+            if Interface["statistics"]["online_location"] != "":
+                Stats_Source["URL"] = Interface["statistics"]["online_location"]
+            if Interface["statistics"]["delivery_address"] != "":
+                Stats_Source["API Key"] = Interface["statistics"]["delivery_address"]
+            if Interface["statistics"]["locally_stored"] != "":
+                Stats_Source["SUSHI Platform Code"] = Interface["statistics"]["locally_stored"]
+            if Interface["not from Alma"]["issues"] != "":
+                Stats_Source["Collection Issues"] = Interface["not from Alma"]["issues"]
+            if Interface["not from Alma"]["notification"] != "":
+                Stats_Source["Ready Notice Email"] = Interface["not from Alma"]["notification"]
             Data.append(Stats_Source)

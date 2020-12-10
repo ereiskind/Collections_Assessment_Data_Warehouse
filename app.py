@@ -68,7 +68,8 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
 def Handle_Exception_Master_Report(Source, Report, Exception_List, Load_Report_Items = False):
     """Handles results of a SUSHI API call for a master report that is or contains exceptions.
     
-    The function parses the list of exceptions, remaking each exception into a string. Then, if the response contained a Report_Items section, it asks if the usage should be loaded into the database. Finally, if the usage isn't to be loaded into the database, the report is added to Platforms_Not_Collected and the corresponding log statement is output to the terminal.
+    The function parses the list of exceptions, remaking each exception into a string. Then, if the response contained a Report_Items section, it asks if the usage should be loaded into the database. Finally, if the usage isn't to be loaded into the database, the report is added to Platforms_Not_Collected and the corresponding log statement is output to the terminal. Note that because there are two different possible parmeters for including parent details, "include_parent_details" and "include_component_details", which an item report might use, most item reports will require handling through this function.
+    #ToDo: Skip over the messagebox if all of the exceptions are 3050 (parameter not available)
     
     Arguments:
         Source {string} -- the JSON name for the current interface
@@ -347,7 +348,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type|Section_Type"
         elif Master_Report_Type == "IR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
-            # If either of the below is in the parameters but isn't used by the platform, it's presence will add a 3050 warning to the JSON; since there's no good way to tell which IRs use which parameter, using both and letting the warning pass silently is the best option
+            # If either of the below is in the parameters but isn't used by the platform, it's presence will add a 3050 warning to the JSON; since there's no good way to tell which IRs use which parameter, using both and handling the error in Handle_Exception_Master_Report is the best option
             Credentials["include_parent_details"] = "True"
             Credentials["include_component_details"] = "True"
         else:

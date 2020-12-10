@@ -55,7 +55,8 @@ def JSON_to_Python_Data_Types(JSON):
     Arguments:
         JSON {varies} -- an object containing a JSON or JSON-like data
     Returns:
-        dictionary or list -- the data in JSON using Python data types
+        dictionary -- the data in JSON as Python dictionary
+        Boolean False -- if the data in JSON can't be changed into a Python dictionary
     """
     if str(type(JSON)) == "<class 'dict'>":
         return JSON

@@ -106,7 +106,7 @@ for Folder, Subfolder, Files in os.walk(API_Download_Path):
 #ToDo: Save the current time to variable Script_Start_Time
 Platforms_Not_Collected = []
     # This will contain the URLs for failed API calls that prevented any reports from being collected
-    # Format: SUSHI base URL|API call that failed|Error that caused failure
+    # Format: SUSHI base URL|Source of problem|Error that caused failure
 
 #Subsection: Create the PyMySQL Connection and SQLAlchemy Engine
 Database = 'testdatawarehouse'
@@ -243,8 +243,8 @@ for SUSHI_Call_Data in SUSHI_Data:
         if "_" not in Report["Report_ID"]:
             Available_Master_Reports.append(Report)
     if Available_Master_Reports == []:
-        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
-        logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
+        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|reports|No master reports available")
+        logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|reports|No master reports available")
         continue
 
     Captured_By_Master_Reports = []
@@ -255,7 +255,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     if len(Not_Captured_By_Master_Reports) > 0:
         for Report in Not_Captured_By_Master_Reports:
             Platforms_Not_Collected.append(f"{SUSHI_Call_Data['URL']}|{Report}|Standard report based on master report not offered") # The number of these is small, and custom reports will be included in this number, so the list will need to be reviewed manually
-        logging.info(f"There were standard reports for {SUSHI_Call_Data['URL']} that didn't correspond to master reports. ({Not_Captured_By_Master_Reports})")
+            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['URL']}|{Report}|Standard report based on master report not offered")
     
     logging.info(f"Master report list collection successful: {Available_Master_Reports}")
 

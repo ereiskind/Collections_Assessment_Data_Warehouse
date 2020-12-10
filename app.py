@@ -422,7 +422,8 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         #Subsection:Load Dataframe into MySQL
         #ToDo: Load dataframe into MySQL
-        #Alert: Commit as transaction at end, follow commit with messagebox indicating success
+        #ToDo: Commit as transaction at end, follow commit with messagebox indicating success
+        #Alert: Should the commit still happen if there are platforms that can't be collected? If so, how should the program keep from collecting from the the same sources for the same time period multiple times?
 
 Connection.close()
 
@@ -444,4 +445,3 @@ for Platform in Platforms_Not_Collected:
 
 FileIO.close()
 #ToDo: Figure out how to open CSV so it stays open when program exits--os.startfile closes file at program exit
-#Alert: Should the commit still happen if there are platforms that can't be collected? If so, how should the program keep from collecting from the the same sources for the same time period multiple times?

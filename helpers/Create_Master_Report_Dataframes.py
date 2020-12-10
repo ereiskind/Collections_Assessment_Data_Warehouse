@@ -56,14 +56,15 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         ## "R5_Count" int64 --> R5_Count MEDIUMINT
         ## "Report_Creation_Date" datetime64 --> Report_Creation_Date DATE
     
-    #ToDo: Make following type changes with https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.astype.html#pandas.DataFrame.astype
-        # "Interface" int64
-        # "Report" string
-        # "Platform" string
-        # "Data_Type" string
-        # "Access_Method" string
-        # "Metric_Type" string
-        # "R5_Count" int64
+    Dataframe = Dataframe.astype({
+        'Interface': 'int64',
+        'Report': 'string',
+        'Platform': 'string',
+        'Data_Type': 'string',
+        'Access_Method': 'string',
+        'Metric_Type': 'string',
+        'R5_Count': 'int64'
+    })
 
     pandas.to_datetime( #ToDo: Doesn't seem to be changing type or raising error
         Dataframe['R5_Month'],
@@ -78,13 +79,13 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     )
 
     try:
-        #ToDo: Dataframe.['Resource_Name'] to string
+        Dataframe['Resource_Name'] = Dataframe['Resource_Name'].astype('string')
         # Should there be a sanity/data check here that all DR, TR, IR records have a Resource_Name value?
     except KeyError:
         Dataframe['Resource_Name'] = None
 
     try:
-        #ToDo: Dataframe['Publisher'] to string
+        Dataframe['Publisher'] = Dataframe['Publisher'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Publisher'] = None
@@ -92,73 +93,73 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     #Publisher_ID would go here
 
     try:
-        #ToDo: Dataframe['DOI'] to string
+        Dataframe['DOI'] = Dataframe['DOI'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['DOI'] = None
 
     try:
-        #ToDo: Dataframe['Proprietary_ID'] to string
+        Dataframe['Proprietary_ID'] = Dataframe['Proprietary_ID'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Proprietary_ID'] = None
 
     try:
-        #ToDo: Dataframe['ISBN'] to string
+        Dataframe['ISBN'] = Dataframe['ISBN'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['ISBN'] = None
 
     try:
-        #ToDo: Dataframe['Print_ISSN'] as string
+        Dataframe['Print_ISSN'] = Dataframe['Print_ISSN'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Print_ISSN'] = None
 
     try:
-        #ToDo: Dataframe['Online_ISSN'] as string
+        Dataframe['Online_ISSN'] = Dataframe['Online_ISSN'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Online_ISSN'] = None
 
     try:
-        #ToDo: Dataframe['URI'] as string
+        Dataframe['URI'] = Dataframe['URI'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['URI'] = None
 
     try:
-        #ToDo: Dataframe['Section_Type'] as string
+        Dataframe['Section_Type'] = Dataframe['Section_Type'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Section_Type'] = None
 
     try:
-        #ToDo: Dataframe['Parent_Data_Type'] as string
+        Dataframe['Parent_Data_Type'] = Dataframe['Parent_Data_Type'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Parent_Data_Type'] = None
 
     try:
-        #ToDo: Dataframe['Parent_DOI'] as string
+        Dataframe['Parent_DOI'] = Dataframe['Parent_DOI'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Parent_DOI'] = None
 
     try:
-        #ToDo: Dataframe['Parent_Proprietary_ID'] as string
+        Dataframe['Parent_Proprietary_ID'] = Dataframe['Parent_Proprietary_ID'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Parent_Proprietary_ID'] = None
 
     try:
-        #ToDo: Dataframe['YOP'] as int32
+        Dataframe['YOP'] = Dataframe['YOP'].astype('int64')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['YOP'] = None
 
     try:
-        #ToDo: Dataframe['Access_Type'] as string
+        Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')
         #ToDo: Ensure Python None values are registering as null
     except KeyError:
         Dataframe['Access_Type'] = None

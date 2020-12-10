@@ -263,8 +263,14 @@ for SUSHI_Call_Data in SUSHI_Data:
     [Not_Captured_By_Master_Reports.append(Report) for Report in Available_Reports_List if Report not in Captured_By_Master_Reports]
     if len(Not_Captured_By_Master_Reports) > 0:
         for Report in Not_Captured_By_Master_Reports:
-            Platforms_Not_Collected.append(f"{SUSHI_Call_Data['URL']}|{Report}|Standard report based on master report not offered") # The number of these is small, and custom reports will be included in this number, so the list will need to be reviewed manually
-            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['URL']}|{Report}|Standard report based on master report not offered")
+            # The number of these is small, and custom reports will be included in this number, so the list will need to be reviewed manually
+            Extra_Report_Problem = dict(
+                Interface = SUSHI_Call_Data["JSON_Name"],
+                Type = Report,
+                Details = "Standard report based on master report not offered",
+            )
+            Platforms_Not_Collected.append(Extra_Report_Problem) 
+        logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Report}|Standard report based on master report not offered")
     
     logging.info(f"Master report list collection successful: {len(Available_Master_Reports)} reports")
 

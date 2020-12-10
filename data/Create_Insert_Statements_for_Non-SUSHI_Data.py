@@ -46,6 +46,7 @@ with open(CSV_Path) as CSVfile:
             Record[i] = Record[i].replace("'", "''")
         Insert_Statement = f"""
             INSERT INTO Interfaces (
+                Interface_ID,
                 Interface_Name,
                 COUNTER_R4_Compliant,
                 SUSHI_R5_Compliant,
@@ -54,12 +55,13 @@ with open(CSV_Path) as CSVfile:
                 Vendor
             )
             VALUES(
-                ('{Record[0]}'),
-                {Record[1]},
+                {Record[0]},
+                ('{Record[1]}'),
                 {Record[2]},
                 {Record[3]},
-                ('{Record[4]}'),
-                {Record[5]}
+                {Record[4]},
+                ('{Record[5]}'),
+                {Record[6]}
             );
         """
         Insert_Statement = Insert_Statement.replace("('')", "NULL")

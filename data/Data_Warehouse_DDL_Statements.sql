@@ -11,7 +11,7 @@ CREATE TABLE Vendors (
 -- Create Table "Interfaces"
 -- -----------------------------------------------------
 CREATE TABLE Interfaces (
-    Interface_ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- With Alma, these will be pre-supplied as the Alma ID numbers
+    Interface_ID INT PRIMARY KEY NOT NULL, -- With Alma, these will be pre-supplied as the Alma ID numbers
     Interface_Name VARCHAR(75) NOT NULL,
     COUNTER_R4_Compliant BOOLEAN NOT NULL,
     SUSHI_R5_Compliant BOOLEAN NOT NULL,

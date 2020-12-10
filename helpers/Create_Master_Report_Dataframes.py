@@ -195,10 +195,14 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
         if len(Platform) > Platform_Length:
             Update_Max_Platform_Length = True
             Platform_Length = len(Platform)
-        #ToDo: Key Data_Type not always available (KeyError)
-        Data_Type = Item['Data_Type']
-        #ToDo: Key Access_Method not always available (KeyError)
-        Access_Method = Item['Access_Method']
+        try: # This handles situations where data types aren't included
+            Data_Type = Item['Data_Type']
+        except KeyError:
+            Data_Type = None
+        try: # This handles situations where access methods aren't included
+            Access_Method = Item['Access_Method']
+        except KeyError:
+            Access_Method = None
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']
             for Statstic in Time_Period['Instance']:

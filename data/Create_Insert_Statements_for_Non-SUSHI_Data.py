@@ -4,7 +4,6 @@
 # The script handles escaping all apostrophes in the CSV, replaces empty strings in the insert statements with null values, and condenses the INSERT statements, which are written across multiple lines here for clarity, into a single line.
 
 # Reminder: cd into data before executing
-#ToDo: Figure out Booleans--does CSV take away special properties of Excel Bool, causing literal copy of all caps words?
 
 from pathlib import Path
 import csv
@@ -52,7 +51,7 @@ with open(CSV_Path) as CSVfile:
                 SUSHI_R5_Compliant,
                 Has_Usage_Portal,
                 Email_for_Usage,
-                Vendor,
+                Vendor
             )
             VALUES(
                 ('{Record[0]}'),

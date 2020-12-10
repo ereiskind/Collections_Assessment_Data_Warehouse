@@ -29,23 +29,35 @@ logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %
 
 #Section: Functions
 #Subsection: Messages
-def Handle_Status_Check_Error(URL, Error, Message, Code):
-    """Prints a message that the SUSHI API call for status returned a SUSHI error message.
-    #ToDo: Potentially try again if message severity is "fatal"
+def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
+    """Handles results of SUSHI API call for status that countain an error or alert by presenting the message and asking if the interface's stats should be collected.
+    
+    #ToDo: Potentially offer option to try again if message severity is "fatal"
 
     Arguments:
-        URL {string} -- the SUSHI API URL
-        Error {string} -- the SUSHI error severity
-        Message {string} -- the SUSHI error message
-        Code {string} -- the SUSHI error code
+        Source {string} -- the JSON name for the current interface
+        Message {string} -- the SUSHI error message or the SUSHI alert value
+        Error {string} -- the SUSHI error severity; default None for SUSHI alerts
+        Type {string} -- the SUSHI error code; default "Alert" for SUSHI alerts
     
     Returns:
         None
+        Boolean -- if keyword continue is triggered
     """
-    if Status_Check_Error == "Warning":
-        print(f"Data is available for {URL}, but there may be a problem with it.")
-    Platforms_Not_Collected.append(URL + f"|{Message} (error code {Code})")
-    logging.info("Added to Platforms_Not_Collected: " + URL + f"|{Message} (error code {Code})")
+    if str(type(Type)) == "<class 'int'>": # If "Type" is just a series of digits, meaning that there was an error code
+        Type = "error " + str(Type)
+    Response_to_Problem = messagebox.askyesno(title="Status Check Problem", message=f"The status check for {Source} contained the following {Type}:\n\n{Message}\n\nShould the usage for this platform be collected?")
+    if not Response_to_Problem: # This code block needs to run if the answer to the above is no, which produces the Boolean False
+        Problem_Message = f"Canceled collection from interface with {Type}: {Message}"
+        Capture_Problem = dict(
+            Interface = Source,
+            Type = "status",
+            Details = Problem_Message,
+        )
+        Platforms_Not_Collected.append(Capture_Problem)
+        logging.info("Added to Platforms_Not_Collected: " + Problem_Message)
+        return True
+    return False
 
 
 def API_Download_Not_Empty():
@@ -199,31 +211,28 @@ for SUSHI_Call_Data in SUSHI_Data:
     # https://www.projectcounter.org/appendix-f-handling-errors-exceptions/ has list of COUNTER error codes
     try: # Status_Check is JSON-like dictionary with Report_Header and information about the error
         Status_Check_Error = Status_Check["Exception"]["Severity"]
-        Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check_Error, Status_Check["Exception"]["Message"], Status_Check["Exception"]["Code"])
-        continue
+        if Handle_Status_Check_Problem(SUSHI_Call_Data["JSON_Name"], Status_Check["Exception"]["Message"], Status_Check_Error, Status_Check["Exception"]["Code"]):
+            continue
     except:
         try: # Status_Check is JSON-like dictionary with nothing but information about the error
             Status_Check_Error = Status_Check["Severity"]
-            Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check_Error, Status_Check["Message"], Status_Check["Code"])
-            continue
+            if Handle_Status_Check_Problem(SUSHI_Call_Data["JSON_Name"], Status_Check["Message"], Status_Check_Error, Status_Check["Code"]):
+                continue
         except: #Alert: Not known if functional
             try: # Status_Check is a list containing a JSON-like dictionary with nothing but information about the error
                 Status_Check_Error = Status_Check[0]["Severity"]
-                Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check_Error, Status_Check[0]["Message"], Status_Check[0]["Code"])
-                continue
+                if Handle_Status_Check_Problem(SUSHI_Call_Data["JSON_Name"], Status_Check[0]["Message"], Status_Check_Error, Status_Check[0]["Code"]):
+                    continue
             except: # If the status check passes, a KeyError is returned
-                logging.info(f"Status check successful: {Status_Check}")
+                pass # Before the status check is declared a success, it needs to be checked for COUNTER Alerts as well
     
-    #Subsection: Check Status Check for Alerts
+    #Subsection: Check if Status_Check Returns COUNTER Alert
     try:
-        Status_Alert = Status_Check["Alerts"]
-        Status_Alert_Response = messagebox.askyesno(title="Status Check Contained Alert", message=f"The status check for {SUSHI_Call_Data['JSON_Name']} contained the following alert:\n\n"+Status_Alert+"\n\nShould the usage for this platform be collected?")
-        if not Status_Alert_Response: # This code block needs to run if the answer to the above is no, which produces the Boolean False
-            Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|status|Canceled because of alert: " + Status_Alert)
-            logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|status|Canceled because of alert: " + Status_Alert)
+        Status_Check_Alert = Status_Check["Alerts"]
+        if Handle_Status_Check_Problem(SUSHI_Call_Data["JSON_Name"], Status_Check_Alert):
             continue
     except:
-        pass # An alert wasn't included in the status check, so nothing needs to be done
+        logging.info(f"Status check successful: {Status_Check}")
 
     #Subsection: Get List of R5 Reports Available
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())

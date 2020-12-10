@@ -95,3 +95,37 @@ def Status(URL, Parameters, WebDriver):
         return URL + "|Status|Some other error"
 
     return JSON_to_Python_Data_Types(Status)
+
+
+def Reports(URL, Parameters, WebDriver):
+    """Performs the SUSHI API call to retrieve the list of available R5 reports and performs error checking on the response to ensure that it's valid.
+    
+    Arguments:
+        URL {string} -- the root URL for the SUSHI API
+        Parameters {string} -- the parameters that need to be passed as part of the API call
+        WebDriver {WebDriver} -- Selenium WebDriver object
+    
+    Returns:
+        dictionary or list -- the data in JSON using Python data types
+        string -- the root URL for the SUSHI API, a pipe, and the reason for the failure
+    """
+    Reports_URL = URL + "reports"
+    time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this delay keeps this request from being too soon after the status request
+    try:
+        Reports = requests.get(Reports_URL, params=Parameters, timeout=10)
+    except Timeout as error:
+        print(f"Server didn't respond to request for list of available reports after 10 seconds ({format(error)}).")
+        return URL + f"|Reports|{format(error)}"
+    except HTTPError as error: # If the API request returns a 4XX HTTP code
+        if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
+            Reports = Retrieve_Downloaded_JSON_File(WebDriver, Reports_URL + "?" + Parameters)
+            if Reports == []:
+                return URL + f"|Reports|{format(error)}"
+        else:
+            print(f"HTTP Error: {format(error)}")
+            return URL + f"|Reports|{format(error)}"
+    except: # If there's some other problem with the API request
+        print(f"Some error other than a status error or timout occurred when trying to access {Reports_URL}.")
+        return URL + "|Reports|Some other error"
+
+    return JSON_to_Python_Data_Types(Reports)

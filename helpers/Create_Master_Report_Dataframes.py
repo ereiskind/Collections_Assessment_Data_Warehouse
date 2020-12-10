@@ -80,7 +80,7 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
     Dataframe = pandas.DataFrame(Dataframe_Records)
 
     if Update_Max_Platform_Length:
-        messagebox.showwarning(title="Max Platform Length Exceeded", message=f"The platform report for interface {Interface} has platform values exceeding the max character length in the database. Update the \"Platform\" field to greater than {Platform_Length} characters.")
+        messagebox.showwarning(title="Max Platform Length Exceeded", message=f"The platform report for interface {Interface} has values for the field \"Platform\" exceeding the field's max character length. Update the field to greater than {Platform_Length} characters.")
         return f"Unable to create PR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe

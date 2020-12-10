@@ -15,20 +15,20 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
     if  Master_Report_Type == "PR":
-        Dataframe = Create_PR_Dataframe(Interface, Master_Report_JSON)
+        Partial_Dataframe = Create_PR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "DR":
-        Dataframe = Create_DR_Dataframe(Interface, Master_Report_JSON)
+        Partial_Dataframe = Create_DR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "TR":
-        Dataframe = Create_TR_Dataframe(Interface, Master_Report_JSON)
+        Partial_Dataframe = Create_TR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "IR":
-        Dataframe = Create_IR_Dataframe(Interface, Master_Report_JSON)
+        Partial_Dataframe = Create_IR_Dataframe(Interface, Master_Report_JSON)
     else:
         #ToDo: If saving data from reports where no master report is available, determine where to send the JSON here
         # Currently, the function should never get here
         return f"Unable to create dataframe|Master report type {Master_Report_Type} not recognized for creating a dataframe"
     
-    if str(type(Dataframe)) == "<class 'str'>": # Meaning one of the values exceeded the max length for the field
-        return Dataframe
+    if str(type(Partial_Dataframe)) == "<class 'str'>": # Meaning one of the values exceeded the max length for the field
+        return Partial_Dataframe
     
     # Dataframe to MySQL--two hashes means in all reports
         ## "Interface" int64 --> Interface INT
@@ -55,10 +55,25 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         ## "R5_Month" datetime64 --> R5_Month DATE
         ## "R5_Count" int64 --> R5_Count MEDIUMINT
         ## "Report_Creation_Date" datetime64 --> Report_Creation_Date DATE
+    
+    Dataframe = Partial_Dataframe[['Interface', 'Report', 'Platform', 'Data_Type', 'Access_Method', 'Metric_Type', 'R5_Month', 'R5_Count', 'Report_Creation_Date']]
+    #ToDo: Add fields from original returned dataframe if available or create new with that name filled with null values
+    #ToDo: Use fillna to change the Python null values to pandas null values for the appropriate type
+        # Dataframe.fillna(value=float('nan'), inplace=True) for floats
+        # Don't know if this should be before or after the data type changes
 
     #ToDo: Change the data types of the existing columns
-    #ToDo: Use fillna to change the Python null values to pandas null values for the appropriate type
-    #ToDo: For columns that don't exist, create them filled with null values of the appropriate data type
+    pandas.to_datetime(
+        Dataframe['R5_Month'],
+        errors='raise', # If ‘raise’, then invalid parsing will raise an exception; If ‘coerce’, then invalid parsing will be set as NaT; If ‘ignore’, then invalid parsing will return the input
+        format='%Y-%m-%d'
+    )
+    pandas.to_datetime(
+        Dataframe['Report_Creation_Date'],
+        errors='raise', # If ‘raise’, then invalid parsing will raise an exception; If ‘coerce’, then invalid parsing will be set as NaT; If ‘ignore’, then invalid parsing will return the input
+        format='%Y-%m-%dT',
+        exact=False # Some dates use the timezone (indicated by "Z") while others use UTC offset, so the format just has the ISO date format
+    )
     
     return Dataframe
 

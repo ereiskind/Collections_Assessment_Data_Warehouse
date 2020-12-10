@@ -65,7 +65,7 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
             for Statstic in Time_Period['Instance']:
                 Metric_Type = Statstic['Metric_Type']
                 R5_Count = Statstic['Count']
-                
+
                 Dataframe_Records.append({
                     "Interface": Interface,
                     "Report": Report,
@@ -96,39 +96,56 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
     Returns:
         dataframe -- the master report data in a dataframe
     """
-    #Subsection: Create Dataframe
-    Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
-        Interface, # Interface
-        Master_Report_JSON['Report_Header']['Report_ID'], # Report
-        Master_Report_JSON['Report_Items', 'Database'], # Resource_Name
-        Master_Report_JSON['Report_Items', 'Publisher'], # Publisher
-        #ToDo: Should "Publisher_ID (len=50)" be kept in addition to or in favor of "Publisher"?
-        Master_Report_JSON['Report_Items', 'Platform'], # Platform
-        Master_Report_JSON['Report_Items', 'Item_ID'], # Proprietary_ID
-        Master_Report_JSON['Report_Items', 'Data_Type'], # Data_Type
-        Master_Report_JSON['Report_Items', 'Access_Method'], # Access_Method
-        Master_Report_JSON['Report_Items', 'Performance', 'Instance', 'Metric_Type'], # Metric_Type
-        Master_Report_JSON['Report_Items', 'Performance', 'Period', 'Begin_Date'], # R5_Month
-        Master_Report_JSON['Report_Items', 'Performance', 'Instance', 'Count'], # R5_Count
-        Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
-    ])
+    global Platform_Length
+    Update_Max_Platform_Length = False
 
-    #Subsection: Check Field Length Constraints
-    #ToDo: Have the below loop through all values at the dictionary key path
-    if len(Master_Report_JSON['Report_Items', 'Database']) > Resource_Name_Length:
-        Resource_Name_Length = len(Master_Report_JSON['Report_Items', 'Database'])
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
-    if len(Master_Report_JSON['Report_Items', 'Publisher']) > Publisher_Length:
-        Publisher_Length = len(Master_Report_JSON['Report_Items', 'Publisher'])
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
-    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
-        Platform_Length = len(Master_Report_JSON['Report_Items', 'Platform'])
-        print(Platform_Length) # This should print twice for OSA with the value of Platform_Length set to 5
-        # Ultimately, the above print will be removed
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    Dataframe_Records = []
+
+    Report = Master_Report_JSON['Report_Header']['Report_ID']
+    Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
+    for Item in Master_Report_JSON['Report_Items']:
+        Resource_Name = Item['Database']
+        #ToDo: Check length
+        Publisher = Item['Publisher']
+        #ToDo: Check length
+        Platform = Item['Platform']
+        if len(Platform) > Platform_Length:
+            Update_Max_Platform_Length = True
+            Platform_Length = len(Platform)
+        Data_Type = Item['Data_Type']
+        Access_Method = Item['Access_Method']
+        #ToDo: Error handling for the below when not available (OSA as example)
+        for ID in Item['Item_ID']:
+            if ID['Type'] == "Proprietary":
+                Proprietary_ID = ID['Value']
+        for Time_Period in Item['Performance']:
+            R5_Month = Time_Period['Period']['Begin_Date']
+            for Statstic in Time_Period['Instance']:
+                Metric_Type = Statstic['Metric_Type']
+                R5_Count = Statstic['Count']
+
+                Dataframe_Records.append({
+                    "Interface": Interface,
+                    "Report": Report,
+                    "Report_Creation_Date": Report_Creation_Date,
+                    "Resource_Name": Resource_Name,
+                    "Publisher": Publisher,
+                    #ToDo: Should "Publisher_ID (len=50)" be kept in addition to or in favor of "Publisher"?
+                    "Platform": Platform,
+                    "Proprietary_ID": Proprietary_ID,
+                    "Data_Type": Data_Type,
+                    "Access_Method": Access_Method,
+                    "R5_Month": R5_Month,
+                    "Metric_Type": Metric_Type,
+                    "R5_Count": R5_Count,
+                })
+    Dataframe = pandas.DataFrame(Dataframe_Records)
+
+    if Update_Max_Platform_Length:
+        messagebox.showwarning(title="Max Platform Length Exceeded", message=f"The platform report for interface {Interface} has platform values exceeding the max character length in the database. Update the \"Platform\" field to greater than {Platform_Length} characters.")
+        return f"Unable to create PR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
+    #ToDo: Check on Resource_Name_Length
+    #ToDo: Check on Publisher_Length
 
     return Dataframe
 

@@ -193,6 +193,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         try: # Status_Check is JSON-like dictionary with nothing but information about the error
             Status_Check_Error = Status_Check["Severity"]
             Handle_Status_Check_Error(SUSHI_Call_Data["URL"], Status_Check_Error, Status_Check["Message"], Status_Check["Code"])
+            continue
         except: #Alert: Not known if functional
             try: # Status_Check is a list containing a JSON-like dictionary with nothing but information about the error
                 Status_Check_Error = Status_Check[0]["Severity"]
@@ -202,23 +203,18 @@ for SUSHI_Call_Data in SUSHI_Data:
                 pass # If the status check passes, a KeyError is returned
 
     #Subsection: Get List of R5 Reports Available
-    Reports_URL = SUSHI_Call_Data["URL"] + "reports" # This API returns a list of the available SUSHI reports
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
-    try:
-        Available_Reports = requests.get(Reports_URL, params=Credentials_String, timeout=10)
-    except Timeout as error:
-        print(f"Server didn't respond to request for {Master_Report_Type} after 10 seconds [{format(error)}].")
-        #ToDo: Add platform and error to Platforms_Not_Collected
+    Available_Reports = SUSHI_R5_API_Calls.Reports(SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+    if str(type(Available_Reports)) == "<class 'str'>": # Meaning the API call returned an error
+        Platforms_Not_Collected.append(Available_Reports)
         continue
     
     Available_Master_Reports = [] # This list will contain the dictionaries from the JSON for the master reports available on the platform, which will be the only reports pulled
-    for Report in Available_Reports.json():
+    for Report in Available_Reports:
         if "Master Report" in Report["Report_Name"]:
             Available_Master_Reports.append(Report)
     if Available_Master_Reports == []:
-        #ToDo: Add platform and error to Platforms_Not_Collected
-        # If the master reports aren't offered, should the standard views be retrieved with this script?
+        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
         print(f"{SUSHI_Call_Data['URL']} doesn't offer any master reports.")
         continue
 

@@ -57,3 +57,14 @@ CREATE TABLE LIB_Platforms (
         ON UPDATE restrict
         ON DELETE restrict
 );
+
+CREATE TABLE LIB_Platform_Notes (
+    Platform_Notes_ID INT PRIMARY KEY NOT NULL,
+    Platform INT NOT NULL,
+    Note TEXT,
+    INDEX INDX_Platform (Platform),
+    CONSTRAINT FK_PlatformNotes_Platform FOREIGN KEY INDX_Platform (Platform)
+        REFERENCES LIB_Platforms(Platform_ID)
+        ON UPDATE restrict
+        ON DELETE restrict
+);

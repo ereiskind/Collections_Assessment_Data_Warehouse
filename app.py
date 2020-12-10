@@ -296,7 +296,6 @@ for SUSHI_Call_Data in SUSHI_Data:
     # This creates a list of all the reports offered by a platform excluding the consortium reports offered by Silverchair, which have a Report_ID value of "Silverchair:CR_??"
     Available_Reports_List = []
     for Report in Available_Reports:
-        #ToDo: This is raising a KeyError in a small number of interfaces--figure out reason and how to handle the error
         if "Silverchair:CR" not in Report["Report_ID"]:
             Available_Reports_List.append(Report["Report_ID"])
     
@@ -387,6 +386,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                 pass # A SUSHI JSON without an "Exceptions" key will return a KeyError for the above
 
         #ToDo: If len(Master_Report_Response["Report_Items"]) == 0 (aka no usage reported), possible sanity check on that?
+        #Alert: Some interfaces seem to offer DR even though there aren't any databases on the constituent platform(s)/user interface(s); other interfaces offer DR with a single database where the metrics are identical to the PR (see Project MUSE as example). For the former, do we want to maintain a register of interfaces where the empty DR is expected? For the latter, do we want to load the DR?
 
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
 

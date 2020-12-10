@@ -223,7 +223,8 @@ for SUSHI_Call_Data in SUSHI_Data:
     
     Available_Master_Reports = [] # This list will contain the dictionaries from the JSON for the master reports available on the platform, which will be the only reports pulled
     for Report in Available_Reports:
-        if "Master Report" in Report["Report_Name"]:
+        if "_" not in Report["Report_ID"]:
+            #ToDo: Check that preset reports also have their master report offered (use Adam Matthew to check this)
             Available_Master_Reports.append(Report)
     if Available_Master_Reports == []:
         Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|N/A|No master reports available")

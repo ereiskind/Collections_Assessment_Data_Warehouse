@@ -1,0 +1,59 @@
+#Section: JSON Locations
+#Subsection: Interface 
+    # SUSHI_Call_Data['JSON_Name']
+#Subsection: Report
+    # Master_Report_Response['Report_Header']['Report_ID']
+#Subsection: Resource_Name (len=150)
+    # Warning if longer than 150 characters
+    # DR: ['Report_Items', 'Database']
+    # IR: ['Report_Items', 'Item']
+    # TR: ['Report_Items', 'Title']
+#Subsection: Publisher (len=100)
+    # Warning if longer than 100 characters
+    # DR, TR, IR: ['Report_Items', 'Publisher']
+#Subsection: Publisher_ID (len=50)
+    # Should this be kept in addition to or in favor of "Publisher"?
+#Subsection: Platform (not null) (len=75)
+    # Warning if longer than 75 characters
+    # ['Report_Items', 'Platform']
+#Subsection: DOI (len=50)
+    # Warning if longer than 50 characters
+    # TR, IR: See ['Report_Items', 'Item_ID']
+#Subsection: Proprietary_ID (len=50)
+    # Warning if longer than 50 characters
+    # DR, TR, IR: See ['Report_Items', 'Item_ID']
+#Subsection: ISBN
+    # TR, IR: See ['Report_Items', 'Item_ID']
+#Subsection: Print_ISSN
+    # TR, IR: See ['Report_Items', 'Item_ID']
+#Subsection: Online_ISSN
+    # TR, IR: See ['Report_Items', 'Item_ID']
+#Subsection: URI (len=50)
+    # Warning if longer than 50 characters
+    # TR, IR: See ['Report_Items', 'Item_ID']
+#Subsection: Data_Type (not null)
+    # ['Report_Items', 'Data_Type']
+#Subsection: `Section_Type
+    # TR: ['Report_Items', 'Section_Type']
+#Subsection: Parent_Data_Type
+    # IR: ['Report_Items', 'Item_Parent', 'Data_Type']
+#Subsection: Parent_DOI (len=50)
+    # Warning if longer than 50 characters
+    # IR: See ['Report_Items', 'Item_Parent', 'Item_ID']
+#Subsection: Parent_Proprietary_ID (len=50)
+    # Warning if longer than 50 characters
+    # IR: See ['Report_Items', 'Item_Parent', 'Item_ID']
+#Subsection: YOP (YOP unknown is "0001" and articles-in-press is "9999", so data type YEAR can't be used)
+    # TR, IR: ['Report_Items', 'YOP']
+#Subsection: Access_Type
+    # TR, IR: ['Report_Items', 'Access_Type']
+#Subsection: Access_Method (not null)
+    # ['Report_Items', 'Access_Method']
+#Subsection: Metric_Type (not null)
+    # ['Report_Items', 'Performance', 'Instance', 'Metric_Type']
+#Subsection: R5_Month (not null)
+    # ['Report_Items', 'Performance', 'Period', 'Begin_Date']
+#Subsection: R5_Count (not null)
+    #  ['Report_Items', 'Performance', 'Instance', 'Count']
+#Subsection: Report_Creation_Date
+    # ['Report_Header', 'Created']

@@ -18,6 +18,7 @@ from selenium.webdriver.chrome.options import Options
 #Alert: FROM ORIGINAL REPOSITORY with flat structure; these files are now at different locations
 import Database_Credentials # Loaded in from runtime environment repository at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
 import SUSHI_R5_API_Calls # In this repository at Collections_Assessment_Data_Warehouse/helpers/SUSHI_R5_API_Calls.py
+import Create_Master_Report_Dataframes # In this repository at Collections_Assessment_Data_Warehouse/helpers/Create_Master_Report_Dataframes.py
 
 
 #Section: Set Up Logging

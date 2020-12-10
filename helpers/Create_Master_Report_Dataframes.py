@@ -30,7 +30,35 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     if str(type(Dataframe)) == "<class 'str'>": # Meaning one of the values exceeded the max length for the field
         return Dataframe
     
-    #ToDo: Make any other adjustments
+    # Dataframe to MySQL--two hashes means in all reports
+        ## "Interface" int64 --> Interface INT
+        ## "Report" string --> Report CHAR
+        # "Resource_Name" string --> Resource_Name VARCHAR
+        # "Publisher" string --> Publisher VARCHAR
+        # Publisher_ID VARCHAR
+        ## "Platform" string --> Platform VARCHAR
+        # "DOI" string --> DOI VARCHAR
+        # "Proprietary_ID" string --> Proprietary_ID VARCHAR
+        # "ISBN" string --> ISBN CHAR
+        # "Print_ISSN" string --> Print_ISSN CHAR
+        # "Online_ISSN" string --> Online_ISSN CHAR
+        # "URI" string --> URI VARCHAR
+        ## "Data_Type" string --> Data_Type VARCHAR
+        # "Section_Type" string --> Section_Type VARCHAR
+        # "Parent_Data_Type" string --> Parent_Data_Type VARCHAR
+        # "Parent_DOI" string --> Parent_DOI VARCHAR
+        # "Parent_Proprietary_ID" string --> Parent_Proprietary_ID VARCHAR
+        # "YOP" int64 --> YOP SMALLINT (YOP unknown is "0001" and articles-in-press is "9999", so data type YEAR can't be used)
+        # "Access_Type" string --> Access_Type VARCHAR
+        ## "Access_Method" string --> Access_Method VARCHAR
+        ## "Metric_Type" string --> Metric_Type VARCHAR
+        ## "R5_Month" datetime64 --> R5_Month DATE
+        ## "R5_Count" int64 --> R5_Count MEDIUMINT
+        ## "Report_Creation_Date" datetime64 --> Report_Creation_Date DATE
+
+    #ToDo: Change the data types of the existing columns
+    #ToDo: Use fillna to change the Python null values to pandas null values for the appropriate type
+    #ToDo: For columns that don't exist, create them filled with null values of the appropriate data type
     
     return Dataframe
 

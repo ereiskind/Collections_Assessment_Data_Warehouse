@@ -375,7 +375,19 @@ for SUSHI_Call_Data in SUSHI_Data:
 Connection.close()
 
 #Section: Output Platforms_Not_Collected
-#ToDo: For each item in list Platforms_Not_Collected, split at pipe
-#ToDo: Create dictionary with each item where first section key is URL, second is part of program, third is details
-#ToDo: Output to a CSV
-#ToDo: Open the CSV
+FileIO = open('Platforms_Not_Collected.csv', 'w', newline='')
+CSV_Writer = csv.DictWriter(FileIO, [
+    #ToDo: Decide if there are better column names to use and/or if more columns are needed
+    "Interface", # The interface where there was a problem
+    "Type", # The type of error
+    #ToDo: Develop fixed vocabulary for "Type"
+    "Details", # the details of the error
+    #ToDo: Determine what should and shouldn't go in details, and make other columns if necessary
+])
+CSV_Writer.writeheader()
+
+for Platform in Platforms_Not_Collected:
+    CSV_Writer.writerow(Platform)
+
+FileIO.close()
+os.startfile('Platforms_Not_Collected.csv')

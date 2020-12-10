@@ -1,0 +1,1 @@
+# This script can generate MySQL insert statements for the tables in Schema_Creation_Statements other than R5_Usage based on CSVs of the same name as the tables in the subfolder "data/DML_CSVs". The CSVs cannot contain a header row and the columns must be in the order in which the fields are listed in the insert statements.

@@ -289,30 +289,13 @@ for SUSHI_Call_Data in SUSHI_Data:
             continue
         logging.info(f"Ready to call {SUSHI_Call_Data['URL']} for {Master_Report_Type} with parameters {Credentials}.")
 
-        Master_Report_URL = SUSHI_Call_Data["URL"] + "reports/" + Master_Report_Type.lower()
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
         time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
-        try:
-            Master_Report_Response = requests.get(Master_Report_URL, params=Credentials_String, timeout=90)
-            # Larger reports seem to take longer to respond, so the initial timeout interval is long
-        except Timeout as error:
-            try: # Timeout errors seem to be random, so going to try get request again with more time
-                time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
-                Master_Report_Response = requests.get(Master_Report_URL, params=Credentials_String, timeout=120)
-            except Timeout as error:
-                #ToDo: Get info for loading into sushierrorreports table--note that SUSHI JSONs for this resource don't have Report_Header sections, so data needs to come from elsewhere
-                #ToDo: Load above data into a record in SUSHIErrorReports
-                print(f"Server didn't respond to request for {Master_Report_Type} after second request of 120 seconds [{format(error)}].")
-                continue
-            except:
-                print(f"An error occurred while requesting {Master_Report_Type} [{format(error)}].")
-                #ToDo: Get same data as above and load into SUSHIErrorReports
-                continue
-
-            if Master_Report_Response.text == "":
-                #ToDo: If Master_Report_Response.json() is empty, get above data and load into record in SUSHIErrorReports
-                print(f"{Master_Report_URL} returned no data.")
-                continue
+        Master_Report_Response = SUSHI_R5_API_Calls.Master_Report_API_Call(Master_Report_Type, SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+        if str(type(Master_Report_Response)) == "<class 'str'>": # Meaning the API call returned an error
+            Platforms_Not_Collected.append(Master_Report_Response)
+            logging.info("Added to Platforms_Not_Collected: " + Master_Report_Response)
+            continue
 
         #ToDo: Error handling for JSON decoding errors--is there a way to take the text and transform it to valid JSON-like Python data structures? The rest of the code relies on Report_JSON being a dictionary.
         Report_JSON = Master_Report_Response.json()

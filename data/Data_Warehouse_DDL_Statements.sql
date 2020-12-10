@@ -1,0 +1,4 @@
+CREATE TABLE LIB_Vendors (
+    CORAL_ID INT PRIMARY KEY,
+    Vendor_Name VARCHAR(75)
+); 

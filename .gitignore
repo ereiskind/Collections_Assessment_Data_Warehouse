@@ -1,5 +1,6 @@
 # Private data copied from runtime environment repository
 data/Database_Credentials.py
+data/SUSHI_R5_Credentials.json
 
 # Examples from Alma containing only sample data--these can be safely saved to this repository
 !data/Examples/Alma_Vendor_Sample.json

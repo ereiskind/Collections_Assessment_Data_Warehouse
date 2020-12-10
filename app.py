@@ -255,8 +255,13 @@ for SUSHI_Call_Data in SUSHI_Data:
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
     Status_Check = SUSHI_R5_API_Calls.Single_Element_API_Call("status", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Status_Check)) == "<class 'str'>": # Meaning the API call returned an error
-        Platforms_Not_Collected.append(Status_Check)
-        logging.info("Added to Platforms_Not_Collected: " + Status_Check)
+        Status_Check_Problem = dict(
+            Interface = SUSHI_Call_Data["JSON_Name"],
+            Type = Status_Check.split("|")[0],
+            Details = Status_Check.split("|")[1],
+        )
+        Platforms_Not_Collected.append(Status_Check_Problem)
+        logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
         continue
 
     #Subsection: Check if Status_Check Returns COUNTER Error
@@ -290,8 +295,13 @@ for SUSHI_Call_Data in SUSHI_Data:
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
     Available_Reports = SUSHI_R5_API_Calls.Single_Element_API_Call("reports", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Available_Reports)) == "<class 'str'>": # Meaning the API call returned an error
-        Platforms_Not_Collected.append(Available_Reports)
-        logging.info("Added to Platforms_Not_Collected: " + Available_Reports)
+        Available_Reports_Problem = dict(
+            Interface = SUSHI_Call_Data["JSON_Name"],
+            Type = Status_Check.split("|")[0],
+            Details = Status_Check.split("|")[1],
+        )
+        Platforms_Not_Collected.append(Available_Reports_Problem)
+        logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
         continue
     # This creates a list of all the reports offered by a platform excluding the consortium reports offered by Silverchair, which have a Report_ID value of "Silverchair:CR_??"
     Available_Reports_List = []
@@ -304,8 +314,13 @@ for SUSHI_Call_Data in SUSHI_Data:
         if "_" not in Report["Report_ID"]:
             Available_Master_Reports.append(Report)
     if Available_Master_Reports == []:
-        Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|reports|No master reports available")
-        logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|reports|No master reports available")
+        No_Reports_Problem = dict(
+            Interface = SUSHI_Call_Data["JSON_Name"],
+            Type = "reports",
+            Details = "No master reports available",
+        )
+        Platforms_Not_Collected.append(No_Reports_Problem)
+        logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["JSON_Name"] + "|reports|No master reports available")
         continue
 
     Captured_By_Master_Reports = []
@@ -369,7 +384,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         #Subsection: Handle Master Reports with Exceptions
         try: # Master_Report_Response is JSON-like dictionary with top-level key of "Report_Header" that includes the key "Exceptions"
-            Master_Report_Exception = Master_Report_Response["Report_Header"]["Exceptions"]
+            Master_Report_Exceptions = Master_Report_Response["Report_Header"]["Exceptions"]
             if "Report_Items" in Master_Report_Response:
                 if Handle_Exception_Master_Report(SUSHI_Call_Data["JSON_Name"], Master_Report_Type, Master_Report_Exceptions, True):
                     continue
@@ -390,12 +405,34 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
 
-        #Subsection: Save Individual Reports as JSON
-        File_Name = Path('Examples', 'Example_JSONs', f"{Master_Report_Response['Report_Header']['Report_ID']}_{SUSHI_Call_Data['JSON_Name']}.json")
-        with open(File_Name, 'w') as writeJSON:
-            json.dump(Master_Report_Response, writeJSON)
-            logging.info(f"{File_Name} created.")
-        
+        #Section:Load Master Report into MySQL
+        #ToDo: Load master report JSON into pandas dataframe with following fields (as appropriate)
+            # Interface #Alert: Need to make SUSHI_R5_Credentials.json["interface"]["name"] (aka SUSHI_Call_Data['JSON_Name']) = PK in MySQL "interfaces" table
+            # Report = Master_Report_Response['Report_Header']['Report_ID']
+            # Resource_Name (len=150)
+            # Publisher (len=100)
+            # Publisher_ID (len=50)
+            # Platform (not null) (len=75)
+            # DOI (len=50)
+            # Proprietary_ID (len=50)
+            # ISBN
+            # Print_ISSN
+            # Online_ISSN
+            # URI (len=50)
+            # Data_Type (not null)
+            # `Section_Type
+            # Parent_Data_Type
+            # Parent_DOI (len=50)
+            # Parent_Proprietary_ID (len=50)
+            # YOP (YOP unknown is "0001" and articles-in-press is "9999", so data type YEAR can't be used)
+            # Access_Type
+            # Access_Method (not null)
+            # Metric_Type (not null)
+            # R5_Month (not null)
+            # R5_Count (not null)
+            # Report_Creation_Date
+        #ToDo: Load dataframe into MySQL
+
         """
         #Section: Read Master Report into Dataframe
         #Alert: Thought (also in Visio)--Alma interfaces, nested under vendors in one-to-many relationship but only able to store a single SUSHI credential, can be used as backends and connected to frontends here, be used to represent both backends and frontends individually, or should one platform among those that share a SUSHI setup be designated as location for SUSHI data?

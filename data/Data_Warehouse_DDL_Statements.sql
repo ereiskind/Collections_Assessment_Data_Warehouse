@@ -68,3 +68,14 @@ CREATE TABLE LIB_Platform_Notes (
         ON UPDATE restrict
         ON DELETE restrict
 );
+
+CREATE TABLE LIB_Historical_Aleph (
+    Historical_Aleph_ID INT PRIMARY KEY NOT NULL,
+    Platform INT NOT NULL,
+    Aleph_Order_Number VARCHAR(25),
+    INDEX INDX_Platform (Platform),
+    CONSTRAINT FK_HistoricalAleph_Platform FOREIGN KEY INDX_Platform (Platform)
+        REFERENCES LIB_Platforms(Platform_ID)
+        ON UPDATE restrict
+        ON DELETE restrict
+);

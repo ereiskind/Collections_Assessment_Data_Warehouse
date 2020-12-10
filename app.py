@@ -166,20 +166,25 @@ with open('SUSHI_R5_Credentials.json') as JSON_File:
         for Interface in Vendor["interface"]:
             Set = dict(
                 URL = Interface["statistics"]["online_location"],
-                JSON_Name = Interface["name"]
-                #ToDo: requestor_id = Interface["statistics"]["user_password"] if that value != "" else None
-                #ToDo: api_key = Interface["statistics"]["delivery_address"]  if that value != "" else None
-                #ToDo: customer_id = Interface["statistics"]["user_id"]  if that value != "" else None
-                #ToDo: platform = Interface["statistics"]["locally_stored"]  if that value != "" else None
+                JSON_Name = Interface["name"],
+                customer_id = Interface["statistics"]["user_id"]
             )
+            if Interface["statistics"]["user_password"] != "":
+                Set["requestor_id"] = Interface["statistics"]["user_password"]
+            if Interface["statistics"]["delivery_address"] != "":
+                Set["api_key"] = Interface["statistics"]["delivery_address"]
+            if Interface["statistics"]["locally_stored"] != "":
+                Set["platform"] = Interface["statistics"]["locally_stored"]
             SUSHI_Data.append(Set)
             logging.info(f"Credentials for {SUSHI_Data[-1]['JSON_Name']} added to SUSHI_Data")
 
 
 #Section: Make API Calls
 for SUSHI_Call_Data in SUSHI_Data:
-    #ToDo: JSON_Name also needs to be removed from Credentials
-    Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"} # This creates another dictionary without the URL to be used in the URL's query string
+    # These list comprehensions create another dictionary with just the content needed for the URL's query string--two are used because combining the Boolean expressions wasn't working
+    #ToDo: Try to combine Boolean expressions at end for a single list comprehension
+    Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"}
+    Credentials = {key: value for key, value in Credentials.items() if key != "JSON_Name"}
     logging.info(f"Making API calls starting with {SUSHI_Call_Data['URL']}")
 
     #Subsection: Determine SUSHI Availability

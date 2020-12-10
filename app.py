@@ -422,6 +422,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         #Subsection:Load Dataframe into MySQL
         #ToDo: Load dataframe into MySQL
+        #Alert: Commit as transaction at end, follow commit with messagebox indicating success
 
 Connection.close()
 

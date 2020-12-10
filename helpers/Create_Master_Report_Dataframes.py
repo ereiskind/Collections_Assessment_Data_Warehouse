@@ -124,8 +124,10 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
         if len(Platform) > Platform_Length:
             Update_Max_Platform_Length = True
             Platform_Length = len(Platform)
-        #ToDo: Key Data_Type not always available (KeyError)
-        Data_Type = Item['Data_Type']
+        try: # This handles situations where data types aren't included
+            Data_Type = Item['Data_Type']
+        except KeyError:
+            Data_Type = None #ToDo: Confirm this is registering as a null value
         Access_Method = Item['Access_Method']
         try: # This handles situations where proprietary IDs aren't included
             for ID in Item['Item_ID']:
@@ -234,8 +236,10 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                     Update_Max_URI_Length = True
                     URI_Length = len(URI)
         Data_Type = Item['Data_Type']
-        #ToDo: Key Section_Type not always available (KeyError)
-        Section_Type = Item['Section_Type']
+        try: # This handles situations where section types aren't included
+            Section_Type = Item['Section_Type']
+        except KeyError:
+            Section_Type = None #ToDo: Confirm this is registering as a null value
         YOP = Item['YOP']
         Access_Type = Item['Access_Type']
         Access_Method = Item['Access_Method']
@@ -355,53 +359,72 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         if len(Resource_Name) > Resource_Name_Length:
             Update_Max_Resource_Name_Length = True
             Resource_Name_Length = len(Resource_Name)
-        #ToDo: Key Publisher not always available (KeyError)
-        Publisher = Item['Publisher']
-        if len(Publisher) > Publisher_Length:
-            Update_Max_Publisher_Length = True
-            Publisher_Length = len(Publisher)
+        try: # This handles situations where publishers aren't included
+            Publisher = Item['Publisher']
+            if len(Publisher) > Publisher_Length:
+                Update_Max_Publisher_Length = True
+                Publisher_Length = len(Publisher)
+        except KeyError:
+            Publisher = None #ToDo: Confirm this is registering as a null value
         Platform = Item['Platform']
         if len(Platform) > Platform_Length:
             Update_Max_Platform_Length = True
             Platform_Length = len(Platform)
-        #ToDo: Key Item_ID not always available
-        for ID in Item['Item_ID']:
-            if ID['Type'] == "Proprietary":
-                Proprietary_ID = ID['Value']
-                if len(Proprietary_ID) > Proprietary_ID_Length:
-                    Update_Max_Proprietary_ID_Length = True
-                    Proprietary_ID_Length = len(Proprietary_ID)
-            if ID['Type'] == "DOI":
-                DOI = ID['Value']
-                if len(DOI) > DOI_Length:
-                    Update_Max_DOI_Length = True
-                    DOI_Length = len(DOI)
-            if ID['Type'] == "ISBN": #ToDo: Check if ISBNs are ever used in item-level IDs
-                ISBN = ID['Value']
-            if ID['Type'] == "Print_ISSN": #ToDo: Check if ISSNs are ever used in item-level IDs
-                Print_ISSN = ID['Value']
-            if ID['Type'] == "Online_ISSN": #ToDo: Check if eISSNs are ever used in item-level IDs
-                Online_ISSN = ID['Value']
-            if ID['Type'] == "URI":
-                URI = ID['Value']
-                if len(URI) > URI_Length:
-                    Update_Max_URI_Length = True
-                    URI_Length = len(URI)
+        try: # This handles situations where no item IDs are included
+            for ID in Item['Item_ID']:
+                if ID['Type'] == "Proprietary":
+                    Proprietary_ID = ID['Value']
+                    if len(Proprietary_ID) > Proprietary_ID_Length:
+                        Update_Max_Proprietary_ID_Length = True
+                        Proprietary_ID_Length = len(Proprietary_ID)
+                if ID['Type'] == "DOI":
+                    DOI = ID['Value']
+                    if len(DOI) > DOI_Length:
+                        Update_Max_DOI_Length = True
+                        DOI_Length = len(DOI)
+                if ID['Type'] == "ISBN": #ToDo: Check if ISBNs are ever used in item-level IDs
+                    ISBN = ID['Value']
+                if ID['Type'] == "Print_ISSN": #ToDo: Check if ISSNs are ever used in item-level IDs
+                    Print_ISSN = ID['Value']
+                if ID['Type'] == "Online_ISSN": #ToDo: Check if eISSNs are ever used in item-level IDs
+                    Online_ISSN = ID['Value']
+                if ID['Type'] == "URI":
+                    URI = ID['Value']
+                    if len(URI) > URI_Length:
+                        Update_Max_URI_Length = True
+                        URI_Length = len(URI)
+        except KeyError:
+            pass # The "try-except UnboundLocalError" blocks below will handle all of the variables from above
         Data_Type = Item['Data_Type']
-        #ToDo: Key Item_Parent not always available (KeyError)
-        #ToDo: Item_Parent can also be an one-item list (TypeError)
-        Parent_Data_Type = Item['Item_Parent']['Data_Type']
-        for Parent_ID in Item['Item_Parent']['Item_ID']:
-            if Parent_ID['Type'] == "DOI":
-                Parent_DOI = Parent_ID['Value']
-                if len(Parent_DOI) > Parent_DOI_Length:
-                    Update_Max_Parent_DOI_Length = True
-                    Parent_DOI_Length = len(Parent_DOI)
-            if Parent_ID['Type'] == "Proprietary":
-                Parent_Proprietary_ID = Parent_ID['Value']
-                if len(Parent_Proprietary_ID) > Parent_Proprietary_ID_Length:
-                    Update_Max_Parent_Proprietary_ID_Length = True
-                    Parent_Proprietary_ID_Length = len(Parent_Proprietary_ID)
+        try:
+            Parent_Data_Type = Item['Item_Parent']['Data_Type']
+            for Parent_ID in Item['Item_Parent']['Item_ID']:
+                if Parent_ID['Type'] == "DOI":
+                    Parent_DOI = Parent_ID['Value']
+                    if len(Parent_DOI) > Parent_DOI_Length:
+                        Update_Max_Parent_DOI_Length = True
+                        Parent_DOI_Length = len(Parent_DOI)
+                if Parent_ID['Type'] == "Proprietary":
+                    Parent_Proprietary_ID = Parent_ID['Value']
+                    if len(Parent_Proprietary_ID) > Parent_Proprietary_ID_Length:
+                        Update_Max_Parent_Proprietary_ID_Length = True
+                        Parent_Proprietary_ID_Length = len(Parent_Proprietary_ID)
+        except KeyError: # This handles situations where item parent info isn't included
+            Parent_Data_Type = None # The "try-except UnboundLocalError" blocks below will handle the parent ID variables
+        except TypeError: # This handles situations where the value for the key "Item_Parent" is a list containing a single dictionary
+            for Parent in Item['Item_Parent']:
+                Parent_Data_Type = Parent['Data_Type']
+                for Parent_ID in Parent['Item_ID']:
+                    if Parent_ID['Type'] == "DOI":
+                        Parent_DOI = Parent_ID['Value']
+                        if len(Parent_DOI) > Parent_DOI_Length:
+                            Update_Max_Parent_DOI_Length = True
+                            Parent_DOI_Length = len(Parent_DOI)
+                    if Parent_ID['Type'] == "Proprietary":
+                        Parent_Proprietary_ID = Parent_ID['Value']
+                        if len(Parent_Proprietary_ID) > Parent_Proprietary_ID_Length:
+                            Update_Max_Parent_Proprietary_ID_Length = True
+                            Parent_Proprietary_ID_Length = len(Parent_Proprietary_ID)
         YOP = Item['YOP']
         Access_Type = Item['Access_Type']
         Access_Method = Item['Access_Method']

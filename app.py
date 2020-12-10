@@ -68,6 +68,9 @@ def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
         Dataframe {pandas dataframe} -- dataframe to be loaded into MySQL
         DBTable {string} -- name of the MySQL table (relation) the data's being loaded into
         DBEngine {SQLAlchemy engine} -- engine object for MySQL database
+    
+    Returns:
+        None
     """
     Connection = DBEngine.connect()
     Dataframe.to_sql(
@@ -87,6 +90,9 @@ def Execute_SQL_Statement(SQLStatement, DBConnection):
     Arguments:
         SQLStatement {string} -- the SQL statement
         DBConnection {PyMySQL connection} -- connection object for MySQL database
+    
+    Returns:
+        None
     """
     Cursor = DBConnection.cursor()
     Cursor.execute(SQLStatement)
@@ -153,37 +159,21 @@ Chrome_Browser_Driver = webdriver.Chrome(options=chrome_options, executable_path
 
 #Section: Collect Information Needed for SUSHI Call
 # Later, this will be replaced with a call to the Alma API--see Credentials_Through_Alma_API.py
-#ToDo: Use credential set containing comma in mock Alma API response
-SUSHI_Data_File = open('SUSHI_R5_Credentials.csv','r', encoding='utf-8-sig') # Without encoding, characters added to front of first URL, causing API call to fail
+#ToDo: SUSHI_Data_File = Open JSON with SUSHI credentials--file is structured as a list of JSON objects similar to what would be returned by the Alma API
 SUSHI_Data = []
-for Set in [SUSHI_Data_Set.rstrip().split(",") for SUSHI_Data_Set in SUSHI_Data_File]: # This turns the CSV into a list where each line is a dictionary
-    try: # If none of the credential sets have a platform, the if statement below causes a key error
-        if Set[4] != "":
-            if Set[1] == "":
-                Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3], platform = Set[4])
-            elif Set[2] == "":
-                Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3], platform = Set[4])
-            else:
-                Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3], platform = Set[4])
-        else:
-            if Set[1] == "":
-                Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
-            elif Set[2] == "":
-                Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
-            else:
-                Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
-    except:
-        if Set[1] == "":
-            Data = dict(URL = Set[0], api_key = Set[2], customer_id = Set[3])
-        elif Set[2] == "":
-            Data = dict(URL = Set[0], requestor_id = Set[1], customer_id = Set[3])
-        else:
-            Data = dict(URL = Set[0], requestor_id = Set[1], api_key = Set[2], customer_id = Set[3])
-    SUSHI_Data.append(Data)
+#ToDo: Iterate through SUSHI_Data_File, and for each interface (set of SUSHI credentials) in the file, append to SUSHI_Data a dictionary that has (if not empty string in original data):
+    #ToDo: URL = [iterator]["interface"][interface iterator]["statistics"]["online_location"]
+    #ToDo: requestor_id = [iterator]["interface"][interface iterator]["statistics"]["user_password"]
+    #ToDo: api_key = [iterator]["interface"][interface iterator]["statistics"]["delivery_address"]
+    #ToDo: customer_id = [iterator]["interface"][interface iterator]["statistics"]["user_id"]
+    #ToDo: platform = [iterator]["interface"][interface iterator]["statistics"]["locally_stored"]
+    #ToDo: JSON_Name = [iterator]["interface"][interface iterator]["name"]
+#ToDo: Will require nested iterators--one iterating through the vendor JSON objects, another through the interfaces for each vendor
 
 
 #Section: Make API Calls
 for SUSHI_Call_Data in SUSHI_Data:
+    #ToDo: JSON_Name also needs to be removed from Credentials
     Credentials = {key: value for key, value in SUSHI_Call_Data.items() if key != "URL"} # This creates another dictionary without the URL to be used in the URL's query string
     logging.info(f"Making API calls starting with {SUSHI_Call_Data['URL']}")
 
@@ -284,13 +274,11 @@ for SUSHI_Call_Data in SUSHI_Data:
             Credentials["include_parent_details"] = "True"
             Credentials["include_component_details"] = "True"
         else:
-            print("Invalid Master Report Type: " + Master_Report["Report_Name"])
             logging.info("Invalid Master Report Type: " + Master_Report["Report_Name"])
             continue
         logging.info(f"Ready to call {SUSHI_Call_Data['URL']} for {Master_Report_Type}.")
 
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-        time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls
         Master_Report_Response = SUSHI_R5_API_Calls.Master_Report_API_Call(Master_Report_Type, SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
         if str(type(Master_Report_Response)) == "<class 'str'>": # Meaning the API call returned an error
             Platforms_Not_Collected.append(Master_Report_Response)
@@ -300,6 +288,8 @@ for SUSHI_Call_Data in SUSHI_Data:
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
         #ToDo: If len(Master_Report_Response["Report_Items"]) == 0 (aka no usage reported), possible sanity check on that?
 
+        #Subsection: Save Individual Reports as JSON
+        #ToDo: Use SUSHI_Call_Data["JSON_Name"] to name the report
         try:
             Namespace = str(Master_Report_Response['Report_Header']['Institution_ID'][0]['Value']).split(":")[0]
             File_Name = Path('Examples', 'Example_JSONs', f"{Master_Report_Response['Report_Header']['Report_ID']}_{Namespace}.json")

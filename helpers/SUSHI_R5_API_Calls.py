@@ -83,7 +83,6 @@ def Status(URL, Parameters, WebDriver):
         Status.raise_for_status()
     #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
     except Timeout as error: # If the API request times out
-        print(f"Server didn't respond after 10 seconds ({format(error)}).")
         return URL + f"|Status|{format(error)}"
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
@@ -91,10 +90,8 @@ def Status(URL, Parameters, WebDriver):
             if Status == []:
                 return URL + f"|Status|{format(error)}"
         else:
-            print(f"HTTP Error: {format(error)}")
             return URL + f"|Status|{format(error)}"
     except: # If there's some other problem with the API request
-        print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
         return URL + "|Status|Some other error"
 
     if JSON_to_Python_Data_Types(Status):
@@ -120,7 +117,6 @@ def Reports(URL, Parameters, WebDriver):
     try:
         Reports = requests.get(Reports_URL, params=Parameters, timeout=10)
     except Timeout as error:
-        print(f"Server didn't respond to request for list of available reports after 10 seconds ({format(error)}).")
         return URL + f"|Reports|{format(error)}"
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
@@ -128,10 +124,8 @@ def Reports(URL, Parameters, WebDriver):
             if Reports == []:
                 return URL + f"|Reports|{format(error)}"
         else:
-            print(f"HTTP Error: {format(error)}")
             return URL + f"|Reports|{format(error)}"
     except: # If there's some other problem with the API request
-        print(f"Some error other than a status error or timout occurred when trying to access {Reports_URL}.")
         return URL + "|Reports|Some other error"
 
     if JSON_to_Python_Data_Types(Reports):

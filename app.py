@@ -35,8 +35,8 @@ def Handle_Status_Check_Error(URL, Error, Message, Code):
     """
     if Status_Check_Error == "Warning":
         print("Data is available, but there may be a problem with it.")
-    print(f"Reports from {URL} not available because {Message} (error code {Code}).")
-    Platforms_Not_Collected.append(URL + "|" + Message)
+    Platforms_Not_Collected.append(URL + f"|{Message} (error code {Code})")
+    print("Added to Platforms_Not_Collected: " + URL + f"|{Message} (error code {Code})")
 
 
 def API_Download_Not_Empty():
@@ -181,6 +181,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     Status_Check = SUSHI_R5_API_Calls.Status(SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Status_Check)) == "<class 'str'>": # Meaning the API call returned an error
         Platforms_Not_Collected.append(Status_Check)
+        print("Added to Platforms_Not_Collected: " + Status_Check)
         continue
 
     #Subsection: Check if Status_Check Returns COUNTER Error
@@ -207,6 +208,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     Available_Reports = SUSHI_R5_API_Calls.Reports(SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Available_Reports)) == "<class 'str'>": # Meaning the API call returned an error
         Platforms_Not_Collected.append(Available_Reports)
+        print("Added to Platforms_Not_Collected: " + Available_Reports)
         continue
     
     Available_Master_Reports = [] # This list will contain the dictionaries from the JSON for the master reports available on the platform, which will be the only reports pulled
@@ -215,7 +217,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Available_Master_Reports.append(Report)
     if Available_Master_Reports == []:
         Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
-        print(f"{SUSHI_Call_Data['URL']} doesn't offer any master reports.")
+        print("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
         continue
 
     #Subsection: Collect Individual Master Reports

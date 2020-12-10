@@ -297,24 +297,22 @@ for SUSHI_Call_Data in SUSHI_Data:
             logging.info("Added to Platforms_Not_Collected: " + Master_Report_Response)
             continue
 
-        #ToDo: Error handling for JSON decoding errors--is there a way to take the text and transform it to valid JSON-like Python data structures? The rest of the code relies on Report_JSON being a dictionary.
-        Report_JSON = Master_Report_Response.json()
-        #Alert: Confirm that empty report is no usage
-        #ToDo: Sanity check that no usage empty report makes sense here vs. empty report as indication of an issue?
+        logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
+        #ToDo: If len(Master_Report_Response["Report_Items"]) == 0 (aka no usage reported), possible sanity check on that?
 
-        from pathlib import Path
         try:
-            Namespace = str(Report_JSON['Report_Header']['Institution_ID'][0]['Value']).split(":")[0]
-            File_Name = Path('Examples', 'Example_JSONs', f"{Report_JSON['Report_Header']['Report_ID']}_{Namespace}.json")
+            Namespace = str(Master_Report_Response['Report_Header']['Institution_ID'][0]['Value']).split(":")[0]
+            File_Name = Path('Examples', 'Example_JSONs', f"{Master_Report_Response['Report_Header']['Report_ID']}_{Namespace}.json")
         except KeyError:
             try:
-                Namespace = str(Report_JSON['Institution_ID'][0]['Value']).split(":")[0]
-                File_Name = Path('Examples', 'Example_JSONs', f"{Report_JSON['Report_ID']}_{Namespace}.json")
+                Namespace = str(Master_Report_Response['Institution_ID'][0]['Value']).split(":")[0]
+                File_Name = Path('Examples', 'Example_JSONs', f"{Master_Report_Response['Report_ID']}_{Namespace}.json")
             except KeyError:
-                print(f"No Institution_ID key was found in the {Master_Report_Type} from {Master_Report_URL}.")
+                print(f"No Institution_ID key was found in the {Master_Report_Type} from {SUSHI_Call_Data['URL']}.")
                 continue
         with open(File_Name, 'w') as writeJSON:
-            json.dump(Master_Report_Response.json(), writeJSON)
+            json.dump(Master_Report_Response, writeJSON)
+            print(f"{File_Name} created.")
         
         """
         #Section: Read Master Report into Dataframe

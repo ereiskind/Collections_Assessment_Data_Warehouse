@@ -82,87 +82,74 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['Resource_Name'] = Dataframe['Resource_Name'].astype('string')
         # Should there be a sanity/data check here that all DR, TR, IR records have a Resource_Name value?
     except KeyError:
-        Dataframe['Resource_Name'] = None
+        Dataframe['Resource_Name'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['Publisher'] = Dataframe['Publisher'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['Publisher'] = None
+        Dataframe['Publisher'] = None  #ToDo: Convert this to string data type
 
     #Publisher_ID would go here
 
     try:
         Dataframe['DOI'] = Dataframe['DOI'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['DOI'] = None
+        Dataframe['DOI'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['Proprietary_ID'] = Dataframe['Proprietary_ID'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['Proprietary_ID'] = None
+        Dataframe['Proprietary_ID'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['ISBN'] = Dataframe['ISBN'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['ISBN'] = None
+        Dataframe['ISBN'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['Print_ISSN'] = Dataframe['Print_ISSN'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['Print_ISSN'] = None
+        Dataframe['Print_ISSN'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['Online_ISSN'] = Dataframe['Online_ISSN'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['Online_ISSN'] = None
+        Dataframe['Online_ISSN'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['URI'] = Dataframe['URI'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['URI'] = None
+        Dataframe['URI'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['Section_Type'] = Dataframe['Section_Type'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['Section_Type'] = None
+        Dataframe['Section_Type'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['Parent_Data_Type'] = Dataframe['Parent_Data_Type'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['Parent_Data_Type'] = None
+        Dataframe['Parent_Data_Type'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['Parent_DOI'] = Dataframe['Parent_DOI'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['Parent_DOI'] = None
+        Dataframe['Parent_DOI'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['Parent_Proprietary_ID'] = Dataframe['Parent_Proprietary_ID'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['Parent_Proprietary_ID'] = None
+        Dataframe['Parent_Proprietary_ID'] = None  #ToDo: Convert this to string data type
 
     try:
         Dataframe['YOP'] = Dataframe['YOP'].astype('int64')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['YOP'] = None
+        Dataframe['YOP'] = None  #ToDo: Convert this to int64 data type
 
     try:
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')
-        #ToDo: Ensure Python None values are registering as null
     except KeyError:
-        Dataframe['Access_Type'] = None
+        Dataframe['Access_Type'] = None  #ToDo: Convert this to string data type
     
     #ToDo: Use fillna to change the Python null values to pandas null values for the appropriate type
         # Dataframe.fillna(value=float('nan'), inplace=True) for floats
@@ -276,14 +263,14 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
         try: # This handles situations where data types aren't included
             Data_Type = Item['Data_Type']
         except KeyError:
-            Data_Type = None #ToDo: Confirm this is registering as a null value
+            Data_Type = None
         Access_Method = Item['Access_Method']
         try: # This handles situations where proprietary IDs aren't included
             for ID in Item['Item_ID']:
                 if ID['Type'] == "Proprietary":
                     Proprietary_ID = ID['Value']
         except KeyError:
-            Proprietary_ID = None #ToDo: Confirm this is registering as a null value
+            Proprietary_ID = None
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']
             for Statstic in Time_Period['Instance']:
@@ -388,7 +375,7 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
         try: # This handles situations where section types aren't included
             Section_Type = Item['Section_Type']
         except KeyError:
-            Section_Type = None #ToDo: Confirm this is registering as a null value
+            Section_Type = None
         YOP = Item['YOP']
         Access_Type = Item['Access_Type']
         Access_Method = Item['Access_Method']
@@ -419,32 +406,32 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                 try:
                     Record["Proprietary_ID"] = Proprietary_ID
                 except UnboundLocalError: # There wasn't a Proprietary_ID
-                    Record["Proprietary_ID"] = None #ToDo: Confirm this is registering as a null value
+                    Record["Proprietary_ID"] = None
 
                 try:
                     Record["DOI"] = DOI
                 except UnboundLocalError: # There wasn't a DOI
-                    Record["DOI"] = None #ToDo: Confirm this is registering as a null value
+                    Record["DOI"] = None
 
                 try:
                     Record["ISBN"] = ISBN
                 except UnboundLocalError: # There wasn't an ISBN
-                    Record["ISBN"] = None #ToDo: Confirm this is registering as a null value
+                    Record["ISBN"] = None
 
                 try:
                     Record["Print_ISSN"] = Print_ISSN
                 except UnboundLocalError: # There wasn't a Print_ISSN
-                    Record["Print_ISSN"] = None #ToDo: Confirm this is registering as a null value
+                    Record["Print_ISSN"] = None
 
                 try:
                     Record["Online_ISSN"] = Online_ISSN
                 except UnboundLocalError: # There wasn't an Online_ISSN
-                    Record["Online_ISSN"] = None #ToDo: Confirm this is registering as a null value
+                    Record["Online_ISSN"] = None
 
                 try:
                     Record["URI"] = URI
                 except UnboundLocalError: # There wasn't an URI
-                    Record["URI"] = None #ToDo: Confirm this is registering as a null value
+                    Record["URI"] = None
 
                 Dataframe_Records.append(Record)
     Dataframe = pandas.DataFrame(Dataframe_Records)
@@ -514,7 +501,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                 Update_Max_Publisher_Length = True
                 Publisher_Length = len(Publisher)
         except KeyError:
-            Publisher = None #ToDo: Confirm this is registering as a null value
+            Publisher = None
         Platform = Item['Platform']
         if len(Platform) > Platform_Length:
             Update_Max_Platform_Length = True
@@ -604,42 +591,42 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                 try:
                     Record["Proprietary_ID"] = Proprietary_ID
                 except UnboundLocalError: # There wasn't a Proprietary_ID
-                    Record["Proprietary_ID"] = None #ToDo: Confirm this is registering as a null value
+                    Record["Proprietary_ID"] = None
 
                 try:
                     Record["DOI"] = DOI
                 except UnboundLocalError: # There wasn't a DOI
-                    Record["DOI"] = None #ToDo: Confirm this is registering as a null value
+                    Record["DOI"] = None
 
                 try:
                     Record["ISBN"] = ISBN
                 except UnboundLocalError: # There wasn't an ISBN
-                    Record["ISBN"] = None #ToDo: Confirm this is registering as a null value
+                    Record["ISBN"] = None
 
                 try:
                     Record["Print_ISSN"] = Print_ISSN
                 except UnboundLocalError: # There wasn't a Print_ISSN
-                    Record["Print_ISSN"] = None #ToDo: Confirm this is registering as a null value
+                    Record["Print_ISSN"] = None
 
                 try:
                     Record["Online_ISSN"] = Online_ISSN
                 except UnboundLocalError: # There wasn't an Online_ISSN
-                    Record["Online_ISSN"] = None #ToDo: Confirm this is registering as a null value
+                    Record["Online_ISSN"] = None
 
                 try:
                     Record["URI"] = URI
                 except UnboundLocalError: # There wasn't an URI
-                    Record["URI"] = None #ToDo: Confirm this is registering as a null value
+                    Record["URI"] = None
 
                 try:
                     Record["Parent_DOI"] = Parent_DOI
                 except UnboundLocalError: # There wasn't a Parent_DOI
-                    Record["Parent_DOI"] = None #ToDo: Confirm this is registering as a null value
+                    Record["Parent_DOI"] = None
 
                 try:
                     Record["Parent_Proprietary_ID"] = Parent_Proprietary_ID
                 except UnboundLocalError: # There wasn't a Parent_Proprietary_ID
-                    Record["Parent_Proprietary_ID"] = None #ToDo: Confirm this is registering as a null value
+                    Record["Parent_Proprietary_ID"] = None
 
                 Dataframe_Records.append(Record)
     Dataframe = pandas.DataFrame(Dataframe_Records)

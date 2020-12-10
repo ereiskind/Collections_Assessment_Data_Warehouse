@@ -3,6 +3,8 @@
     # All string values are encapsulated in parentheses, then in single quotes, like ('Record[i]'), so that any commas within the values are retained.
 # The script handles escaping all apostrophes in the CSV, replaces empty strings in the insert statements with null values, and condenses the INSERT statements, which are written across multiple lines here for clarity, into a single line.
 
+# Reminder: cd into data before executing
+
 from pathlib import Path
 import csv
 

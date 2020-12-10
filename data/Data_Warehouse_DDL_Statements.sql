@@ -4,7 +4,7 @@ CREATE TABLE LIB_Vendors (
 ); 
 
 CREATE TABLE LIB_Interfaces (
-    Interfaces_ID INT PRIMARY KEY NOT NULL, -- Should this be pre-supplied to ensure matching with JSON and mimic production, where values from Alma will likely be used?
+    Interface_ID INT PRIMARY KEY NOT NULL, -- Should this be pre-supplied to ensure matching with JSON and mimic production, where values from Alma will likely be used?
     Interface_Name VARCHAR(75) NOT NULL,
     COUNTER_R4_Compliant BOOLEAN NOT NULL,
     SUSHI_R5_Compliant BOOLEAN NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE LIB_Stats_Collection_Info (
     PRIMARY KEY (Interface, Fiscal_Year),
     INDEX INDX_Interface (Interface),
     CONSTRAINT FK_SCInfo_Interface FOREIGN KEY INDX_Interface (Interface)
-        REFERENCES LIB_Interfaces(Interfaces_ID)
+        REFERENCES LIB_Interfaces(Interface_ID)
         ON UPDATE restrict
         ON DELETE restrict,
     INDEX INDX_FY (Fiscal_Year),

@@ -47,8 +47,9 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
         dataframe -- the master report data in a dataframe
     """
     global Platform_Length
-    Dataframe_Records = []
     Update_Max_Platform_Length = False
+
+    Dataframe_Records = []
 
     Report = Master_Report_JSON['Report_Header']['Report_ID']
     Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
@@ -64,6 +65,7 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
             for Statstic in Time_Period['Instance']:
                 Metric_Type = Statstic['Metric_Type']
                 R5_Count = Statstic['Count']
+                
                 Dataframe_Records.append({
                     "Interface": Interface,
                     "Report": Report,

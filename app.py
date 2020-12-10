@@ -60,7 +60,7 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
             Details = Problem_Message,
         )
         Platforms_Not_Collected.append(Capture_Problem)
-        logging.info(f"Added to Platforms_Not_Collected: {Source}|{Report}|{Problem_Message}")
+        logging.info(f"Added to Platforms_Not_Collected: {Source}|status|{Problem_Message}")
         return True
     return False
 

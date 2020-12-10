@@ -1,5 +1,7 @@
 # This outputs the contents of SUSHI_R5_Credentials.json, a file in the same folder containing a list of JSON object with the same structure as the one shown in SUSHI_R5_Credentials_Template.json, in a tabular format
 
+#ToDo: Develop way to indicate if issue indicated in JSON is being handled appropriately by scripts or needs more attention
+
 import json
 import csv
 

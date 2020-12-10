@@ -1,4 +1,5 @@
 import pandas
+from tkinter import messagebox
 
 #Section: Main Function
 def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
@@ -48,13 +49,17 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
     Returns:
         dataframe -- the master report data in a dataframe
     """
+    global Platform_Length
     Dataframe_Records = []
+    Update_Max_Platform_Length = False
 
     Report = Master_Report_JSON['Report_Header']['Report_ID']
     Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
     for Item in Master_Report_JSON['Report_Items']:
         Platform = Item['Platform']
-        #ToDo: Check platform length
+        if len(Platform) > Platform_Length:
+            Update_Max_Platform_Length = True
+            Platform_Length = len(Platform)
         Data_Type = Item['Data_Type']
         Access_Method = Item['Access_Method']
         for Time_Period in Item['Performance']:
@@ -75,14 +80,9 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
                 })
     Dataframe = pandas.DataFrame(Dataframe_Records)
 
-    #Subsection: Check Field Length Constraints
-    #ToDo: Have the below loop through all values at the dictionary key path
-    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
-        Platform_Length = len(Master_Report_JSON['Report_Items', 'Platform'])
-        print(Platform_Length) # This should print twice for OSA with the value of Platform_Length set to 5
-        # Ultimately, the above print will be removed
-        #ToDo: Create a messagebox indicating that the max character length of the field needs to be reset to the largest value found +10
-        #ToDo: Return a string "Unable to create dataframe|Values in <field> would have been truncated on import to MySQL"
+    if Update_Max_Platform_Length:
+        messagebox.showwarning(title="Max Platform Length Exceeded", message=f"The platform report for interface {Interface} has platform values exceeding the max character length in the database. Update the \"Platform\" field to greater than {Platform_Length} characters.")
+        return f"Unable to create PR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe
 

@@ -57,7 +57,74 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         ## "Report_Creation_Date" datetime64 --> Report_Creation_Date DATE
     
     Dataframe = Partial_Dataframe[['Interface', 'Report', 'Platform', 'Data_Type', 'Access_Method', 'Metric_Type', 'R5_Month', 'R5_Count', 'Report_Creation_Date']]
-    #ToDo: Add fields from original returned dataframe if available or create new with that name filled with null values
+
+    try:
+        Dataframe['Resource_Name'] = Partial_Dataframe['Resource_Name']
+    except KeyError:
+        Dataframe['Resource_Name'] = None
+
+    try:
+        Dataframe['Publisher'] = Partial_Dataframe['Publisher']
+    except KeyError:
+        Dataframe['Publisher'] = None
+
+    #Publisher_ID would go here
+
+    try:
+        Dataframe['DOI'] = Partial_Dataframe['DOI']
+    except KeyError:
+        Dataframe['DOI'] = None
+
+    try:
+        Dataframe['Proprietary_ID'] = Partial_Dataframe['Proprietary_ID']
+    except KeyError:
+        Dataframe['Proprietary_ID'] = None
+
+    try:
+        Dataframe['ISBN'] = Partial_Dataframe['ISBN']
+    except KeyError:
+        Dataframe['ISBN'] = None
+
+    try:
+        Dataframe['Print_ISSN'] = Partial_Dataframe['Print_ISSN']
+    except KeyError:
+        Dataframe['Print_ISSN'] = None
+
+    try:
+        Dataframe['URI'] = Partial_Dataframe['URI']
+    except KeyError:
+        Dataframe['URI'] = None
+
+    try:
+        Dataframe['Section_Type'] = Partial_Dataframe['Section_Type']
+    except KeyError:
+        Dataframe['Section_Type'] = None
+
+    try:
+        Dataframe['Parent_Data_Type'] = Partial_Dataframe['Parent_Data_Type']
+    except KeyError:
+        Dataframe['Parent_Data_Type'] = None
+
+    try:
+        Dataframe['Parent_DOI'] = Partial_Dataframe['Parent_DOI']
+    except KeyError:
+        Dataframe['Parent_DOI'] = None
+
+    try:
+        Dataframe['Parent_Proprietary_ID'] = Partial_Dataframe['Parent_Proprietary_ID']
+    except KeyError:
+        Dataframe['Parent_Proprietary_ID'] = None
+
+    try:
+        Dataframe['YOP'] = Partial_Dataframe['YOP']
+    except KeyError:
+        Dataframe['YOP'] = None
+
+    try:
+        Dataframe['Access_Type'] = Partial_Dataframe['Access_Type']
+    except KeyError:
+        Dataframe['Access_Type'] = None
+    
     #ToDo: Use fillna to change the Python null values to pandas null values for the appropriate type
         # Dataframe.fillna(value=float('nan'), inplace=True) for floats
         # Don't know if this should be before or after the data type changes

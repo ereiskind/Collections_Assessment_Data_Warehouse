@@ -372,9 +372,10 @@ for SUSHI_Call_Data in SUSHI_Data:
         #Section: Export Dataframe to MySQL
         """
 
-
-#Section: Retrieve List of Failed Reports
-#ToDo: SELECT COUNTER_Namespace, Report_Source, Report_Type FROM sushierrorreports WHERE Time_Report_Run > Script_Start_Time (aka created after the script started running)
-#ToDo: Output the results of the above to an Excel file
-
 Connection.close()
+
+#Section: Output Platforms_Not_Collected
+#ToDo: For each item in list Platforms_Not_Collected, split at pipe
+#ToDo: Create dictionary with each item where first section key is URL, second is part of program, third is details
+#ToDo: Output to a CSV
+#ToDo: Open the CSV

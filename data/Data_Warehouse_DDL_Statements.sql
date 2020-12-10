@@ -17,3 +17,8 @@ CREATE TABLE LIB_Interfaces (
         ON UPDATE cascade
         ON DELETE restrict
 );
+
+CREATE TABLE LIB_Fiscal_Year (
+    Fiscal_Year_ID INT PRIMARY KEY,
+    Fiscal_Year CHAR(9)
+);

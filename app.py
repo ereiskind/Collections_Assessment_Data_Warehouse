@@ -44,6 +44,8 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
         None
         Boolean -- if keyword continue is triggered
     """
+    if len(Message) == 0: # Some interfaces always include the key for a status check problem, even if none exists; this keeps the messagebox from being triggered in those instances
+        return False
     # Combined, below tests if "Type" is a series of digits, meaning that it's an error code
     if str(type(Type)) == "<class 'int'>":
         Type = "error " + str(Type)

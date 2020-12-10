@@ -191,7 +191,7 @@ with open('SUSHI_R5_Credentials.json') as JSON_File:
             logging.info(f"Credentials for {SUSHI_Data[-1]['JSON_Name']} added to SUSHI_Data")
 
 
-#Section: Make API Calls
+#Section: Make API Calls for Status and Reports
 for SUSHI_Call_Data in SUSHI_Data:
     # These list comprehensions create another dictionary with just the content needed for the URL's query string--two are used because combining the Boolean expressions wasn't working
     #ToDo: Try to combine Boolean expressions at end for a single list comprehension
@@ -275,7 +275,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     
     logging.info(f"Master report list collection successful: {len(Available_Master_Reports)} reports")
 
-    #Subsection: Collect Individual Master Reports
+    #Section: Make API Calls for Individual Master Reports
     #ToDo: Allow system or user to change dates
     Credentials["begin_date"] = "2020-01-01"
     Credentials["end_date"] = "2020-01-31"
@@ -318,9 +318,18 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
 
-        #Subsection: Check for Exceptions in Returned Report
-        #ToDo: In returned report, check if list ["Report_Header"]["Exceptions"] has any content
-        #ToDo: If above is yes, see what type of exception it is and throw up some sort of error message if it's something to pay attention to
+        #Subsection: Handle Master Reports with Exceptions
+        #ToDo: Determine if list ["Report_Header"]["Exceptions"] exists and has content--work through the variant ways it can appear as well
+        #ToDo: iterate through items in Exceptions
+            #ToDo: Required elements are "Code" (int, but can be string of int format) for the exception number and "Message" describing the exception
+            #ToDo: "Data" element can provide further clarification
+        #ToDo: Determine if Master_Report_Response["Report_Items"] exists
+            #ToDo: If it does, display the errors and ask if the Report_Items data should be loaded
+        #ToDo: If not loading Report_Items data
+            #ToDo: Collect data on request and exception
+                #ToDo: Potentially add to Platforms_Not_Collected?
+            #ToDo: Output logging statement on above
+            #ToDo: continue
 
         #ToDo: If len(Master_Report_Response["Report_Items"]) == 0 (aka no usage reported), possible sanity check on that?
 

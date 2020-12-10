@@ -132,7 +132,7 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
                 if ID['Type'] == "Proprietary":
                     Proprietary_ID = ID['Value']
         except KeyError:
-            pass
+            Proprietary_ID = None #ToDo: Confirm this is registering as a null value
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']
             for Statstic in Time_Period['Instance']:
@@ -152,11 +152,8 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
                     "R5_Month": R5_Month,
                     "Metric_Type": Metric_Type,
                     "R5_Count": R5_Count,
+                    "Proprietary_ID": Proprietary_ID,
                 }
-                try:
-                    Record["Proprietary_ID"] = Proprietary_ID
-                except UnboundLocalError: # There wasn't a Proprietary_ID
-                    Record["Proprietary_ID"] = None #ToDo: Confirm this is registering as a null value
                 Dataframe_Records.append(Record)
     Dataframe = pandas.DataFrame(Dataframe_Records)
 

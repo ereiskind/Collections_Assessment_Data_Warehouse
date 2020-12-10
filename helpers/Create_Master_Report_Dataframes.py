@@ -60,13 +60,17 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
         Master_Report_JSON['Report_Items', 'Performance', 'Instance', 'Count'], # R5_Count
         Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
     ])'''
+    #ToDo: Revise below for SUSHI and to perform checks on field length constraints
     vals = []
 
-    for item in Master_Report_JSON:
-        unit_code = item['unitcode']
-        for col in item['columns']:
-            for hd in col['hoverDetails']:
+    for item in Master_Report_JSON: # This captures each of the highest-level dicts in the list
+        unit_code = item['unitCode'] # This saves the single value at the end of the key path ['unitCode']
+        for col in item['columns']: # This iterates through the list at the end of the key path ['columns']
+            for hd in col['hoverDetails']:# This iterates through the list at the end of the key path ['columns']['hoverDetails']
                 vals.append({'unitCode': unit_code, col['id']: hd['value']})
+                # Creates dict and adds it to list of dicts
+                    # literal string "unitcode" = value of variable unit_code
+                    # value at end of key path ['columns']['id'] = value at the end of key path ['columns']['hoverDetails']['value']
     Dataframe = pandas.DataFrame(vals)
     print(Dataframe.head())
 

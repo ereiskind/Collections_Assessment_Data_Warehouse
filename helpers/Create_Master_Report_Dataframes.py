@@ -97,7 +97,11 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
         dataframe -- the master report data in a dataframe
     """
     global Platform_Length
+    global Resource_Name_Length
+    global Publisher_Length
     Update_Max_Platform_Length = False
+    Update_Max_Resource_Name_Length = False
+    Update_Max_Publisher_Length = False
 
     Dataframe_Records = []
 
@@ -105,9 +109,13 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
     Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
     for Item in Master_Report_JSON['Report_Items']:
         Resource_Name = Item['Database']
-        #ToDo: Check length
+        if len(Resource_Name) > Resource_Name_Length:
+            Update_Max_Resource_Name_Length = True
+            Resource_Name_Length = len(Resource_Name)
         Publisher = Item['Publisher']
-        #ToDo: Check length
+        if len(Publisher) > Publisher_Length:
+            Update_Max_Publisher_Length = True
+            Publisher_Length = len(Publisher)
         Platform = Item['Platform']
         if len(Platform) > Platform_Length:
             Update_Max_Platform_Length = True
@@ -142,10 +150,14 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
     Dataframe = pandas.DataFrame(Dataframe_Records)
 
     if Update_Max_Platform_Length:
-        messagebox.showwarning(title="Max Platform Length Exceeded", message=f"The platform report for interface {Interface} has platform values exceeding the max character length in the database. Update the \"Platform\" field to greater than {Platform_Length} characters.")
-        return f"Unable to create PR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
-    #ToDo: Check on Resource_Name_Length
-    #ToDo: Check on Publisher_Length
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The database report for interface {Interface} has values for the field \"Platform\" exceeding the field's max character length. Update the field to greater than {Platform_Length} characters.")
+        return f"Unable to create DR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_Resource_Name_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The database report for interface {Interface} has values for the field \"Resource_Name\" exceeding the field's max character length. Update the field to greater than {Resource_Name_Length} characters.")
+        return f"Unable to create DR dataframe|Values in \"Resource_Name\" are {Resource_Name_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_Publisher_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The database report for interface {Interface} has values for the field \"Publisher\" exceeding the field's max character length. Update the field to greater than {Publisher_Length} characters.")
+        return f"Unable to create DR dataframe|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe
 

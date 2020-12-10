@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.options import Options
 
 Chrome_User_Agent = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36'} # Using this in the header makes the URL request appear to come from a Chrome browser and not the requests module; some platforms return 403 errors with the standard requests header
 
+
 #Subsection: Helper Functions
 def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     """Reads a JSON downloaded by an API call into memory.
@@ -59,12 +60,16 @@ def JSON_to_Python_Data_Types(JSON):
     if str(type(JSON)) == "<class 'dict'>":
         return JSON
     elif str(type(JSON)) == "<class 'list'>": #Alert: Not yet tested
-        return JSON
+        if len(JSON) == 1 and str(type(JSON[0])) == "<class 'dict'>": # "JSON" is an one-item list containing a dictionary
+            return JSON[0]
+        else:
+            False
     elif str(type(JSON)) == "<class 'requests.models.Response'>":
         try:
             return JSON.json()
         except:
             return False
+
 
 #Section: API Calls
 def Single_Element_API_Call(Path_Addition, URL, Parameters, WebDriver):
@@ -102,7 +107,8 @@ def Single_Element_API_Call(Path_Addition, URL, Parameters, WebDriver):
     if JSON_to_Python_Data_Types(API_Response):
         return JSON_to_Python_Data_Types(API_Response)
     else:
-        return f"{URL}|{Path_Addition}|Return not JSON: {API_Response.text}"
+        return f"{URL}|{Path_Addition}|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"
+
 
 def Master_Report_API_Call(Report_ID, URL, Parameters, WebDriver):
     """Performs a SUSHI R5 API call for a master report.
@@ -147,4 +153,4 @@ def Master_Report_API_Call(Report_ID, URL, Parameters, WebDriver):
     if JSON_to_Python_Data_Types(API_Response):
         return JSON_to_Python_Data_Types(API_Response)
     else:
-        return f"{URL}|{Report_ID}|Return not JSON: {API_Response.text}"
+        return f"{URL}|{Report_ID}|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"

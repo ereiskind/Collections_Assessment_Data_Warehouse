@@ -257,7 +257,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Platforms_Not_Collected.append(f"{SUSHI_Call_Data['URL']}|{Report}|Standard report based on master report not offered") # The number of these is small, and custom reports will be included in this number, so the list will need to be reviewed manually
             logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['URL']}|{Report}|Standard report based on master report not offered")
     
-    logging.info(f"Master report list collection successful: {Available_Master_Reports}")
+    logging.info(f"Master report list collection successful: {len(Available_Master_Reports)} reports")
 
     #Subsection: Collect Individual Master Reports
     #ToDo: Allow system or user to change dates
@@ -287,7 +287,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             print("Invalid Master Report Type: " + Master_Report["Report_Name"])
             logging.info("Invalid Master Report Type: " + Master_Report["Report_Name"])
             continue
-        logging.info(f"Ready to call {SUSHI_Call_Data['URL']} for {Master_Report_Type} with parameters {Credentials}.")
+        logging.info(f"Ready to call {SUSHI_Call_Data['URL']} for {Master_Report_Type}.")
 
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
         time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this spaces out the API calls

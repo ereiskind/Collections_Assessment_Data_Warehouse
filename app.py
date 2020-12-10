@@ -419,44 +419,6 @@ for SUSHI_Call_Data in SUSHI_Data:
             Platforms_Not_Collected.append(Master_Report_Response_Problem)
             logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|Unable to create dataframe|Master report type {Master_Report_Type} not recognized in function Create_Master_Report_Dataframes.Create_Dataframe")
             continue
-        
-        #Subsection: Import Relevant Data from JSON into Dataframe
-        '''
-        Dataframe_Fields = [
-            ['Report_Header', 'Created'],
-            ['Report_Items', 'Platform'],
-            ['Report_Items', 'Performance', 'Period', 'Begin_Date'],
-            ['Report_Items', 'Performance', 'Period', 'End_Date'],
-            ['Report_Items', 'Performance', 'Instance', 'Metric_Type'],
-            ['Report_Items', 'Performance', 'Instance', 'Count'],
-            ['Report_Items', 'Access_Method'],
-            ['Report_Items', 'Data_Type'] #ToDo: Determine if issues with some of the reports returning errors are actually issues with missing keys and json_normalize (which shouldn't be happening since errors='ignore')
-        ]
-        if Master_Report_Type == "DR":
-            Dataframe_Fields.append(['Report_Items', 'Database'])
-            Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
-        elif Master_Report_Type == "TR":
-            Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
-            Dataframe_Fields.append(['Report_Items', 'Item_ID'])
-            Dataframe_Fields.append(['Report_Items', 'Section_Type'])
-            Dataframe_Fields.append(['Report_Items', 'Access_Type'])
-            Dataframe_Fields.append(['Report_Items', 'YOP'])
-            Dataframe_Fields.append(['Report_Items', 'Title'])
-        elif Master_Report_Type == "IR":
-            Dataframe_Fields.append(['Report_Items', 'Publisher']) # Should we use Publisher or Publisher_ID and match the IDs in the database?
-            Dataframe_Fields.append(['Report_Items', 'Item_ID'])
-            Dataframe_Fields.append(['Report_Items', 'Access_Type'])
-            Dataframe_Fields.append(['Report_Items', 'YOP'])
-            Dataframe_Fields.append(['Report_Items', 'Item'])
-            # Excluded attributes: Authors, Publication_Date, Article_Version, Parent_Authors, Parent_Publication_Date, Parent_Article_Version, Component_Authors, Component_Publication_Date
-            # About Parent Info
-                # Optional fields containing info that can provide useful information: Parent_Title, Parent_Data_Type, Parent_DOI, Parent_Proprietary_ID, Parent_ISBN, Parent_Print_ISSN, Parent_Online_ISSN, Parent_URI, Component_Title, Component_Data_Type, Component_DOI, Component_Proprietary_ID, Component_ISBN, Component_Print_ISSN, Component_Online_ISSN, Component_URI
-                # Unable to find item report containing this information, thus unsure how it's nested
-                # list all attributes marked with ‘O’ in tables 4.b, 4.f, 4.k and 4.p except the Parent and Component elements in attributes_to_show, separated by ‘|’. For including the Parent and Component elements in IR add include_parent_details=True and include_component_details=True. This is explained in section 3.3.8.
-            #ToDo: Map paths for Parent_Title, Parent_Data_Type, Parent_DOI, Parent_Proprietary_ID, Parent_ISBN, Parent_Print_ISSN, Parent_Online_ISSN, Parent_URI, Component_Title, Component_Data_Type, Component_DOI, Component_Proprietary_ID, Component_ISBN, Component_Print_ISSN, Component_Online_ISSN, Component_URI
-        else:
-            pass # This represents Platform Master Reports; the if-elif-else above filters out other reports before they reach this point
-        '''
 
         #Subsection:Load Dataframe into MySQL
         #ToDo: Load dataframe into MySQL

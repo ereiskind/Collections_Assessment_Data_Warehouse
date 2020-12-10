@@ -1,6 +1,7 @@
 # This outputs the contents of SUSHI_R5_Credentials.json, a file in the same folder containing a list of JSON object with the same structure as the one shown in SUSHI_R5_Credentials_Template.json, in a tabular format
 
 import json
+import csv
 
 with open('SUSHI_R5_Credentials.json') as JSON_File:
     Data_File = json.load(JSON_File)
@@ -30,3 +31,23 @@ with open('SUSHI_R5_Credentials.json') as JSON_File:
             if Interface["not from Alma"]["notification"] != "":
                 Stats_Source["Ready Notice Email"] = Interface["not from Alma"]["notification"]
             Data.append(Stats_Source)
+
+fileIO = open('SUSHI_R5_Credentials.csv', 'w', newline='')
+CSV_Writer = csv.DictWriter(fileIO, [
+    "Platform/Stats Source",
+    "JSON Name",
+    "Vendor_Name",
+    "Covered Platforms",
+    "Collection Issues",
+    "Ready Notice Email",
+    "URL",
+    "Customer ID",
+    "Requestor ID",
+    "API Key",
+    "SUSHI Platform Code",
+    "CORAL",
+])
+
+CSV_Writer.writeheader()
+for Interface in Data:
+    CSV_Writer.writerow(Interface) 

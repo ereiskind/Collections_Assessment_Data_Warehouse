@@ -220,16 +220,30 @@ for SUSHI_Call_Data in SUSHI_Data:
         Platforms_Not_Collected.append(Available_Reports)
         logging.info("Added to Platforms_Not_Collected: " + Available_Reports)
         continue
+    # This creates a list of all the reports offered by a platform excluding the consortium reports offered by Silverchair, which have a Report_ID value of "Silverchair:CR_??"
+    Available_Reports_List = []
+    for Report in Available_Reports:
+        if "Silverchair:CR" not in Report["Report_ID"]:
+            Available_Reports_List.append(Report["Report_ID"])
     
     Available_Master_Reports = [] # This list will contain the dictionaries from the JSON for the master reports available on the platform, which will be the only reports pulled
     for Report in Available_Reports:
         if "_" not in Report["Report_ID"]:
-            #ToDo: Check that preset reports also have their master report offered (use Adam Matthew to check this)
             Available_Master_Reports.append(Report)
     if Available_Master_Reports == []:
         Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
         logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|N/A|No master reports available")
         continue
+
+    Captured_By_Master_Reports = []
+    Not_Captured_By_Master_Reports = []
+    for Master_Report in Available_Master_Reports:
+        [Captured_By_Master_Reports.append(Report) for Report in Available_Reports_List if Report[0:2] == Master_Report["Report_ID"]]
+    [Not_Captured_By_Master_Reports.append(Report) for Report in Available_Reports_List if Report not in Captured_By_Master_Reports]
+    if len(Not_Captured_By_Master_Reports) > 0:
+        logging.info(f"There were standard reports for {SUSHI_Call_Data['URL']} that didn't correspond to master reports. ({Not_Captured_By_Master_Reports})")
+    #Alert: Should the reports in Not_Captured_By_Master_Reports be requested? Are they a small enough number that having instructions to manually gather those reports output at the end of the script is appropriate?
+    
     logging.info(f"Master report list collection successful: {Available_Master_Reports}")
 
     #Subsection: Collect Individual Master Reports

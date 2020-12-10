@@ -218,8 +218,10 @@ for SUSHI_Call_Data in SUSHI_Data:
     try:
         Status_Alert = Status_Check["Alerts"]
         Status_Alert_Response = messagebox.askyesno(title="Status Check Contained Alert", message="The status check contained the following alert:\n\n"+Status_Alert+"\n\nShould the usage for this platform be collected?")
-        #ToDo: Display Status_Alert and ask if platform should be skipped
-        #ToDo: If skip is selected, add to Platforms_Not_Collected and continue
+        if not Status_Alert_Response: # This code block needs to run if the answer to the above is no, which produces the Boolean False
+            Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|status|Canceled because of alert: " + Status_Alert)
+            logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|status|Canceled because of alert: " + Status_Alert)
+            continue
     except:
         pass # An alert wasn't included in the status check, so nothing needs to be done
 

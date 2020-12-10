@@ -1,11 +1,109 @@
 # User Stories by Role
+The sub-bullets to each user story are the data elements that would be needed to accomplish the goal stated in the user story.
 
 ## As an e-resources library associate...
 - responsible for collecting usage stats, I want the system to generate emails to the vendors that don't provide COUNTER stats so that I don't want to send each email individually.
-- responsible for collecting usage stats, I want the system to use SUSHI to collect COUNTER reports so that I don't need to manually download the reports.
+  - Is COUNTER R4 compliant?
+  - Is SUSHI R5 compliant?
+  - Has usage portal?
+  - Email to obtain usage
+  - If manual connection required, collection completed?
+- responsible for collecting usage stats, I want the system to use R5 SUSHI to collect COUNTER reports so that I don't need to manually download the reports.
+  - Interface (backend/set of SUSHI credentials)
+  - SUSHI requestor_id
+  - SUSHI customer_id
+  - SUSHI api_key
+  - SUSHI platform
+  - R5 PR Institution ID for platform
+  - R5 PR Report creation date
+  - R5 DR Institution ID for platform
+  - R5 DR Report creation date
+  - R5 TR Institution ID for platform
+  - R5 TR Report creation date
+  - R5 IR Institution ID for platform
+  - R5 IR Report creation date
+- responsible for collecting usage statistics, I want the option to add notes about an interface for a given year to record any thoughts for future reference.
+  - Note
+  - Fiscal year
 - I want the system to store all usage stats so that I can create custom cross-platform reports without copying and pasting from multiple spreadsheets.
+  - R5 PR Platform
+  - R5 PR Month
+  - R5 PR Metric
+  - R5 PR Count of metric occurrences
+  - R5 PR Type of resource
+  - R5 DR Database
+  - R5 DR Platform hosting database
+  - R5 DR Month
+  - R5 DR Metric
+  - R5 DR Count of metric occurrences
+  - R5 DR Type of resource
+  - R5 DR Method used to access resource
+  - R5 DR Database publisher
+  - R5 TR Platform hosting resource
+  - R5 TR Month
+  - R5 TR Metric
+  - R5 TR Count of metric occurrences
+  - R5 TR Method used to access resource
+  - R5 TR Type of resource
+  - R5 TR Resource publisher
+  - R5 TR Resource IDs--ISSN, ISBN, DOI, proprietary
+  - R5 TR Sections by which content is accessed
+  - R5 TR Paywall status
+  - R5 TR Year of publication
+  - R5 TR Resource title
+  - R5 IR Platform hosting resource
+  - R5 IR Month
+  - R5 IR Metric
+  - R5 IR Count of metric occurrences
+  - R5 IR Method used to access resource
+  - R5 IR Type of resource
+  - R5 IR Resource publisher
+  - R5 IR Resource IDs--DOI, proprietary
+  - R5 IR Paywall status
+  - R5 IR Year of publication
+  - R5 IR Resource title
+  - R5 IR Parent resource title
+  - R5 IR Parent resource IDs--ISSN, ISBN, DOI, proprietary
+  - R5 IR Type of parent resource
+- I want the system to store all R4 reports so that historical usage data is retained in a single location.
+  - R4 Title
+  - R4 Publisher
+  - R4 Platform
+  - R4 Title DOI
+  - R4 Proprietary ID
+  - R4 Metric type
+  - R4 Date
+  - R4 Number
+  - ISBN from R4
+  - Print ISSN from R4
+  - eISSN from R4
+- I want the system to store all single-metric non-COUNTER compliant usage stats, past and future, together so that the majority of non-COUNTER resources can have all of their available stats accessed at the same time.
+  - Resource
+  - Metric
+  - Date
+  - Number
 - I want the system to automatically sum up the e-resources usage numbers requested by ARL and ACRL/IPEDS so that I don't need to create additional workbooks to get these numbers.
+  - Interface in eBooks report
+  - Interface in eJournals report
+  - Interface in Multimedia report
+  - Interface in Database report
+- I want to be able to match order numbers from any current or legacy ILS to platforms and/or resources to add historical price data.
+  - Order numbers
+  - Invoice numbers
 
 ## As the e-resources librarian...
+- I want to know what Databases A-Z items are on which platforms/user interfaces so I can more easily organize the Databases A-Z holdings by provider.
+  - Host platform name
+  - Databases A-Z entry name
+- I want a list of all the names a databases goes and has gone by so I can more easily connect databases to invoices.
+  - Databases A-Z entry name
+  - Database name
 
 ## As a selector librarian...
+- I want to look at the usage statistics by platform/user interface, so I can know if a resource is being used on a publisher platform or through an aggregator.
+  - Host platform name
+  - Host platform permalink
+  - Host platform note
+- I want to have all the names of a database available so I can find specific databases even if the official name has recently changed.
+  - Databases A-Z entry name
+  - Database name

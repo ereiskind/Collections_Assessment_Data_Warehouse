@@ -243,7 +243,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     if len(Not_Captured_By_Master_Reports) > 0:
         logging.info(f"There were standard reports for {SUSHI_Call_Data['URL']} that didn't correspond to master reports. ({Not_Captured_By_Master_Reports})")
     #Alert: Should the reports in Not_Captured_By_Master_Reports be requested? Are they a small enough number that having instructions to manually gather those reports output at the end of the script is appropriate?
-    
+
     logging.info(f"Master report list collection successful: {Available_Master_Reports}")
 
     #Subsection: Collect Individual Master Reports
@@ -267,13 +267,14 @@ for SUSHI_Call_Data in SUSHI_Data:
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type|Section_Type"
         elif Master_Report_Type == "IR":
             Credentials["attributes_to_show"] = "Data_Type|Access_Method|YOP|Access_Type"
-            # If either of the below isn't used, it's presence will add a 3050 warning to the JSON; since there's no good way to tell which IRs use which parameter, using both and letting the warning pass silently is the best option
+            # If either of the below is in the parameters but isn't used by the platform, it's presence will add a 3050 warning to the JSON; since there's no good way to tell which IRs use which parameter, using both and letting the warning pass silently is the best option
             Credentials["include_parent_details"] = "True"
-            #Alert: PQ IR had {"Name": "Include_Component_Details", "Value": "No"} as Report_Attributes item
             Credentials["include_component_details"] = "True"
         else:
             print("Invalid Master Report Type: " + Master_Report["Report_Name"])
+            logging.info("Invalid Master Report Type: " + Master_Report["Report_Name"])
             continue
+        logging.info(f"Ready to call {SUSHI_Call_Data['URL']} for {Master_Report_Type} with parameters {Credentials}.")
 
         Master_Report_URL = SUSHI_Call_Data["URL"] + "reports/" + Master_Report_Type.lower()
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())

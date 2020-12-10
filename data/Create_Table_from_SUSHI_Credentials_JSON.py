@@ -3,6 +3,23 @@
 import json
 import csv
 
+fileIO = open('SUSHI_R5_Credentials.csv', 'w', newline='')
+CSV_Writer = csv.DictWriter(fileIO, [
+    "Platform/Stats Source",
+    "JSON Name",
+    "Vendor_Name",
+    "Covered Platforms",
+    "Collection Issues",
+    "Ready Notice Email",
+    "URL",
+    "Customer ID",
+    "Requestor ID",
+    "API Key",
+    "SUSHI Platform Code",
+    "CORAL",
+])
+CSV_Writer.writeheader()
+
 with open('SUSHI_R5_Credentials.json') as JSON_File:
     Data_File = json.load(JSON_File)
     Data = []
@@ -30,24 +47,4 @@ with open('SUSHI_R5_Credentials.json') as JSON_File:
                 Stats_Source["Collection Issues"] = Interface["not from Alma"]["issues"]
             if Interface["not from Alma"]["notification"] != "":
                 Stats_Source["Ready Notice Email"] = Interface["not from Alma"]["notification"]
-            Data.append(Stats_Source)
-
-fileIO = open('SUSHI_R5_Credentials.csv', 'w', newline='')
-CSV_Writer = csv.DictWriter(fileIO, [
-    "Platform/Stats Source",
-    "JSON Name",
-    "Vendor_Name",
-    "Covered Platforms",
-    "Collection Issues",
-    "Ready Notice Email",
-    "URL",
-    "Customer ID",
-    "Requestor ID",
-    "API Key",
-    "SUSHI Platform Code",
-    "CORAL",
-])
-
-CSV_Writer.writeheader()
-for Interface in Data:
-    CSV_Writer.writerow(Interface) 
+            CSV_Writer.writerow(Stats_Source)

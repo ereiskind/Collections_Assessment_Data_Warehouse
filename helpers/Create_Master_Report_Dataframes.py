@@ -48,6 +48,24 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
     Returns:
         dataframe -- the master report data in a dataframe
     """
+    Dataframe_Records = []
+
+    Report = Master_Report_JSON['Report_Header']['Report_ID']
+    Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
+    #ToDo: Loop through list Report_Items
+    Platform = 1
+    Data_Type = 1
+    Access_Method = 1
+    Metric_Type = 1
+    R5_Month = 1
+    R5_Count = 1
+
+    Dataframe_Records.append({
+        #"key": "value"
+        "Report": Report,
+        "Report_Creation_Date": Report_Creation_Date,
+    })
+
     #Subsection: Create Dataframe
     '''Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
         Interface, # Interface
@@ -61,6 +79,7 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
         Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
     ])'''
     #ToDo: Revise below for SUSHI and to perform checks on field length constraints
+    '''
     vals = []
 
     for item in Master_Report_JSON: # This captures each of the highest-level dicts in the list
@@ -72,7 +91,8 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
                     # literal string "unitcode" = value of variable unit_code
                     # value at end of key path ['columns']['id'] = value at the end of key path ['columns']['hoverDetails']['value']
     Dataframe = pandas.DataFrame(vals)
-    print(Dataframe.head())
+    '''
+    #print(Dataframe.head())
 
     #Subsection: Check Field Length Constraints
     #ToDo: Have the below loop through all values at the dictionary key path

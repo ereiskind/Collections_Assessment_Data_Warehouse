@@ -214,10 +214,14 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
         for ID in Item['Item_ID']:
             if ID['Type'] == "Proprietary":
                 Proprietary_ID = ID['Value']
-                #ToDo: Check Proprietary_ID_Length
+                if len(Proprietary_ID) > Proprietary_ID_Length:
+                    Update_Max_Proprietary_ID_Length = True
+                    Proprietary_ID_Length = len(Proprietary_ID)
             if ID['Type'] == "DOI":
                 DOI = ID['Value']
-                #ToDo: Check DOI_Length
+                if len(DOI) > DOI_Length:
+                    Update_Max_DOI_Length = True
+                    DOI_Length = len(DOI)
             if ID['Type'] == "ISBN":
                 ISBN = ID['Value']
             if ID['Type'] == "Print_ISSN":
@@ -226,7 +230,9 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                 Online_ISSN = ID['Value']
             if ID['Type'] == "URI":
                 URI = ID['Value']
-                #ToDo: Check URI_Length
+                if len(URI) > URI_Length:
+                    Update_Max_URI_Length = True
+                    URI_Length = len(URI)
         Data_Type = Item['Data_Type']
         Section_Type = Item['Section_Type']
         YOP = Item['YOP']
@@ -271,6 +277,25 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
 
                 Dataframe_Records.append(Record)
     Dataframe = pandas.DataFrame(Dataframe_Records)
+
+    if Update_Max_Platform_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The title report for interface {Interface} has values for the field \"Platform\" exceeding the field's max character length. Update the field to greater than {Platform_Length} characters.")
+        return f"Unable to create TR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_Resource_Name_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The title report for interface {Interface} has values for the field \"Resource_Name\" exceeding the field's max character length. Update the field to greater than {Resource_Name_Length} characters.")
+        return f"Unable to create TR dataframe|Values in \"Resource_Name\" are {Resource_Name_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_Publisher_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The title report for interface {Interface} has values for the field \"Publisher\" exceeding the field's max character length. Update the field to greater than {Publisher_Length} characters.")
+        return f"Unable to create TR dataframe|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_DOI_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The title report for interface {Interface} has values for the field \"DOI\" exceeding the field's max character length. Update the field to greater than {DOI_Length} characters.")
+        return f"Unable to create TR dataframe|Values in \"DOI\" are {DOI_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_Proprietary_ID_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The title report for interface {Interface} has values for the field \"Proprietary_ID\" exceeding the field's max character length. Update the field to greater than {Proprietary_ID_Length} characters.")
+        return f"Unable to create TR dataframe|Values in \"Proprietary_ID\" are {Proprietary_ID_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_URI_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The title report for interface {Interface} has values for the field \"URI\" exceeding the field's max character length. Update the field to greater than {URI_Length} characters.")
+        return f"Unable to create TR dataframe|Values in \"URI\" are {URI_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe
 

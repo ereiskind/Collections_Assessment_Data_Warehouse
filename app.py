@@ -180,7 +180,7 @@ Platforms_Not_Collected = []
     # Format: SUSHI base URL|Source of problem|Error that caused failure
 
 #Subsection: Create the PyMySQL Connection and SQLAlchemy Engine
-Database = 'testdatawarehouse'
+Database = 'schema name' #Alert: This should be a value coming from one of the files that's read in from the runtime environment
 
 Connection = pymysql.connect(
     host=Database_Credentials.Host,

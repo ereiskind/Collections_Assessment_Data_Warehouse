@@ -63,6 +63,52 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
     return False
 
 
+def Handle_Exception_Master_Report(Source, Report, Exception_List, Load_Report_Items = False):
+    """Handles results of a SUSHI API call for a master report that is or contains exceptions.
+    
+    The function parses the list of exceptions, remaking each exception into a string. Then, if the response contained a Report_Items section, it asks if the usage should be loaded into the database. Finally, if the usage isn't to be loaded into the database, the report is added to Platforms_Not_Collected and the corresponding log statement is output to the terminal.
+    
+    Arguments:
+        Source {string} -- the JSON name for the current interface
+        Report {string} -- the abbreviation for the current master report
+        Exception_List {list} -- the list of exception dictionaries
+    
+    Keyword Arguments:
+        Load_Report_Items {bool} -- if the SUSHI API response contains the Report_Items key (default: {False})
+    
+    Returns:
+        Boolean -- if keyword continue is triggered
+    """
+    List_of_Exceptions = []
+
+    for SUSHI_Exception in Exception_List:
+        # Combined, below confirms SUSHI_Exception["Code"] is a series of digits, meaning that it's an exception code
+        if str(type(SUSHI_Exception["Code"])) == "<class 'int'>":
+            Code = "exception " + str(SUSHI_Exception["Code"])
+        elif SUSHI_Exception["Code"].isnumeric():
+            Code = "exception " + SUSHI_Exception["Code"]
+
+        try:
+            List_of_Exceptions.append(f"{Code}: {SUSHI_Exception['Message']} ({SUSHI_Exception['Data']})")
+        except:
+            List_of_Exceptions.append(f"{Code}: {SUSHI_Exception['Message']}")
+
+    if Load_Report_Items: # Meaning that there's data that could be loaded--messagebox changes Boolean to if that data should be loaded
+        #ToDo: Check how the messagebox formatting works and adjust if necessary
+        Load_Report_Items = messagebox.askyesno(title="Exception Raised", message=f"The {Report} for {Source} contained the following exception(s):\n\n{List_of_Exceptions}\n\nShould this report be added to the database?")
+    if not Load_Report_Items: # This code block needs to run if the answer to the above is no, which produces the Boolean False
+        Problem_Message = f"Cancelled collection because of exception(s) {'|'.join(List_of_Exceptions)}"
+        Capture_Problem = dict(
+            Interface = Source,
+            Type = Report,
+            Details = Problem_Message,
+        )
+        Platforms_Not_Collected.append(Capture_Problem)
+        logging.info(f"Added to Platforms_Not_Collected: {Source}|{Report}|{Problem_Message}")
+        return True
+    return False
+
+
 def API_Download_Not_Empty():
     """Prints a message indicating that the "API_Download" folder isn't empty and that it needs to be for the program to work properly, then exits the program.
     

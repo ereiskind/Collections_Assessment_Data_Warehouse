@@ -140,3 +140,12 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
     #  ['Report_Items', 'Performance', 'Instance', 'Count']
 #Subsection: Report_Creation_Date
     # ['Report_Header', 'Created']
+
+#Section: Field Length Constants
+Resource_Name_Length = 150
+Publisher_Length = 100
+Platform_Length = 75
+DOI_Length = 50
+URI_Length = 50
+Parent_DOI_Length = 50
+Parent_Proprietary_ID_Length = 50

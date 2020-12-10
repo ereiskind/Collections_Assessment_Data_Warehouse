@@ -15,27 +15,24 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
     if  Master_Report_Type == "PR":
-        Create_PR_Dataframe(Interface, Master_Report_JSON)
-        #ToDo: if a string is returned by the above function, return that string
+        Dataframe = Create_PR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "DR":
-        Create_DR_Dataframe(Interface, Master_Report_JSON)
-        #ToDo: if a string is returned by the above function, return that string
+        Dataframe = Create_DR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "TR":
-        Create_TR_Dataframe(Interface, Master_Report_JSON)
-        #ToDo: if a string is returned by the above function, return that string
+        Dataframe = Create_TR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "IR":
-        Create_IR_Dataframe(Interface, Master_Report_JSON)
-        #ToDo: if a string is returned by the above function, return that string
+        Dataframe = Create_IR_Dataframe(Interface, Master_Report_JSON)
     else:
         #ToDo: If saving data from reports where no master report is available, determine where to send the JSON here
         # Currently, the function should never get here
         return f"Unable to create dataframe|Master report type {Master_Report_Type} not recognized for creating a dataframe"
-    #ToDo: Make other adjustments
     
-    #Subsection: Create Single Time Field
-        #ToDo: Confirm that fields for beginning and end of each time interval are for the beginning and end of a single month
-        #ToDo: Create a field for that month and/or change name of beginning date field (as ISO for first date of that month)
-        #ToDo: Remove unneeded date fields
+    if str(type(Dataframe)) == "<class 'str'>": # Meaning one of the values exceeded the max length for the field
+        return Dataframe
+    
+    #ToDo: Make any other adjustments
+    
+    return Dataframe
 
 
 #Section: Dataframe Creation Functions

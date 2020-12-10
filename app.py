@@ -410,14 +410,14 @@ for SUSHI_Call_Data in SUSHI_Data:
         #Section: Load Master Report into MySQL
         #Subsection: Read Master Report into Dataframe
         Master_Report_Dataframe = Create_Master_Report_Dataframes.Create_Dataframe(SUSHI_Call_Data['JSON_Name'], Master_Report_Type, Master_Report_Response)
-        if Master_Report_Dataframe == "ERROR: Master_Report_Type":
-            Master_Report_Response_Problem = dict(
+        if str(type(Master_Report_Dataframe)) == "<class 'str'>": # Meaning the dataframe couldn't be created
+            Master_Report_Dataframe_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
-                Type = "Unable to create dataframe",
-                Details = f"Master report type {Master_Report_Type} not recognized in function Create_Master_Report_Dataframes.Create_Dataframe",
+                Type = Master_Report_Dataframe.split("|")[0],
+                Details = Master_Report_Dataframe.split("|")[1],
             )
-            Platforms_Not_Collected.append(Master_Report_Response_Problem)
-            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|Unable to create dataframe|Master report type {Master_Report_Type} not recognized in function Create_Master_Report_Dataframes.Create_Dataframe")
+            Platforms_Not_Collected.append(Master_Report_Dataframe_Problem)
+            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Response)
             continue
 
         #Subsection:Load Dataframe into MySQL

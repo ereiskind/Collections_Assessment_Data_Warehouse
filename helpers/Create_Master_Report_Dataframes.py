@@ -11,7 +11,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     
     Returns:
         dataframe -- the SUSHI API response data in a dataframe
-        string -- the Master_Report_Type wasn't for a master report
+        string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
     if  Master_Report_Type == "PR":
         Create_PR_Dataframe(Interface, Master_Report_JSON)
@@ -24,8 +24,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     else:
         #ToDo: If saving data from reports where no master report is available, determine where to send the JSON here
         # Currently, the function should never get here
-        return "ERROR: Master_Report_Type"
-    #ToDo: Send inputs to appropriate function for master report type
+        return f"Unable to create dataframe|Master report type {Master_Report_Type} not recognized for creating a dataframe"
     #ToDo: Make other adjustments
     
     #Subsection: Create Single Time Field

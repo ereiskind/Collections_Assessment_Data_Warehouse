@@ -188,7 +188,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Subsection: Determine SUSHI Availability
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    Status_Check = SUSHI_R5_API_Calls.Status(SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+    Status_Check = SUSHI_R5_API_Calls.Single_Element_API_Call("status", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Status_Check)) == "<class 'str'>": # Meaning the API call returned an error
         Platforms_Not_Collected.append(Status_Check)
         logging.info("Added to Platforms_Not_Collected: " + Status_Check)
@@ -215,7 +215,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Subsection: Get List of R5 Reports Available
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    Available_Reports = SUSHI_R5_API_Calls.Reports(SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+    Available_Reports = SUSHI_R5_API_Calls.Single_Element_API_Call("reports", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Available_Reports)) == "<class 'str'>": # Meaning the API call returned an error
         Platforms_Not_Collected.append(Available_Reports)
         logging.info("Added to Platforms_Not_Collected: " + Available_Reports)

@@ -65,70 +65,39 @@ def JSON_to_Python_Data_Types(JSON):
             return False
 
 #Section: API Calls
-def Status(URL, Parameters, WebDriver):
-    """Performs the SUSHI R5 API call to check for SUSHI server status and performs error checking on the response to ensure that it's valid.
+def Single_Element_API_Call(Path_Addition, URL, Parameters, WebDriver):
+    """Performs the SUSHI R5 API call with a URL that contains a single extra element between the base URL and the parameters.
     
     Arguments:
+        Path_Addition {string} -- the last element of the URL path before the parameters, also what is being requested by the API call
         URL {string} -- the root URL for the SUSHI API
         Parameters {string} -- the parameters that need to be passed as part of the API call
         WebDriver {WebDriver} -- Selenium WebDriver object
     
     Returns:
-        dictionary or list -- the data in JSON using Python data types
-        string -- the root URL for the SUSHI API, a pipe, and the reason for the failure
+        dictionary or list -- the data in JSON returned by API using Python data types
+        string -- the root URL for the SUSHI API, a pipe, what was being requested, a pipe, and the reason for the failure
     """
-    Status_URL = URL + "status"
+    API_Call_URL = URL + Path_Addition
+    time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
     try: # Makes the initial API call
-        Status = requests.get(Status_URL, params=Parameters, timeout=10)
-        Status.raise_for_status()
-    #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
+        API_Response = requests.get(API_Call_URL, params=Parameters, timeout=15)
+        API_Response.raise_for_status()
+        #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
     except Timeout as error: # If the API request times out
-        return URL + f"|Status|{format(error)}"
+        return f"{URL}|{Path_Addition}|{format(error)}"
     except HTTPError as error: # If the API request returns a 4XX HTTP code
-        if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
-            Status = Retrieve_Downloaded_JSON_File(WebDriver, Status_URL + "?" + Parameters)
-            if Status == []:
-                return URL + f"|Status|{format(error)}"
+        if format(error.response) == "<Response [403]>":
+            # This response could be because of an actual issue, or because the API prompts a JSON file download rather than making the JSON data the page content; the function below handles the latter case
+            API_Response = Retrieve_Downloaded_JSON_File(WebDriver, API_Call_URL + "?" + Parameters)
+            if API_Response == []:
+                return f"{URL}|{Path_Addition}|{format(error)}"
         else:
-            return URL + f"|Status|{format(error)}"
+            return f"{URL}|{Path_Addition}|{format(error)}"
     except: # If there's some other problem with the API request
-        return URL + "|Status|Some other error"
+        return f"{URL}|{Path_Addition}|Some other error"
 
-    if JSON_to_Python_Data_Types(Status):
-        return JSON_to_Python_Data_Types(Status)
+    if JSON_to_Python_Data_Types(API_Response):
+        return JSON_to_Python_Data_Types(API_Response)
     else:
-        return URL + "|Status|" + Status.text
-
-
-def Reports(URL, Parameters, WebDriver):
-    """Performs the SUSHI API call to retrieve the list of available R5 reports and performs error checking on the response to ensure that it's valid.
-    
-    Arguments:
-        URL {string} -- the root URL for the SUSHI API
-        Parameters {string} -- the parameters that need to be passed as part of the API call
-        WebDriver {WebDriver} -- Selenium WebDriver object
-    
-    Returns:
-        dictionary or list -- the data in JSON using Python data types
-        string -- the root URL for the SUSHI API, a pipe, and the reason for the failure
-    """
-    Reports_URL = URL + "reports"
-    time.sleep(0.1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this delay keeps this request from being too soon after the status request
-    try:
-        Reports = requests.get(Reports_URL, params=Parameters, timeout=10)
-    except Timeout as error:
-        return URL + f"|Reports|{format(error)}"
-    except HTTPError as error: # If the API request returns a 4XX HTTP code
-        if format(error.response) == "<Response [403]>": # Handles the JSON file downloads 
-            Reports = Retrieve_Downloaded_JSON_File(WebDriver, Reports_URL + "?" + Parameters)
-            if Reports == []:
-                return URL + f"|Reports|{format(error)}"
-        else:
-            return URL + f"|Reports|{format(error)}"
-    except: # If there's some other problem with the API request
-        return URL + "|Reports|Some other error"
-
-    if JSON_to_Python_Data_Types(Reports):
-        return JSON_to_Python_Data_Types(Reports)
-    else:
-        return URL + "|Reports|" + Reports.text
+        return f"{URL}|{Path_Addition}|Return not JSON: {API_Response.text}"

@@ -306,8 +306,13 @@ for SUSHI_Call_Data in SUSHI_Data:
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
         Master_Report_Response = SUSHI_R5_API_Calls.Master_Report_API_Call(Master_Report_Type, SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
         if str(type(Master_Report_Response)) == "<class 'str'>": # Meaning the API call returned an error
-            Platforms_Not_Collected.append(Master_Report_Response)
-            logging.info("Added to Platforms_Not_Collected: " + Master_Report_Response)
+            Master_Report_Response_Problem = dict(
+                Interface = SUSHI_Call_Data["JSON_Name"],
+                Type = Master_Report_Response.split("|")[0],
+                Details = Master_Report_Response.split("|")[1],
+            )
+            Platforms_Not_Collected.append(Master_Report_Response_Problem)
+            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Response)
             continue
 
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")

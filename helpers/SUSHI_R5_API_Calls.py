@@ -120,7 +120,7 @@ def Master_Report_API_Call(Report_ID, URL, Parameters, WebDriver):
     
     Returns:
         dictionary or list -- the data in JSON returned by API  using Python data types
-        string -- the root URL for the SUSHI API, a pipe, what was being requested, a pipe, and the reason for the failure
+        string -- the master report being requested, a pipe, and the reason for the failure
     """
     API_Call_URL = URL + "reports/" + Report_ID.lower()
     time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
@@ -134,23 +134,23 @@ def Master_Report_API_Call(Report_ID, URL, Parameters, WebDriver):
             API_Response = requests.get(API_Call_URL, params=Parameters, timeout=120, headers=Chrome_User_Agent)
             API_Response.raise_for_status()
         except Timeout as error:
-            return f"{URL}|{Report_ID}|Timed out twice [{format(error)}]"
+            return f"{Report_ID}|Timed out twice: {format(error)}"
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>":
             # This response could be because of an actual issue, or because the API prompts a JSON file download rather than making the JSON data the page content; the function below handles the latter case
             API_Response = Retrieve_Downloaded_JSON_File(WebDriver, API_Call_URL + "?" + Parameters)
             if API_Response == []:
-                return f"{URL}|{Report_ID}|{format(error)}"
+                return f"{Report_ID}|HTTP error: {format(error)}"
         else:
-            return f"{URL}|{Report_ID}|{format(error)}"
+            return f"{Report_ID}|HTTP error: {format(error)}"
     except: # If there's some other problem with the API request
-        return f"{URL}|{Report_ID}|Some other error"
+        return f"{Report_ID}|Some other error"
 
     if API_Response.text == "":
         #ToDo: Confirm this works even with downloaded JSON
-        return f"{URL}|{Report_ID}|No data in response"
+        return f"{Report_ID}|No data in response"
 
     if JSON_to_Python_Data_Types(API_Response):
         return JSON_to_Python_Data_Types(API_Response)
     else:
-        return f"{URL}|{Report_ID}|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"
+        return f"{Report_ID}|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"

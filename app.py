@@ -217,7 +217,7 @@ for SUSHI_Call_Data in SUSHI_Data:
     #Subsection: Check Status Check for Alerts
     try:
         Status_Alert = Status_Check["Alerts"]
-        Status_Alert_Response = messagebox.askyesno(title="Status Check Contained Alert", message="The status check contained the following alert:\n\n"+Status_Alert+"\n\nShould the usage for this platform be collected?")
+        Status_Alert_Response = messagebox.askyesno(title="Status Check Contained Alert", message=f"The status check for {SUSHI_Call_Data['JSON_Name']} contained the following alert:\n\n"+Status_Alert+"\n\nShould the usage for this platform be collected?")
         if not Status_Alert_Response: # This code block needs to run if the answer to the above is no, which produces the Boolean False
             Platforms_Not_Collected.append(SUSHI_Call_Data["URL"] + "|status|Canceled because of alert: " + Status_Alert)
             logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["URL"] + "|status|Canceled because of alert: " + Status_Alert)

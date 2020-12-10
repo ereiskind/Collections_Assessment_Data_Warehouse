@@ -45,12 +45,6 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
     Returns:
         dataframe -- the master report data in a dataframe
     """
-    #Subsection: Check Field Length Constraints
-    #ToDo: Do these need to use loop constructs to get to all values at the dictionary key path?
-    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
-        #ToDo: Create new variable holding largest found value of len(Master_Report_JSON['Report_Items', 'Platform'])
-        pass
-
     #Subsection: Create Dataframe
     Dataframe = pandas.json_normalize(Master_Report_JSON, sep=":", meta=[
         Interface, # Interface
@@ -64,6 +58,13 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
         Master_Report_JSON['Report_Header', 'Created'], # Report_Creation_Date
     ])
 
+    #Subsection: Check Field Length Constraints
+    #ToDo: Do these need to use loop constructs to get to all values at the dictionary key path?
+    if len(Master_Report_JSON['Report_Items', 'Platform']) > Platform_Length:
+        New_Platform_Length = len(Master_Report_JSON['Report_Items', 'Platform'])
+        print(New_Platform_Length) # This should print twice
+
+        #ToDo: Create new variable holding largest found value of Platform_Length
     #ToDo: If any new largest found values were created, create messagebox indicating what the max length for a given field was and presenting the option to not load the dataframe (adding info on report to Platforms_Not_Collected instead by returning string from these functions)
 
     return Dataframe

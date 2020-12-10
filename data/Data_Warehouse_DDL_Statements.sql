@@ -118,7 +118,7 @@ CREATE TABLE R5_Usage (
     R5_Usage_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     Interface INT NOT NULL,
     Report CHAR(2) NOT NULL,-- If adding standard views without master reports as standard views, this will need to change
-    Resource_Name VARCHAR(150),
+    Resource_Name VARCHAR(1500),
     Publisher VARCHAR(100),
     Publisher_ID VARCHAR(50),
     Platform VARCHAR(75) NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE R5_Usage (
     ISBN CHAR(17),
     Print_ISSN CHAR(9),
     Online_ISSN CHAR(9),
-    URI VARCHAR(50),
+    URI VARCHAR(200),
     Data_Type VARCHAR(25) NOT NULL,
     Section_Type VARCHAR(10),
     Parent_Data_Type VARCHAR(25),

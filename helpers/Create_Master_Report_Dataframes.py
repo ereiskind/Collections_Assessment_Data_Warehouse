@@ -59,7 +59,9 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
         if len(Platform) > Platform_Length:
             Update_Max_Platform_Length = True
             Platform_Length = len(Platform)
+        #ToDo: Key Data_Type not always available (KeyError)
         Data_Type = Item['Data_Type']
+        #ToDo: Key Access_Method not always available (KeyError)
         Access_Method = Item['Access_Method']
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']
@@ -122,6 +124,7 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
         if len(Platform) > Platform_Length:
             Update_Max_Platform_Length = True
             Platform_Length = len(Platform)
+        #ToDo: Key Data_Type not always available (KeyError)
         Data_Type = Item['Data_Type']
         Access_Method = Item['Access_Method']
         try: # This handles situations where proprietary IDs aren't included
@@ -234,6 +237,7 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                     Update_Max_URI_Length = True
                     URI_Length = len(URI)
         Data_Type = Item['Data_Type']
+        #ToDo: Key Section_Type not always available (KeyError)
         Section_Type = Item['Section_Type']
         YOP = Item['YOP']
         Access_Type = Item['Access_Type']
@@ -354,6 +358,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         if len(Resource_Name) > Resource_Name_Length:
             Update_Max_Resource_Name_Length = True
             Resource_Name_Length = len(Resource_Name)
+        #ToDo: Key Publisher not always available (KeyError)
         Publisher = Item['Publisher']
         if len(Publisher) > Publisher_Length:
             Update_Max_Publisher_Length = True
@@ -362,6 +367,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         if len(Platform) > Platform_Length:
             Update_Max_Platform_Length = True
             Platform_Length = len(Platform)
+        #ToDo: Key Item_ID not always available
         for ID in Item['Item_ID']:
             if ID['Type'] == "Proprietary":
                 Proprietary_ID = ID['Value']
@@ -385,6 +391,8 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                     Update_Max_URI_Length = True
                     URI_Length = len(URI)
         Data_Type = Item['Data_Type']
+        #ToDo: Key Item_Parent not always available (KeyError)
+        #ToDo: Item_Parent can also be an one-item list (TypeError)
         Parent_Data_Type = Item['Item_Parent']['Data_Type']
         for Parent_ID in Item['Item_Parent']['Item_ID']:
             if Parent_ID['Type'] == "DOI":
@@ -497,11 +505,11 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
 
 #Section: Field Length Constants
 #ToDo: Is there a way to read metadata from MySQL into Python?
-Resource_Name_Length = 150
+Resource_Name_Length = 1500
 Publisher_Length = 100
 Platform_Length = 75
 DOI_Length = 50
 Proprietary_ID_Length = 50
-URI_Length = 50
+URI_Length = 200
 Parent_DOI_Length = 50
 Parent_Proprietary_ID_Length = 50

@@ -59,7 +59,10 @@ def JSON_to_Python_Data_Types(JSON):
     elif str(type(JSON)) == "<class 'list'>": #Alert: Not yet tested
         return JSON
     elif str(type(JSON)) == "<class 'requests.models.Response'>":
-        return JSON.json()
+        try:
+            return JSON.json()
+        except:
+            return False
 
 #Section: API Calls
 def Status(URL, Parameters, WebDriver):
@@ -94,7 +97,10 @@ def Status(URL, Parameters, WebDriver):
         print(f"Some error other than a status error or timout occurred when trying to access {Status_URL}.")
         return URL + "|Status|Some other error"
 
-    return JSON_to_Python_Data_Types(Status)
+    if JSON_to_Python_Data_Types(Status):
+        return JSON_to_Python_Data_Types(Status)
+    else:
+        return URL + "|Status|" + Status.text
 
 
 def Reports(URL, Parameters, WebDriver):
@@ -128,4 +134,7 @@ def Reports(URL, Parameters, WebDriver):
         print(f"Some error other than a status error or timout occurred when trying to access {Reports_URL}.")
         return URL + "|Reports|Some other error"
 
-    return JSON_to_Python_Data_Types(Reports)
+    if JSON_to_Python_Data_Types(Reports):
+        return JSON_to_Python_Data_Types(Reports)
+    else:
+        return URL + "|Reports|" + Reports.text

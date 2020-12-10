@@ -319,22 +319,36 @@ for SUSHI_Call_Data in SUSHI_Data:
             logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Response)
             continue
 
-        logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
-
         #Subsection: Handle Master Reports with Exceptions
-        #ToDo: Determine if list ["Report_Header"]["Exceptions"] exists and has content--work through the variant ways it can appear as well
-        #ToDo: iterate through items in Exceptions
-            #ToDo: Required elements are "Code" (int, but can be string of int format) for the exception number and "Message" describing the exception
-            #ToDo: "Data" element can provide further clarification
-        #ToDo: Determine if Master_Report_Response["Report_Items"] exists
-            #ToDo: If it does, display the errors and ask if the Report_Items data should be loaded
-        #ToDo: If not loading Report_Items data
-            #ToDo: Collect data on request and exception
-                #ToDo: Potentially add to Platforms_Not_Collected?
-            #ToDo: Output logging statement on above
-            #ToDo: continue
+        try: # Master_Report_Response is JSON-like dictionary with top-level key of "Report_Header" that includes the key "Exceptions"
+            Master_Report_Exception = Master_Report_Response["Report_Header"]["Exceptions"]
+            #ToDo: Iterate through items in Exceptions to display exceptions
+                #ToDo: Required elements are "Code" (int, but can be string of int format) for the exception number and "Message" describing the exception
+                #ToDo: "Data" element can provide further clarification
+            #ToDo: Determine if Master_Report_Response["Report_Items"] exists--"Report_Items" in top-level keys
+                #ToDo: If above answer is yes, display error(s) found and ask if Report_Items should be loaded
+            #ToDo: If no Report_Items or if decided not to load Report_Items
+                # Function: Handle_Exception_Master_Report
+                #ToDo: Create dictionary to append to Platforms_Not_Collected
+                #ToDo: Append above to Platforms_Not_Collected
+                #ToDo: Output logging statement on above
+                #ToDo: continue
+        except:
+            try: # Master_Report_Response is JSON-like dictionary containing only the content of a single Exception
+                Master_Report_Exception_Code = Master_Report_Response["Code"]
+                Master_Report_Exception_Message = Master_Report_Response["Message"]
+                #Function: Handle_Excpetion_Master_Report
+                #ToDo: Create dictionary to append to Platforms_Not_Collected
+                #ToDo: Append above to Platforms_Not_Collected
+                #ToDo: Output logging statement on above
+                #ToDo: continue
+            except:
+                # Based on observed close-to-standard behavior, an interface could return a list of multiple Exception dictionaries, which JSON_to_Python_Data_Types would handle as an error, directing it to the Platforms_Not_Collected list. If that happens, error handling for that situation may be better handled within the JSON_to_Python_Data_Types function.
+                pass # A SUSHI JSON without an "Exceptions" key will return a KeyError for the above
 
         #ToDo: If len(Master_Report_Response["Report_Items"]) == 0 (aka no usage reported), possible sanity check on that?
+
+        logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
 
         #Subsection: Save Individual Reports as JSON
         File_Name = Path('Examples', 'Example_JSONs', f"{Master_Report_Response['Report_Header']['Report_ID']}_{SUSHI_Call_Data['JSON_Name']}.json")

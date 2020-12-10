@@ -448,8 +448,15 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                 except UnboundLocalError: # There wasn't an URI
                     Record["URI"] = None #ToDo: Confirm this is registering as a null value
 
-                #Parent_Data_Type
-                #Parent_Proprietary_ID
+                try:
+                    Record["Parent_DOI"] = Parent_DOI
+                except UnboundLocalError: # There wasn't a Parent_DOI
+                    Record["Parent_DOI"] = None #ToDo: Confirm this is registering as a null value
+
+                try:
+                    Record["Parent_Proprietary_ID"] = Parent_Proprietary_ID
+                except UnboundLocalError: # There wasn't a Parent_Proprietary_ID
+                    Record["Parent_Proprietary_ID"] = None #ToDo: Confirm this is registering as a null value
 
                 Dataframe_Records.append(Record)
     Dataframe = pandas.DataFrame(Dataframe_Records)

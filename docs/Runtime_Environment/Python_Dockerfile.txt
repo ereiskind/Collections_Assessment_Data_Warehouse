@@ -9,10 +9,11 @@ RUN git clone https://github.com/ereiskind/Collections_Assessment_Data_Warehouse
 # Performing File Overlay
 # Note: Use a trailing slash to indicate a folder
 
-# Add Docker files to Runtime_Environment folder
+# Add files involved in creating runtime environment to Runtime_Environment folder
 COPY ./Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/Python_Dockerfile.txt
 COPY ./mysql/Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/MySQL_Dockerfile.txt
 COPY ./docker-compose.yml ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/Docker_Compose.txt
+COPY requirements.txt ./root/Collections_Assessment_Data_Warehouse/docs/requirements.txt
 
 # Add example data to data/Example subfolders
 COPY ./Example_Data/Samples/ ./root/Collections_Assessment_Data_Warehouse/data/Examples/

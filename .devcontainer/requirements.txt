@@ -1,9 +1,0 @@
-autopep8
-cryptography
-pandas
-pylint
-PyMySQL
-requests
-rope
-selenium
-SQLAlchemy

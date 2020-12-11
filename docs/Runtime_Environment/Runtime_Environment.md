@@ -14,11 +14,7 @@ One of the files added to the GitHub repository's file structure in the containe
 ## The Runtime Environment Repository File Structure
 Note: Italics represent snips
 
-PRIVATE-Collections_Assessment_Data_Warehouse/
-┣ Documentation/
-┃ ┣ Data_Saved_in_Warehouse.md (a listing of potential data elements for the data warehouse)
-┃ ┣ Entity_Relationship_Diagram.vsdx
-┃ ┗ SUSHI_Credential_Alignment_Table.md
+Collections_Assessment_Data_Warehouse_Runtime/
 ┣ Example_Data/
 ┃ ┣ Master_Report_JSONs/
 ┃ ┃ ┗ *sample DR, IR, PR, and TR from a selection of vendors*

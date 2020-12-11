@@ -1,14 +1,48 @@
 # File Structure Information
-This file structure tree is generated with the File Tree to Text Generator; it's the ASCII version. Bolded file/folder names represent files/folders brought into the container via the file overlay process; the parenthetical following the file name describes the file contents. 
+This file structure tree is generated with the File Tree to Text Generator; it's the ASCII version. File/folder names in bold are files/folders brought into the container via the file overlay process and saved to the GitHub repository; file/folder names in italics are those brought in through the overlay process and included in the .gitignore file.
+*For the program to work, the directory must have properly formatted Collections_Assessment_Data_Warehouse/data/Database_Credentials.py and Collections_Assessment_Data_Warehouse/data/SUSHI_R5_Credentials.json files. See Runtime_Environment.md and SUSHI_R5_Credentials_Template.json respectively for more information.*
 
 Collections_Assessment_Data_Warehouse/
 ┣ data/
+┃ ┣ *DML_CSVs/* (the CSVs containing the raw data for inclusion in the data warehouse entities other than "R5_Usage")
+┃ ┣ Examples/
+┃ ┃ ┣ *Master_Report_JSONs/* (sample DR, IR, PR, and TR from a selection of vendors)
+┃ ┃ ┣ *Alma_Vendor_API_Call_Sample.json* (response to Vendor GET request to Alma API sandbox)
+┃ ┃ ┣ *Alma_Vendor_Common_Keys.json** (JSON elements common to Alma_Vendor_API_Call_Sample and Alma_Vendor_Sample)
+┃ ┃ ┣ **Alma_Vendor_Sample.json* (example response to Vendor GET request on Alma website)
+┃ ┃ ┣ *Error_Sample.json* (COUNTER report with Exceptions in Report_Header and no Report_Items)
+┃ ┃ ┣ *Exceptions_Sample.json* (COUNTER report with Exceptions in Report_Header and Report_Items)
+┃ ┃ ┣ *Report_List_Sample.json* (COUNTER response to /reports GET request)
+┃ ┃ ┣ *Status_Check_Alert_Sample.json* (COUNTER response to /status GET request with an alert value)
+┃ ┃ ┣ *Status_Check_Error_Sample.json* (COUNTER response to /status GET request containing Exception)
+┃ ┃ ┗ *Status_Check_Sample.json* (COUNTER response to /status GET request)
+┃ ┣ Create_Insert_Statements_for_Non-SUSHI_Data.py
+┃ ┣ Create_Table_from_SUSHI_Credentials_JSON.py
+┃ ┣ Data_Warehouse_DDL_Statements.sql
+┃ ┣ *Database_Credentials.py* (the credentials for the MySQL database)
+┃ ┗ *SUSHI_R5_Credentials.json* (a list of the SUSHI credentials for all available resources formatted according to SUSHI_R5_Credentials_Template.json)
 ┣ docs/
 ┃ ┣ Runtime_Environment/
 ┃ ┃ ┣ **Docker_Compose.txt** (the contents of the docker-compose.yml creating the runtime environment)
 ┃ ┃ ┣ **MySQL_Dockerfile.txt** (the contents of the Dockerfile creating the MySQL container)
 ┃ ┃ ┣ **Python_Dockerfile.txt** (the contents of the Dockerfile creating the Python container)
 ┃ ┃ ┗ Runtime_Environment.md
-┃ ┗ Repository_Contents.md
+┃ ┣ About_COUNTER.md
+┃ ┣ Data_Saved_in_Warehouse.md
+┃ ┣ Non-COUNTER_Resources.md
+┃ ┣ Repository_Contents.md
+┃ ┣ Resources.md
+┃ ┣ SUSHI_R5_Credentials_Template.json
+┃ ┣ User_Stories.md
+┃ ┗ **requirements.txt** (Python dependencies)
 ┣ helpers/
-┗ README.md
+┃ ┣ Authentication_Log_Collection.py
+┃ ┣ Create_Master_Report_Dataframes.py
+┃ ┣ Credentials_Through_Alma_API.py
+┃ ┣ Get_Downloading_JSONs.py
+┃ ┣ SUSHI_Call_Upon_Email_Alert_that_Stats_Are_Ready.py
+┃ ┗ SUSHI_R5_API_Calls.py
+┣ .gitignore
+┣ README.md
+┣ app.py
+┗ test.py

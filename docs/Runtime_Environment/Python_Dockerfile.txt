@@ -5,7 +5,23 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN git clone https://github.com/ereiskind/Collections_Assessment_Data_Warehouse.git ./root/Collections_Assessment_Data_Warehouse
 
-# Add Docker files to Runtime_Enviroment folder
-COPY ./Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Enviroment/Python_Dockerfile.txt
-COPY ./mysql/Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Enviroment/MySQL_Dockerfile.txt
-COPY ./docker-compose.yml ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Enviroment/Docker_Compose.txt
+####
+# Performing File Overlay
+# Note: Use a trailing slash to indicate a folder
+
+# Add Docker files to Runtime_Environment folder
+COPY ./Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/Python_Dockerfile.txt
+COPY ./mysql/Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/MySQL_Dockerfile.txt
+COPY ./docker-compose.yml ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/Docker_Compose.txt
+
+# Add example data to data/Example subfolders
+COPY ./Example_Data/Samples/ ./root/Collections_Assessment_Data_Warehouse/data/Examples/
+COPY ./Example_Data/Master_Report_JSONs/ ./root/Collections_Assessment_Data_Warehouse/data/Examples/Master_Report_JSONs/
+# Without Visio in Python container to open file, should following execute? COPY ./Documentation/Entity_Relationship_Diagram.vsdx ./root/Collections_Assessment_Data_Warehouse/docs/Entity_Relationship_Diagram.vsdx
+
+# Add private information and semi-private documentation
+COPY ./Private_Info/Database_Credentials.py ./root/Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
+COPY ./Private_Info/Non-COUNTER_Resources.md ./root/Collections_Assessment_Data_Warehouse/docs/Non-COUNTER_Resources.md
+COPY ./Documentation/Data_Saved_in_Warehouse.md ./root/Collections_Assessment_Data_Warehouse/docs/Data_Saved_in_Warehouse.md
+COPY ./Private_Info/SUSHI_R5_Credentials.json ./root/Collections_Assessment_Data_Warehouse/data/SUSHI_R5_Credentials.json
+COPY ./Private_Info/Data_Warehouse_Data/ ./root/Collections_Assessment_Data_Warehouse/data/DML_CSVs/

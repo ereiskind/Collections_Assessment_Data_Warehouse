@@ -15,10 +15,10 @@ import pymysql
 from sqlalchemy import create_engine
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-#Alert: FROM ORIGINAL REPOSITORY with flat structure; these files are now at different locations
-import Database_Credentials # Loaded in from runtime environment repository at Collections_Assessment_Data_Warehouse/data/Database_Credentials.py
-import SUSHI_R5_API_Calls # In this repository at Collections_Assessment_Data_Warehouse/helpers/SUSHI_R5_API_Calls.py
-import Create_Master_Report_Dataframes # In this repository at Collections_Assessment_Data_Warehouse/helpers/Create_Master_Report_Dataframes.py
+import data.Database_Credentials as Database_Credentials
+from helpers.SUSHI_R5_API_Calls import Single_Element_API_Call
+from helpers.SUSHI_R5_API_Calls import Master_Report_API_Call
+from helpers.Create_Master_Report_Dataframes import Create_Dataframe
 
 
 #Section: Set Up Logging
@@ -180,7 +180,8 @@ Platforms_Not_Collected = []
     # Format: SUSHI base URL|Source of problem|Error that caused failure
 
 #Subsection: Create the PyMySQL Connection and SQLAlchemy Engine
-Database = 'schema name' #Alert: This should be a value coming from one of the files that's read in from the runtime environment
+Database = 'Collections_Assessment_Warehouse_0.1'
+#ToDo: Investigate if this can be parsed from the first line of the SQL file referenced by the MySQL Dockerfile
 
 Connection = pymysql.connect(
     host=Database_Credentials.Host,
@@ -254,7 +255,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Subsection: Determine SUSHI Availability
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    Status_Check = SUSHI_R5_API_Calls.Single_Element_API_Call("status", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+    Status_Check = Single_Element_API_Call("status", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Status_Check)) == "<class 'str'>": # Meaning the API call returned an error
         Status_Check_Problem = dict(
             Interface = SUSHI_Call_Data["JSON_Name"],
@@ -294,7 +295,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Subsection: Get List of R5 Reports Available
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    Available_Reports = SUSHI_R5_API_Calls.Single_Element_API_Call("reports", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+    Available_Reports = Single_Element_API_Call("reports", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
     if str(type(Available_Reports)) == "<class 'str'>": # Meaning the API call returned an error
         Available_Reports_Problem = dict(
             Interface = SUSHI_Call_Data["JSON_Name"],
@@ -372,7 +373,7 @@ for SUSHI_Call_Data in SUSHI_Data:
         logging.info(f"Ready to call {SUSHI_Call_Data['URL']} for {Master_Report_Type}.")
 
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-        Master_Report_Response = SUSHI_R5_API_Calls.Master_Report_API_Call(Master_Report_Type, SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+        Master_Report_Response = Master_Report_API_Call(Master_Report_Type, SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
         if str(type(Master_Report_Response)) == "<class 'str'>": # Meaning the API call returned an error
             Master_Report_Response_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
@@ -409,7 +410,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         #Section: Load Master Report into MySQL
         #Subsection: Read Master Report into Dataframe
-        Master_Report_Dataframe = Create_Master_Report_Dataframes.Create_Dataframe(SUSHI_Call_Data['JSON_Name'], Master_Report_Type, Master_Report_Response)
+        Master_Report_Dataframe = Create_Dataframe(SUSHI_Call_Data['JSON_Name'], Master_Report_Type, Master_Report_Response)
         if str(type(Master_Report_Dataframe)) == "<class 'str'>": # Meaning the dataframe couldn't be created
             Master_Report_Dataframe_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],

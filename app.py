@@ -180,7 +180,8 @@ Platforms_Not_Collected = []
     # Format: SUSHI base URL|Source of problem|Error that caused failure
 
 #Subsection: Create the PyMySQL Connection and SQLAlchemy Engine
-Database = 'schema name' #Alert: This should be a value coming from one of the files that's read in from the runtime environment
+Database = 'Collections_Assessment_Warehouse_0.1'
+#ToDo: Investigate if this can be parsed from the first line of the SQL file referenced by the MySQL Dockerfile
 
 Connection = pymysql.connect(
     host=Database_Credentials.Host,

@@ -18,6 +18,7 @@ RUN apt-get install -y google-chrome-stable
 RUN apt-get install -yqq unzip
 RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+ENV PATH "$PATH:/usr/local/bin/"
 
 # Set display port to avoid crash
 ENV DISPLAY=:99
@@ -43,5 +44,3 @@ COPY ./Private_Info/Non-COUNTER_Resources.md ./root/Collections_Assessment_Data_
 COPY ./Documentation/Data_Saved_in_Warehouse.md ./root/Collections_Assessment_Data_Warehouse/docs/Data_Saved_in_Warehouse.md
 COPY ./Private_Info/SUSHI_R5_Credentials.json ./root/Collections_Assessment_Data_Warehouse/data/SUSHI_R5_Credentials.json
 COPY ./Private_Info/Data_Warehouse_Data/ ./root/Collections_Assessment_Data_Warehouse/data/DML_CSVs/
-
-COPY ./test.py ./root/Collections_Assessment_Data_Warehouse/test.py

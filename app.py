@@ -7,6 +7,7 @@ import csv
 import time
 import os
 import sys
+# from datetime import datetime
 import requests
 from requests import HTTPError, Timeout
 from tkinter import messagebox
@@ -15,6 +16,8 @@ import pymysql
 from sqlalchemy import create_engine
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+# import dateutil.parser
+# from dateutil.rrule import rrule, MONTHLY
 import data.Database_Credentials as Database_Credentials
 from helpers.SUSHI_R5_API_Calls import Single_Element_API_Call
 from helpers.SUSHI_R5_API_Calls import Master_Report_API_Call
@@ -344,10 +347,25 @@ for SUSHI_Call_Data in SUSHI_Data:
     logging.info(f"Master report list collection successful: {len(Available_Master_Reports)} reports")
 
     #Section: Make API Calls for Individual Master Reports
+    #Subsection: Add Date Parameters and Check If Statistics Already Collected
     #ToDo: Allow system or user to change dates
     Credentials["begin_date"] = "2020-01-01"
     Credentials["end_date"] = "2020-01-31"
 
+    #ToDo: Months_in_Range = list(rrule(
+    #     freq = MONTHLY,
+    #     dtstart = parser.isoparse(Credentials["begin_date"]),
+    #     until = parser.isoparse(Credentials["end_date"])
+    # )) # rrule generates a object that can be unpacked into a list of datetime objects representing dates and/or times occurring on a recurring schedule
+    #ToDo: for Month in Months_in_Range:
+        #ToDo: SQL: f"""SELECT COUNT(*) FROM R5_Usage WHERE Interface = {SUSHI_Call_Data['JSON_Name']} AND R5_Month = {Month};"""
+        #ToDo: If the result of the above is 0, add Month to list No_Usage_in_DB
+    #ToDo: if not len(No_Usage_in_DB): # Zero, aka empty list, means this should be skipped and is a false value, negation means if statement triggers if list isn't empty
+        #ToDo: Convert values in No_Usage_in_DB to a single string listing the months seperated by commas
+        #ToDo: messagebox.askyesno saying there was usage for the resource for the month(s) {string created above}; should the resource's stats still be collected?
+        #ToDo: If above is False, continue
+
+    #Subsection: Add Parameters Specific to Type of Master Report
     for Master_Report in Available_Master_Reports: 
         Master_Report_Type = Master_Report["Report_ID"].upper()
         # If the parameters for showing parent details in Item Master Report are in other master reports, an error message saying the parameter's been ignored is included in the report header; the below takes them out of the query
@@ -372,6 +390,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             continue
         logging.info(f"Ready to call {SUSHI_Call_Data['URL']} for {Master_Report_Type}.")
 
+        #Subsection: Make API Call for Master Report
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
         Master_Report_Response = Master_Report_API_Call(Master_Report_Type, SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
         if str(type(Master_Report_Response)) == "<class 'str'>": # Meaning the API call returned an error

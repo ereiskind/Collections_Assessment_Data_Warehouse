@@ -441,10 +441,19 @@ for SUSHI_Call_Data in SUSHI_Data:
             continue
         logging.info(Master_Report_Dataframe.head())
 
-        #Subsection:Load Dataframe into MySQL
-        #ToDo: Load dataframe into MySQL
-        #ToDo: Commit as transaction at end, follow commit with messagebox indicating success
-        #Alert: Should the commit still happen if there are platforms that can't be collected? If so, how should the program keep from collecting from the the same sources for the same time period multiple times?
+        #Subsection: Load Dataframe into MySQL
+        try:
+            with Engine.connect() as Connection:
+                with Connection.begin(): #This creates a SQL transaction
+                    Master_Report_Dataframe.to_sql(
+                        Database,
+                        con=Connection,
+                        if_exists='append',
+                        index=False
+                    )
+        except:
+            #ToDo: Provide message indicating there was a problem loading the dataframe to MySQL
+            pass
 
 Connection.close()
 

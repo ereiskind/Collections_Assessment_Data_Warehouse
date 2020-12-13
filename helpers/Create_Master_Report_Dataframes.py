@@ -14,6 +14,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         dataframe -- the SUSHI API response data in a dataframe
         string -- the type and details of the problem preventing the data from being made into a dataframe seperated by a pipe
     """
+    #Subsection: Send to Subfunction to Extract Appropriate Fields from JSON
     if  Master_Report_Type == "PR":
         Dataframe = Create_PR_Dataframe(Interface, Master_Report_JSON)
     elif Master_Report_Type == "DR":
@@ -30,6 +31,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     if str(type(Dataframe)) == "<class 'str'>": # Meaning one of the values exceeded the max length for the field
         return Dataframe
     
+    #Subsection: Change Data Types and Add Missing Columns to Match Final Database
     # Dataframe to MySQL--two hashes means in all reports
         ## "Interface" int64 --> Interface INT
         ## "Report" string --> Report CHAR
@@ -89,7 +91,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     except KeyError:
         Dataframe['Publisher'] = None  #ToDo: Convert this to string data type
 
-    #Publisher_ID would go here
+    #ToDo: Make Publisher_ID column with string-type null values
 
     try:
         Dataframe['DOI'] = Dataframe['DOI'].astype('string')
@@ -167,6 +169,34 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         format='%Y-%m-%dT',
         exact=False # Some dates use the timezone (indicated by "Z") while others use UTC offset, so the format just has the ISO date format
     )
+    
+    #Subsection: Reorder Columns for Import to MySQL
+    Dataframe = Dataframe[[
+        'Interface',
+        'Report',
+        'Resource_Name',
+        'Publisher',
+        'Publisher_ID',
+        'Platform',
+        'DOI',
+        'Proprietary_ID',
+        'ISBN',
+        'Print_ISSN',
+        'Online_ISSN',
+        'URI',
+        'Data_Type',
+        'Section_Type',
+        'Parent_Data_Type',
+        'Parent_DOI',
+        'Parent_Proprietary_ID',
+        'YOP',
+        'Access_Type',
+        'Access_Method',
+        'Metric_Type',
+        'R5_Month',
+        'R5_Count',
+        'Report_Creation_Date'
+    ]]
     
     return Dataframe
 

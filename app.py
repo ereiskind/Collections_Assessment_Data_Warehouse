@@ -127,29 +127,7 @@ def API_Download_Not_Empty():
 
 
 #Subsection: Database Interactions
-def Load_Dataframe_into_MySQL(Dataframe, DBTable, DBEngine):
-    """A pandas to_sql function call bracketed by the creation and destruction of a SQLAlchemy session object.
-    
-    This function loads the data contained in Dataframe into DBTable, which is in the MySQL database referenced by DBEngine. Dataframe's record index values aren't included.
-    
-    Arguments:
-        Dataframe {pandas dataframe} -- dataframe to be loaded into MySQL
-        DBTable {string} -- name of the MySQL table (relation) the data's being loaded into
-        DBEngine {SQLAlchemy engine} -- engine object for MySQL database
-    
-    Returns:
-        None
-    """
-    Connection = DBEngine.connect()
-    Dataframe.to_sql(
-        DBTable,
-        con=Connection,
-        if_exists='append',
-        index=False
-    )
-    Connection.close()
-
-
+#ToDo: Redo this function
 def Execute_SQL_Statement(SQLStatement, DBConnection):
     """Executes a SQL statement using a PyMySQL connection object.
     
@@ -162,9 +140,19 @@ def Execute_SQL_Statement(SQLStatement, DBConnection):
     Returns:
         None
     """
+    #Alert: The function needs to be rewritten to accommodate the creation and destruction of the connection object within the function
+    Connection = pymysql.connect(
+        host=Database_Credentials.Host,
+        user=Database_Credentials.Username,
+        password=Database_Credentials.Password,
+        db=Database
+    )
+    
     Cursor = DBConnection.cursor()
     Cursor.execute(SQLStatement)
     DBConnection.commit()
+
+    Connection.close()
 
 
 #Section: Establish Prerequisites for Script Execution
@@ -185,13 +173,6 @@ Platforms_Not_Collected = []
 #Subsection: Create the PyMySQL Connection and SQLAlchemy Engine
 Database = 'Collections_Assessment_Warehouse_0.1'
 #ToDo: Investigate if this can be parsed from the first line of the SQL file referenced by the MySQL Dockerfile
-
-Connection = pymysql.connect(
-    host=Database_Credentials.Host,
-    user=Database_Credentials.Username,
-    password=Database_Credentials.Password,
-    db=Database
-)
 
 Engine = create_engine(
     'mysql+pymysql://' +
@@ -455,7 +436,6 @@ for SUSHI_Call_Data in SUSHI_Data:
             #ToDo: Provide message indicating there was a problem loading the dataframe to MySQL
             pass
 
-Connection.close()
 
 #Section: Output Platforms_Not_Collected
 #Alert: The CSV below needs to be written to the data folder

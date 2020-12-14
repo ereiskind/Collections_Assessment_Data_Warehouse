@@ -38,20 +38,17 @@ def Chrome_Browser_Driver():
 def Retrieve_Downloaded_JSON_File(URL):
     """Reads a JSON downloaded by an API call into memory.
     
-    Some of the SUSHI API calls, most notable Silverchair, generate a JSON file download, which requests returns as a 403 error. This function captures the downloaded file and reads its contents into memory so the function can be used. Functionality related to downloading the file taken from https://medium.com/@moungpeter/how-to-automate-downloading-files-using-python-selenium-and-headless-chrome-9014f0cdd196.
+    Some of the SUSHI API calls, most notable Silverchair, generate a JSON file download, which requests returns as a 403 error. This function captures the downloaded file in a folder named "API_Download" and reads its contents into memory so the data it contains can be used. Functionality related to downloading the file taken from https://medium.com/@moungpeter/how-to-automate-downloading-files-using-python-selenium-and-headless-chrome-9014f0cdd196.
 
     Arguments:
-        browser {WebDriver} -- Selenium WebDriver used to access internet
-        download_dir {File path} -- location the file should be downloaded to
-        WebDriver {WebDriver} -- Selenium WebDriver used to access internet
         URL {string} -- the URL for performing the API call
     
     Returns:
         dictionary -- the API response JSON file transformed into Python data types
     """
     WebDriver = Chrome_Browser_Driver()
-    # The function requires a string containing the absolute path to the location where the file should be saved; this allows for a folder "API_Download" within the repo to hold the file
-    API_Download_Folder = str(Path.cwd()) + r"\API_Download"
+    API_Download_Folder = r"/root/Collections_Assessment_Data_Warehouse/data/API_Download"
+    #Alert: The above path is absolute because the deployment of the repository within a Docker container guarantees uniform placement in the overall file structure. To deploy using a method other than the one described in Runtime_Environment.md, change this file path.
 
     # From source: "function to handle setting up headless download"
     WebDriver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')

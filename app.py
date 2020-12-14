@@ -156,7 +156,8 @@ def Execute_SQL_Statement(SQLStatement, DBConnection):
 
 #Section: Establish Prerequisites for Script Execution
 #Subsection: Confirm Folder "API_Download" is Empty
-API_Download_Path = str(Path.cwd()) + r"\API_Download"
+API_Download_Path = r"/root/Collections_Assessment_Data_Warehouse/data/API_Download"
+#Alert: The above path is absolute because the deployment of the repository within a Docker container guarantees uniform placement in the overall file structure. To deploy using a method other than the one described in Runtime_Environment.md, change this file path.
 for Folder, Subfolder, Files in os.walk(API_Download_Path):
     if len(Files) > 0:
         API_Download_Not_Empty()

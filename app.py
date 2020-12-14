@@ -15,8 +15,6 @@ from tkinter import messagebox
 import pandas
 import pymysql
 from sqlalchemy import create_engine
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 # import dateutil.parser
 # from dateutil.rrule import rrule, MONTHLY
 import data.Database_Credentials as Database_Credentials
@@ -184,28 +182,6 @@ Engine = create_engine(
     echo=False
 )
 
-#Subsection: Create Options Object for Chrome WebDriver
-# From source: "instantiate a chrome options object so you can set the size and headless preference"
-# Taken from https://medium.com/@moungpeter/how-to-automate-downloading-files-using-python-selenium-and-headless-chrome-9014f0cdd196
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--window-size=1920x1080")
-chrome_options.add_argument("--disable-notifications")
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--verbose')
-chrome_options.add_experimental_option("prefs", {
-        "download.default_directory": "Downloads",
-        "download.prompt_for_download": False,
-        "download.directory_upgrade": True,
-        "safebrowsing_for_trusted_sources_enabled": False,
-        "safebrowsing.enabled": False
-})
-chrome_options.add_argument('--disable-gpu')
-chrome_options.add_argument('--disable-software-rasterizer')
-
-Path_to_ChromeDriver = Path('..', 'usr', 'local', 'bin', 'chromedriver.exe')
-Chrome_Browser_Driver = webdriver.Chrome(options=chrome_options, executable_path=Path_to_ChromeDriver)
-
 
 #Section: Collect Information Needed for SUSHI Call
 # Later, this will be replaced with a call to the Alma API--see Credentials_Through_Alma_API.py
@@ -239,7 +215,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Subsection: Determine SUSHI Availability
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    Status_Check = Single_Element_API_Call("status", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+    Status_Check = Single_Element_API_Call("status", SUSHI_Call_Data["URL"], Credentials_String)
     if str(type(Status_Check)) == "<class 'str'>": # Meaning the API call returned an error
         Status_Check_Problem = dict(
             Interface = SUSHI_Call_Data["JSON_Name"],
@@ -279,7 +255,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Subsection: Get List of R5 Reports Available
     Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-    Available_Reports = Single_Element_API_Call("reports", SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+    Available_Reports = Single_Element_API_Call("reports", SUSHI_Call_Data["URL"], Credentials_String)
     if str(type(Available_Reports)) == "<class 'str'>": # Meaning the API call returned an error
         Available_Reports_Problem = dict(
             Interface = SUSHI_Call_Data["JSON_Name"],
@@ -373,7 +349,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
         #Subsection: Make API Call for Master Report
         Credentials_String = "&".join("%s=%s" % (k,v) for k,v in Credentials.items())
-        Master_Report_Response = Master_Report_API_Call(Master_Report_Type, SUSHI_Call_Data["URL"], Credentials_String, Chrome_Browser_Driver)
+        Master_Report_Response = Master_Report_API_Call(Master_Report_Type, SUSHI_Call_Data["URL"], Credentials_String)
         if str(type(Master_Report_Response)) == "<class 'str'>": # Meaning the API call returned an error
             Master_Report_Response_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],

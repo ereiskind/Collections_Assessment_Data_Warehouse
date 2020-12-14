@@ -14,7 +14,28 @@ Chrome_User_Agent = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWeb
 
 
 #Subsection: Helper Functions
-def Retrieve_Downloaded_JSON_File(WebDriver, URL):
+def Chrome_Browser_Driver():
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--window-size=1920x1080")
+    chrome_options.add_argument("--disable-notifications")
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--verbose')
+    chrome_options.add_experimental_option("prefs", {
+            "download.default_directory": "Downloads",
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+            "safebrowsing_for_trusted_sources_enabled": False,
+            "safebrowsing.enabled": False
+    })
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--disable-software-rasterizer')
+
+    Path_to_ChromeDriver = Path('..', 'usr', 'local', 'bin', 'chromedriver.exe') # On Windows, "chromedriver" must include the ".exe" extension; on Linux, when the file extension is included, there's a WebDriverException with the message "'chromedriver.exe' executable needs to be in PATH."
+    return webdriver.Chrome(options=chrome_options, executable_path=Path_to_ChromeDriver)
+
+
+def Retrieve_Downloaded_JSON_File(URL):
     """Reads a JSON downloaded by an API call into memory.
     
     Some of the SUSHI API calls, most notable Silverchair, generate a JSON file download, which requests returns as a 403 error. This function captures the downloaded file and reads its contents into memory so the function can be used. Functionality related to downloading the file taken from https://medium.com/@moungpeter/how-to-automate-downloading-files-using-python-selenium-and-headless-chrome-9014f0cdd196.
@@ -28,6 +49,7 @@ def Retrieve_Downloaded_JSON_File(WebDriver, URL):
     Returns:
         dictionary -- the API response JSON file transformed into Python data types
     """
+    WebDriver = Chrome_Browser_Driver()
     # The function requires a string containing the absolute path to the location where the file should be saved; this allows for a folder "API_Download" within the repo to hold the file
     API_Download_Folder = str(Path.cwd()) + r"\API_Download"
 
@@ -74,14 +96,13 @@ def JSON_to_Python_Data_Types(JSON):
 
 
 #Section: API Calls
-def Single_Element_API_Call(Path_Addition, URL, Parameters, WebDriver):
+def Single_Element_API_Call(Path_Addition, URL, Parameters):
     """Performs the SUSHI R5 API call with a URL that contains a single extra element between the base URL and the parameters.
     
     Arguments:
         Path_Addition {string} -- the last element of the URL path before the parameters, also what is being requested by the API call
         URL {string} -- the root URL for the SUSHI API
         Parameters {string} -- the parameters that need to be passed as part of the API call
-        WebDriver {WebDriver} -- Selenium WebDriver object
     
     Returns:
         dictionary or list -- the data in JSON returned by API using Python data types
@@ -98,7 +119,7 @@ def Single_Element_API_Call(Path_Addition, URL, Parameters, WebDriver):
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>":
             # This response could be because of an actual issue, or because the API prompts a JSON file download rather than making the JSON data the page content; the function below handles the latter case
-            API_Response = Retrieve_Downloaded_JSON_File(WebDriver, API_Call_URL + "?" + Parameters)
+            API_Response = Retrieve_Downloaded_JSON_File(API_Call_URL + "?" + Parameters)
             if API_Response == []:
                 return f"{URL}|{Path_Addition}|{format(error)}"
         else:
@@ -112,13 +133,12 @@ def Single_Element_API_Call(Path_Addition, URL, Parameters, WebDriver):
         return f"{URL}|{Path_Addition}|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"
 
 
-def Master_Report_API_Call(Report_ID, URL, Parameters, WebDriver):
+def Master_Report_API_Call(Report_ID, URL, Parameters):
     """Performs a SUSHI R5 API call for a master report.
     Arguments:
         Report_ID {string} -- the uppercase abbreviation for the report being requested
         URL {string} -- the root URL for the SUSHI API
         Parameters {string} -- the parameters that need to be passed as part of the API call
-        WebDriver {WebDriver} -- Selenium WebDriver object
     
     Returns:
         dictionary or list -- the data in JSON returned by API  using Python data types
@@ -140,7 +160,7 @@ def Master_Report_API_Call(Report_ID, URL, Parameters, WebDriver):
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>":
             # This response could be because of an actual issue, or because the API prompts a JSON file download rather than making the JSON data the page content; the function below handles the latter case
-            API_Response = Retrieve_Downloaded_JSON_File(WebDriver, API_Call_URL + "?" + Parameters)
+            API_Response = Retrieve_Downloaded_JSON_File(API_Call_URL + "?" + Parameters)
             if API_Response == []:
                 return f"{Report_ID}|HTTP error: {format(error)}"
         else:

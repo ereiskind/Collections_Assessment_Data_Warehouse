@@ -127,19 +127,19 @@ def API_Download_Not_Empty():
 
 #Subsection: Database Interactions
 #ToDo: Redo this function
-def Execute_SQL_Statement(SQLStatement, DBConnection):
+def Execute_SQL_Statement(SQLStatement, DB):
     """Executes a SQL statement using a PyMySQL connection object.
     
-    This function executes a SQL statement using PyMySQL, creating the cursor based off the connection object argument at the beginning and performing the commit method on that connection at the end.
+    This function fully encapsulates the execution of a SQL statement using PyMySQL, creating a connection object, creating a cursor based off the connection object, executing the statement, committing the changes, and closing the connection.
+    #Alert: This function is currently not used; any adjustments that need to be made to accommodate manual manipulations or retrieval of the data through SQL should be done in the context of the Flask app that will serve as the UI.
     
     Arguments:
         SQLStatement {string} -- the SQL statement
-        DBConnection {PyMySQL connection} -- connection object for MySQL database
+        DB {string} -- name of the MySQL database the statement will be executed in
     
     Returns:
         None
     """
-    #Alert: The function needs to be rewritten to accommodate the creation and destruction of the connection object within the function
     Connection = pymysql.connect(
         host=Database_Credentials.Host,
         user=Database_Credentials.Username,
@@ -147,10 +147,9 @@ def Execute_SQL_Statement(SQLStatement, DBConnection):
         db=Database
     )
     
-    Cursor = DBConnection.cursor()
+    Cursor = Connection.cursor()
     Cursor.execute(SQLStatement)
-    DBConnection.commit()
-
+    Connection.commit()
     Connection.close()
 
 
@@ -170,7 +169,7 @@ Platforms_Not_Collected = []
     # This will contain the URLs for failed API calls that prevented any reports from being collected
     # Format: SUSHI base URL|Source of problem|Error that caused failure
 
-#Subsection: Create the PyMySQL Connection and SQLAlchemy Engine
+#Subsection: Create the SQLAlchemy Engine
 Database = 'Collections_Assessment_Warehouse_0.1'
 #ToDo: Investigate if this can be parsed from the first line of the SQL file referenced by the MySQL Dockerfile
 

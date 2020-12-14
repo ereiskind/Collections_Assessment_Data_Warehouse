@@ -1,3 +1,4 @@
+#! /usr/local/bin/python
 # This serves as the library for the API calls and the ensuing status checks
 
 import time

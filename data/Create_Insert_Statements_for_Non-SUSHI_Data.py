@@ -1,3 +1,5 @@
+#! /usr/local/bin/python
+
 # This script can generate MySQL insert statements for the tables in Schema_Creation_Statements other than R5_Usage based on CSVs of the same name as the tables in the subfolder "data/DML_CSVs". The CSVs cannot contain a header row and the columns must be in the order in which the fields are listed in the insert statements.
 # The columns must be listed in the same order as the field names are, where the ith column is represented by Record[i]. So, if the first field listed corresponds to the values in the third column of the CSV, the first item listed in the VALUES clause must be Record[3].
     # All string values are encapsulated in parentheses, then in single quotes, like ('Record[i]'), so that any commas within the values are retained.

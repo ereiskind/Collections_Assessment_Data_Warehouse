@@ -1,3 +1,4 @@
+#! /usr/local/bin/python
 import pandas
 from tkinter import messagebox
 

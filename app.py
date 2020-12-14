@@ -1,3 +1,4 @@
+#! /usr/local/bin/python
 #API repository: https://app.swaggerhub.com/apis/COUNTER/counter-sushi_5_0_api/1.0.0
 
 import logging

@@ -1,3 +1,4 @@
+#! /usr/local/bin/python
 # Collecting information about authentications to platforms--for approximating how widely distributed the usage of the resources on a platform are
 
 #Section: EZProxy

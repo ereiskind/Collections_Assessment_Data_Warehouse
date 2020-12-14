@@ -185,7 +185,8 @@ Engine = create_engine(
 
 #Section: Collect Information Needed for SUSHI Call
 # Later, this will be replaced with a call to the Alma API--see Credentials_Through_Alma_API.py
-with open('SUSHI_R5_Credentials.json') as JSON_File:
+SUSHI_R5_Credentials_Path = str(Path('.', 'data', 'SUSHI_R5_Credentials.json'))
+with open(SUSHI_R5_Credentials_Path) as JSON_File:
     SUSHI_Data_File = json.load(JSON_File)
     SUSHI_Data = []
     for Vendor in SUSHI_Data_File:

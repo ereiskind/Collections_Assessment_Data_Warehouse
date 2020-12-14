@@ -409,6 +409,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                         if_exists='append',
                         index=False
                     )
+            logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database")
         except:
             #ToDo: Provide message indicating there was a problem loading the dataframe to MySQL
             pass

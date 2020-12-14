@@ -379,10 +379,22 @@ for SUSHI_Call_Data in SUSHI_Data:
                 # Based on observed close-to-standard behavior, an interface could return a list of multiple Exception dictionaries, which JSON_to_Python_Data_Types would handle as an error, directing it to the Platforms_Not_Collected list. If that happens, error handling for that situation may be better handled within the JSON_to_Python_Data_Types function.
                 pass # A SUSHI JSON without an "Exceptions" key will return a KeyError for the above
 
-        #ToDo: If len(Master_Report_Response["Report_Items"]) == 0 (aka no usage reported), possible sanity check on that?
-        #Alert: Some interfaces seem to offer DR even though there aren't any databases on the constituent platform(s)/user interface(s); other interfaces offer DR with a single database where the metrics are identical to the PR (see Project MUSE as example). For the former, do we want to maintain a register of interfaces where the empty DR is expected? For the latter, do we want to load the DR?
-
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
+
+        #Subsection: Return Notice for Empty Reports
+        # These cause problems when passed into the dataframe creation functions, so they're handled here; more investigation is needed, however, as an empty report can be either correct behavior (some interfaces seem to offer DR even though there aren't any databases on the constituent platform(s)/user interface(s)) or a problem
+        #ToDo: Build in some sort of checking to determine if the lack of Report_Items is problematic
+        if len(Master_Report_Response["Report_Items"]) == 0:
+            Master_Report_Items_Problem = dict(
+                Interface = SUSHI_Call_Data["JSON_Name"],
+                # Source of problem|Error that caused failure
+                Type = f"{Master_Report_Type}",
+                Details = f"{Master_Report_Type} empty",
+            )
+            Platforms_Not_Collected.append(Master_Report_Items_Problem)
+            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|{Master_Report_Type} empty")
+            continue
+        #Alert: Should DRs with a single database where the metrics are identical to the PR (see Project MUSE as example) be captured and silently disposed of here as well?
 
 
         #Section: Load Master Report into MySQL

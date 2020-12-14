@@ -11,7 +11,7 @@ import sys
 # from datetime import datetime
 import requests
 from requests import HTTPError, Timeout
-from tkinter import messagebox
+import pyinputplus
 import pandas
 import pymysql
 from sqlalchemy import create_engine
@@ -54,7 +54,7 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
         Type = "error " + str(Type)
     elif Type.isnumeric():
         Type = "error " + Type
-    Response_to_Problem = messagebox.askyesno(title="Status Check Problem", message=f"The status check for {Source} contained the following {Type}:\n\n{Message}\n\nShould the usage for this platform be collected?")
+    Response_to_Problem = inputBool(f"The status check for {Source} contained the following {Type}:\n\n{Message}\n\nShould the usage for this platform be collected? Type \"True\" or \"False\" to answer. ")
     if not Response_to_Problem: # This code block needs to run if the answer to the above is no, which produces the Boolean False
         Problem_Message = f"Canceled collection from interface with {Type}: {Message}"
         Capture_Problem = dict(
@@ -100,8 +100,11 @@ def Handle_Exception_Master_Report(Source, Report, Exception_List, Load_Report_I
             List_of_Exceptions.append(f"{Code}: {SUSHI_Exception['Message']}")
 
     if Load_Report_Items: # Meaning that there's data that could be loaded--messagebox changes Boolean to if that data should be loaded
-        #ToDo: Check how the messagebox formatting works and adjust if necessary
-        Load_Report_Items = messagebox.askyesno(title="Exception Raised", message=f"The {Report} for {Source} contained the following exception(s):\n\n{List_of_Exceptions}\n\nShould this report be added to the database?")
+        print(f"The {Report} for {Source} contained the following exception(s):\n\n")
+        for Exception_Raised in List_of_Exceptions:
+            print(Exception_Raised + "\n")
+        Load_Report_Items = inputBool("\nShould this report be added to the database? Type \"True\" or \"False\" to answer. ")
+        messagebox.askyesno(title="Exception Raised", message={}\n)
     if not Load_Report_Items: # This code block needs to run if the answer to the above is no, which produces the Boolean False
         Problem_Message = f"Cancelled collection because of exception(s) {'|'.join(List_of_Exceptions)}"
         Capture_Problem = dict(
@@ -344,7 +347,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Credentials["include_parent_details"] = "True"
             Credentials["include_component_details"] = "True"
         else:
-            messagebox.showwarning(title="Invalid Master Report Type", message=f"{SUSHI_Call_Data['JSON_Name']} contained a {Master_Report['Report_Name']}. Work out further report type handling.") # This message shouldn't ever appear
+            logging.info(f"{SUSHI_Call_Data['JSON_Name']} contained a {Master_Report['Report_Name']}. Work out further report type handling.") # This message shouldn't ever appear
             continue
         logging.info(f"Ready to call {SUSHI_Call_Data['URL']} for {Master_Report_Type}.")
 

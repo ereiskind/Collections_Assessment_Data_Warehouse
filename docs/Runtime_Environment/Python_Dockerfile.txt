@@ -1,16 +1,11 @@
 FROM python
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
-RUN git clone https://github.com/ereiskind/Collections_Assessment_Data_Warehouse.git ./root/Collections_Assessment_Data_Warehouse
-
 ####
 # Install Chrome and Selenium Chromedriver
+# If placed after the pip installation and git clone in Docerfile, these commands don't execute
 
-# Install Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+RUN sh -c "echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' >>   /etc/apt/sources.list"
 RUN apt-get -y update
 RUN apt-get install -y google-chrome-stable
 
@@ -18,16 +13,22 @@ RUN apt-get install -y google-chrome-stable
 RUN apt-get install -yqq unzip
 RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
-ENV PATH "$PATH:/usr/local/bin/"
 
 # Set display port to avoid crash
 ENV DISPLAY=:99
 
 ####
+# Prepare the Python Environment
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN git clone https://github.com/ereiskind/Collections_Assessment_Data_Warehouse.git ./root/Collections_Assessment_Data_Warehouse
+
+####
 # Performing File Overlay
 # Note: Use a trailing slash to indicate a folder
 
-# Add files involved in creating runtime environment to Runtime_Environment folder
+# Add Docker files to Runtime_Environment folder
 COPY ./Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/Python_Dockerfile.txt
 COPY ./mysql/Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/MySQL_Dockerfile.txt
 COPY ./docker-compose.yml ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/Docker_Compose.txt
@@ -35,7 +36,8 @@ COPY requirements.txt ./root/Collections_Assessment_Data_Warehouse/docs/requirem
 
 # Add example data to data/Example subfolders
 COPY ./Example_Data/Samples/ ./root/Collections_Assessment_Data_Warehouse/data/Examples/
-COPY ./Example_Data/Master_Report_JSONs/ ./root/Collections_Assessment_Data_Warehouse/data/Examples/Master_Report_JSONs/
+COPY ./Example_Data/Master_Report_JSONs/ ./root/Collections_Assessment_Data_Warehouse/data/Examples/
+# The above copies over the folder and all its contents into the given location
 # Without Visio in Python container to open file, should following execute? COPY ./Documentation/Entity_Relationship_Diagram.vsdx ./root/Collections_Assessment_Data_Warehouse/docs/Entity_Relationship_Diagram.vsdx
 
 # Add private information and semi-private documentation

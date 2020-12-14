@@ -85,12 +85,14 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['Resource_Name'] = Dataframe['Resource_Name'].astype('string')
         # Should there be a sanity/data check here that all DR, TR, IR records have a Resource_Name value?
     except KeyError:
-        Dataframe['Resource_Name'] = None  #ToDo: Convert this to string data type
+        Dataframe['Resource_Name'] = None
+        Dataframe['Resource_Name'] = Dataframe['Resource_Name'].astype('string')
 
     try:
         Dataframe['Publisher'] = Dataframe['Publisher'].astype('string')
     except KeyError:
-        Dataframe['Publisher'] = None  #ToDo: Convert this to string data type
+        Dataframe['Publisher'] = None
+        Dataframe['Publisher'] = Dataframe['Publisher'].astype('string')
 
     #ToDo: If adding Publisher_ID as data saved, change to add null value only if column not already present
     Dataframe['Publisher_ID'] = None
@@ -99,62 +101,74 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     try:
         Dataframe['DOI'] = Dataframe['DOI'].astype('string')
     except KeyError:
-        Dataframe['DOI'] = None  #ToDo: Convert this to string data type
+        Dataframe['DOI'] = None
+        Dataframe['DOI'] = Dataframe['DOI'].astype('string')
 
     try:
         Dataframe['Proprietary_ID'] = Dataframe['Proprietary_ID'].astype('string')
     except KeyError:
-        Dataframe['Proprietary_ID'] = None  #ToDo: Convert this to string data type
+        Dataframe['Proprietary_ID'] = None
+        Dataframe['Proprietary_ID'] = Dataframe['Proprietary_ID'].astype('string')
 
     try:
         Dataframe['ISBN'] = Dataframe['ISBN'].astype('string')
     except KeyError:
-        Dataframe['ISBN'] = None  #ToDo: Convert this to string data type
+        Dataframe['ISBN'] = None
+        Dataframe['ISBN'] = Dataframe['ISBN'].astype('string')
 
     try:
         Dataframe['Print_ISSN'] = Dataframe['Print_ISSN'].astype('string')
     except KeyError:
-        Dataframe['Print_ISSN'] = None  #ToDo: Convert this to string data type
+        Dataframe['Print_ISSN'] = None
+        Dataframe['Print_ISSN'] = Dataframe['Print_ISSN'].astype('string')
 
     try:
         Dataframe['Online_ISSN'] = Dataframe['Online_ISSN'].astype('string')
     except KeyError:
-        Dataframe['Online_ISSN'] = None  #ToDo: Convert this to string data type
+        Dataframe['Online_ISSN'] = None
+        Dataframe['Online_ISSN'] = Dataframe['Online_ISSN'].astype('string')
 
     try:
         Dataframe['URI'] = Dataframe['URI'].astype('string')
     except KeyError:
-        Dataframe['URI'] = None  #ToDo: Convert this to string data type
+        Dataframe['URI'] = None
+        Dataframe['URI'] = Dataframe['URI'].astype('string')
 
     try:
         Dataframe['Section_Type'] = Dataframe['Section_Type'].astype('string')
     except KeyError:
-        Dataframe['Section_Type'] = None  #ToDo: Convert this to string data type
+        Dataframe['Section_Type'] = None
+        Dataframe['Section_Type'] = Dataframe['Section_Type'].astype('string')
 
     try:
         Dataframe['Parent_Data_Type'] = Dataframe['Parent_Data_Type'].astype('string')
     except KeyError:
-        Dataframe['Parent_Data_Type'] = None  #ToDo: Convert this to string data type
+        Dataframe['Parent_Data_Type'] = None
+        Dataframe['Parent_Data_Type'] = Dataframe['Parent_Data_Type'].astype('string')
 
     try:
         Dataframe['Parent_DOI'] = Dataframe['Parent_DOI'].astype('string')
     except KeyError:
-        Dataframe['Parent_DOI'] = None  #ToDo: Convert this to string data type
+        Dataframe['Parent_DOI'] = None
+        Dataframe['Parent_DOI'] = Dataframe['Parent_DOI'].astype('string')
 
     try:
         Dataframe['Parent_Proprietary_ID'] = Dataframe['Parent_Proprietary_ID'].astype('string')
     except KeyError:
-        Dataframe['Parent_Proprietary_ID'] = None  #ToDo: Convert this to string data type
+        Dataframe['Parent_Proprietary_ID'] = None
+        Dataframe['Parent_Proprietary_ID'] = Dataframe['Parent_Proprietary_ID'].astype('string')
 
     try:
         Dataframe['YOP'] = Dataframe['YOP'].astype('int64')
     except KeyError:
-        Dataframe['YOP'] = None  #ToDo: Convert this to int64 data type
+        Dataframe['YOP'] = None
+        Dataframe['YOP'] = Dataframe['YOP'].astype('int64')
 
     try:
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')
     except KeyError:
-        Dataframe['Access_Type'] = None  #ToDo: Convert this to string data type
+        Dataframe['Access_Type'] = None
+        Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')
     
     #ToDo: Use fillna to change the Python null values to pandas null values for the appropriate type
         # Dataframe.fillna(value=float('nan'), inplace=True) for floats

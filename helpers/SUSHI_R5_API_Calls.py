@@ -71,9 +71,12 @@ def Retrieve_Downloaded_JSON_File(URL):
 
 def JSON_to_Python_Data_Types(JSON):
     """Returns a JSON-like object that uses Python data types from multiple different forms of input that include JSON formatted data.
+    
     This function takes a JSON-like Python dictionary, JSON-like Python list, requests object with JSON data, or <insert other objects here> and returns the same data using native Python data types.
+    
     Arguments:
         JSON {varies} -- an object containing a JSON or JSON-like data
+    
     Returns:
         dictionary -- the data in JSON as Python dictionary
         Boolean False -- if the data in JSON can't be changed into a Python dictionary

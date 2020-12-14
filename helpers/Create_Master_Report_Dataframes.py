@@ -174,19 +174,6 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         # Dataframe.fillna(value=float('nan'), inplace=True) for floats
         # Don't know if this should be before or after the data type changes
 
-    #ToDo: Change the data types of the existing columns
-    pandas.to_datetime(
-        Dataframe['R5_Month'],
-        errors='raise', # If ‘raise’, then invalid parsing will raise an exception; If ‘coerce’, then invalid parsing will be set as NaT; If ‘ignore’, then invalid parsing will return the input
-        format='%Y-%m-%d'
-    )
-    pandas.to_datetime(
-        Dataframe['Report_Creation_Date'],
-        errors='raise', # If ‘raise’, then invalid parsing will raise an exception; If ‘coerce’, then invalid parsing will be set as NaT; If ‘ignore’, then invalid parsing will return the input
-        format='%Y-%m-%dT',
-        exact=False # Some dates use the timezone (indicated by "Z") while others use UTC offset, so the format just has the ISO date format
-    )
-    
     #Subsection: Reorder Columns for Import to MySQL
     Dataframe = Dataframe[[
         'Interface',

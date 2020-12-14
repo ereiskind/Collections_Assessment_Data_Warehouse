@@ -162,7 +162,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['YOP'] = Dataframe['YOP'].astype('int64')
     except KeyError:
         Dataframe['YOP'] = None
-        Dataframe['YOP'] = Dataframe['YOP'].astype('int64')
+        Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html)
 
     try:
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')

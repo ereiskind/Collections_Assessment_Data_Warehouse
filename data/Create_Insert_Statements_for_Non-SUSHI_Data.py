@@ -10,7 +10,9 @@
 from pathlib import Path
 import csv
 
-print("-- Table Vendors")
+Text_File = open('Insert_Statements.txt', 'w')
+
+Text_File.write("-- Table Vendors\n")
 
 CSV_Path = Path('.', 'DML_CSVs', 'Vendors.csv')
 with open(CSV_Path) as CSVfile:
@@ -36,10 +38,10 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        print(Insert_Statement)
+        Text_File.write(Insert_Statement + "\n)
 
 
-print("-- Table Interfaces")
+Text_File.write("-- Table Interfaces\n")
 
 CSV_Path = Path('.', 'DML_CSVs', 'Interfaces.csv')
 with open(CSV_Path) as CSVfile:
@@ -75,10 +77,10 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        print(Insert_Statement)
+        Text_File.write(Insert_Statement + "\n)
 
 
-print("-- Table Fiscal_Years")
+Text_File.write("-- Table Fiscal_Years\n")
 
 CSV_Path = Path('.', 'DML_CSVs', 'Fiscal_Years.csv')
 with open(CSV_Path) as CSVfile:
@@ -102,11 +104,11 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        print(Insert_Statement)
+        Text_File.write(Insert_Statement + "\n)
 
 #Alert: Stats_Collection_Info needs PK from Interfaces, which is an auto-increment field
 
-print("-- Table Stats_Collection_Info")
+Text_File.write("-- Table Stats_Collection_Info\n")
 
 CSV_Path = Path('.', 'DML_CSVs', 'Stats_Collection_Info.csv')
 with open(CSV_Path) as CSVfile:
@@ -148,10 +150,10 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
         
-        print(Insert_Statement)
+        Text_File.write(Insert_Statement + "\n)
 
 
-print("-- Table Platforms")
+Text_File.write("-- Table Platforms\n")
 
 CSV_Path = Path('.', 'DML_CSVs', 'Platforms.csv')
 with open(CSV_Path) as CSVfile:
@@ -179,10 +181,10 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        print(Insert_Statement)
+        Text_File.write(Insert_Statement + "\n)
 
 
-print("-- Table Platform_Notes")
+Text_File.write("-- Table Platform_Notes\n")
 
 CSV_Path = Path('.', 'DML_CSVs', 'Platform_Notes.csv')
 with open(CSV_Path) as CSVfile:
@@ -208,10 +210,10 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        print(Insert_Statement)
+        Text_File.write(Insert_Statement + "\n)
 
 
-print("-- Table Historical_Aleph")
+Text_File.write("-- Table Historical_Aleph\n")
 
 CSV_Path = Path('.', 'DML_CSVs', 'Historical_Aleph.csv')
 with open(CSV_Path) as CSVfile:
@@ -239,4 +241,4 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        print(Insert_Statement)
+        Text_File.write(Insert_Statement + "\n)

@@ -92,7 +92,9 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     except KeyError:
         Dataframe['Publisher'] = None  #ToDo: Convert this to string data type
 
-    #ToDo: Make Publisher_ID column with string-type null values
+    #ToDo: If adding Publisher_ID as data saved, change to add null value only if column not already present
+    Dataframe['Publisher_ID'] = None
+    Dataframe['Publisher_ID'] = Dataframe['Publisher_ID'].astype('string')
 
     try:
         Dataframe['DOI'] = Dataframe['DOI'].astype('string')

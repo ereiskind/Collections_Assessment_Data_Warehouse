@@ -38,7 +38,7 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        Text_File.write(Insert_Statement + "\n)
+        Text_File.write(Insert_Statement + "\n")
 
 
 Text_File.write("-- Table Interfaces\n")
@@ -77,7 +77,7 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        Text_File.write(Insert_Statement + "\n)
+        Text_File.write(Insert_Statement + "\n")
 
 
 Text_File.write("-- Table Fiscal_Years\n")
@@ -104,7 +104,7 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        Text_File.write(Insert_Statement + "\n)
+        Text_File.write(Insert_Statement + "\n")
 
 #Alert: Stats_Collection_Info needs PK from Interfaces, which is an auto-increment field
 
@@ -150,7 +150,7 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
         
-        Text_File.write(Insert_Statement + "\n)
+        Text_File.write(Insert_Statement + "\n")
 
 
 Text_File.write("-- Table Platforms\n")
@@ -181,7 +181,7 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        Text_File.write(Insert_Statement + "\n)
+        Text_File.write(Insert_Statement + "\n")
 
 
 Text_File.write("-- Table Platform_Notes\n")
@@ -210,7 +210,7 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        Text_File.write(Insert_Statement + "\n)
+        Text_File.write(Insert_Statement + "\n")
 
 
 Text_File.write("-- Table Historical_Aleph\n")
@@ -241,4 +241,4 @@ with open(CSV_Path) as CSVfile:
         Temp_List = Insert_Statement.split(" )")
         Insert_Statement = ")".join(Temp_List)
 
-        Text_File.write(Insert_Statement + "\n)
+        Text_File.write(Insert_Statement + "\n")

@@ -3,6 +3,7 @@ cryptography
 dateutils
 flask
 pandas
+pyinputplus
 pylint
 PyMySQL
 requests

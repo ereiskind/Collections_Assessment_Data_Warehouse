@@ -48,7 +48,7 @@ Below are alternate methods for accessing the contents of the runtime environmen
 
 ### Accessing the MySQL Container via CLI
 1. Open the host CLI
-2. `docker exec -it mysql-container --user=root --password`
+2. `docker exec -it mysql-container mysql --user=root --password`
 3. Enter the password for the root user set in the MySQL Dockerfile
 
 ### Accessing the MySQL Container via MySQL Workbench

@@ -423,8 +423,13 @@ for SUSHI_Call_Data in SUSHI_Data:
                     )
             logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database")
         except:
-            #ToDo: Provide message indicating there was a problem loading the dataframe to MySQL
-            pass
+            Master_Report_Loading_Problem = dict(
+                Interface = SUSHI_Call_Data["JSON_Name"],
+                Type = Master_Report_Type,
+                Details = f"Unable to load {Master_Report_Type} dataframe to MySQL",
+            )
+            Platforms_Not_Collected.append(Master_Report_Loading_Problem)
+            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Unable to load {Master_Report_Type} dataframe to MySQL")
 
 
 #Section: Output Platforms_Not_Collected

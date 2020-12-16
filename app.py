@@ -128,7 +128,6 @@ def API_Download_Not_Empty():
 
 
 #Subsection: Database Interactions
-#ToDo: Redo this function
 def Execute_SQL_Statement(SQLStatement, DB):
     """Executes a SQL statement using a PyMySQL connection object.
     
@@ -166,7 +165,6 @@ for Folder, Subfolder, Files in os.walk(API_Download_Path):
         API_Download_Not_Empty()
 
 #Subsection: Initialize Variables for Reports Not Captured
-#ToDo: Save the current time to variable Script_Start_Time
 Platforms_Not_Collected = []
     # This will contain the URLs for failed API calls that prevented any reports from being collected
     # Format: SUSHI base URL|Source of problem|Error that caused failure

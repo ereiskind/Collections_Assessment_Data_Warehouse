@@ -97,6 +97,22 @@ CREATE TABLE Platform_Notes (
 );
 
 -- -----------------------------------------------------
+-- Create Table "Alt_Platform_Names"
+-- -----------------------------------------------------
+CREATE TABLE Alt_Platform_Names (
+    Alt_Platform_Name_ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Platform INT NOT NULL,
+    Alt_Name VARCHAR(100) NOT NULL,
+    Alt_Name_Type ENUM('Acronym', 'Alternate Name', 'Past Name'),-- For adding records to this table, implement this field as a drop-down
+    Note TEXT,
+    INDEX INDX_Platform (Platform),
+    CONSTRAINT FK_AltPlatformNames_Platforms FOREIGN KEY INDX_Platform (Platform)
+        REFERENCES Platforms(Platform_ID)
+        ON UPDATE restrict
+        ON DELETE restrict
+);
+
+-- -----------------------------------------------------
 -- Create Table "Historical_Aleph"
 -- -----------------------------------------------------
 CREATE TABLE Historical_Aleph (

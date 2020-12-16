@@ -64,7 +64,6 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         'Report': 'string',
         'Platform': 'string',
         'Data_Type': 'string',
-        'Access_Method': 'string',
         'Metric_Type': 'string',
         'R5_Count': 'int64'
     })
@@ -94,6 +93,12 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     except KeyError:
         Dataframe['Publisher'] = None
         Dataframe['Publisher'] = Dataframe['Publisher'].astype('string')
+    
+    try:
+        Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
+    except KeyError:
+        Dataframe['Access_Method'] = None
+        Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
 
     #ToDo: If adding Publisher_ID as data saved, change to add null value only if column not already present
     Dataframe['Publisher_ID'] = None
@@ -299,7 +304,10 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
             Data_Type = Item['Data_Type']
         except KeyError:
             Data_Type = None
-        Access_Method = Item['Access_Method']
+        try:  # This handles situations where access methods aren't included
+            Access_Method = Item['Access_Method']
+        except KeyError:
+            Access_Method - None
         try: # This handles situations where proprietary IDs aren't included
             for ID in Item['Item_ID']:
                 if ID['Type'] == "Proprietary":

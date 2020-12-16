@@ -388,7 +388,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Master_Report_Items_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
                 # Source of problem|Error that caused failure
-                Type = f"{Master_Report_Type}",
+                Type = Master_Report_Type,
                 Details = f"{Master_Report_Type} empty",
             )
             Platforms_Not_Collected.append(Master_Report_Items_Problem)

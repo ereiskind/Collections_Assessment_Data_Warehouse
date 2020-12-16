@@ -428,8 +428,8 @@ for SUSHI_Call_Data in SUSHI_Data:
 
 
 #Section: Output Platforms_Not_Collected
-#Alert: The CSV below needs to be written to the data folder
-FileIO = open('Platforms_Not_Collected.csv', 'w', newline='')
+Platforms_Not_Collected_Location = str(Path('.', 'data', 'Platforms_Not_Collected.csv'))
+FileIO = open(Platforms_Not_Collected_Location, 'w', newline='')
 CSV_Writer = csv.DictWriter(FileIO, [
     #ToDo: Decide if there are better column names to use and/or if more columns are needed
     "Interface", # The interface where there was a problem

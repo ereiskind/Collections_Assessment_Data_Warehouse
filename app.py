@@ -54,7 +54,7 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
         Type = "error " + str(Type)
     elif Type.isnumeric():
         Type = "error " + Type
-    Response_to_Problem = inputBool(f"The status check for {Source} contained the following {Type}:\n\n{Message}\n\nShould the usage for this platform be collected? Type \"True\" or \"False\" to answer. ")
+    Response_to_Problem = pyinputplus.inputBool(f"The status check for {Source} contained the following {Type}:\n\n{Message}\n\nShould the usage for this platform be collected? Type \"True\" or \"False\" to answer. ")
     if not Response_to_Problem: # This code block needs to run if the answer to the above is no, which produces the Boolean False
         Problem_Message = f"Canceled collection from interface with {Type}: {Message}"
         Capture_Problem = dict(
@@ -103,8 +103,7 @@ def Handle_Exception_Master_Report(Source, Report, Exception_List, Load_Report_I
         print(f"The {Report} for {Source} contained the following exception(s):\n\n")
         for Exception_Raised in List_of_Exceptions:
             print(Exception_Raised + "\n")
-        Load_Report_Items = inputBool("\nShould this report be added to the database? Type \"True\" or \"False\" to answer. ")
-        messagebox.askyesno(title="Exception Raised", message={}\n)
+        Load_Report_Items = pyinputplus.inputBool("\nShould this report be added to the database? Type \"True\" or \"False\" to answer. ")
     if not Load_Report_Items: # This code block needs to run if the answer to the above is no, which produces the Boolean False
         Problem_Message = f"Cancelled collection because of exception(s) {'|'.join(List_of_Exceptions)}"
         Capture_Problem = dict(

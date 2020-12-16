@@ -71,7 +71,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         'R5_Count': 'int64'
     })
 
-    print(Dataframe.dtypes)
+    print(Dataframe.info())
 
     pandas.to_datetime( #ToDo: Doesn't seem to be changing type or raising error
         Dataframe['R5_Month'],
@@ -85,7 +85,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         exact=False # Some dates use the timezone (indicated by "Z") while others use UTC offset, so the format just has the ISO date format
     )
 
-    print(Dataframe.dtypes)
+    print(Dataframe.info())
 
     try:
         Dataframe['Resource_Name'] = Dataframe['Resource_Name'].astype('string')
@@ -176,7 +176,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['Access_Type'] = None
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')
     
-    print(Dataframe.dtypes)
+    print(Dataframe.info())
 
     #Subsection: Reorder Columns for Import to MySQL
     Dataframe = Dataframe[[

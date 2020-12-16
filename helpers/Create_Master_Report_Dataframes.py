@@ -59,9 +59,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         ## "R5_Count" int64 --> R5_Count MEDIUMINT
         ## "Report_Creation_Date" datetime64 --> Report_Creation_Date DATE
     
-    #ToDo: Use fillna to change the Python null values to pandas null values for the appropriate type
-        # Dataframe.fillna(value=float('nan'), inplace=True) for floats
-        # Don't know if this should be before or after the data type changes
+    Dataframe.fillna(value='nan', inplace=True) # Intent is to set up all Python Nones to become pandas null values appropriate for column data type
     
     Dataframe = Dataframe.astype({
         'Interface': 'int64',
@@ -73,7 +71,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         'R5_Count': 'int64'
     })
 
-    # Dataframe.dtypes to terminal
+    print(Dataframe.dtypes)
 
     pandas.to_datetime( #ToDo: Doesn't seem to be changing type or raising error
         Dataframe['R5_Month'],
@@ -87,7 +85,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         exact=False # Some dates use the timezone (indicated by "Z") while others use UTC offset, so the format just has the ISO date format
     )
 
-    # Dataframes.dtypes to terminal
+    print(Dataframe.dtypes)
 
     try:
         Dataframe['Resource_Name'] = Dataframe['Resource_Name'].astype('string')
@@ -177,6 +175,8 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     except KeyError:
         Dataframe['Access_Type'] = None
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')
+    
+    print(Dataframe.dtypes)
 
     #Subsection: Reorder Columns for Import to MySQL
     Dataframe = Dataframe[[

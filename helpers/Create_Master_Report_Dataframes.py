@@ -59,8 +59,6 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         ## "R5_Count" int64 --> R5_Count MEDIUMINT
         ## "Report_Creation_Date" datetime64 --> Report_Creation_Date DATE
     
-    Dataframe.fillna(value='nan', inplace=True) # Intent is to set up all Python Nones to become pandas null values appropriate for column data type
-    
     Dataframe = Dataframe.astype({
         'Interface': 'int64',
         'Report': 'string',
@@ -71,21 +69,18 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         'R5_Count': 'int64'
     })
 
-    print(Dataframe.info())
-
-    pandas.to_datetime( #ToDo: Doesn't seem to be changing type or raising error
+    Dataframe['R5_Month'] = pandas.to_datetime(
         Dataframe['R5_Month'],
         errors='raise', # If ‘raise’, then invalid parsing will raise an exception; If ‘coerce’, then invalid parsing will be set as NaT; If ‘ignore’, then invalid parsing will return the input
         format='%Y-%m-%d'
     )
-    pandas.to_datetime( #ToDo: Doesn't seem to be changing type or raising error
+   
+    Dataframe['Report_Creation_Date'] = pandas.to_datetime(
         Dataframe['Report_Creation_Date'],
         errors='raise', # If ‘raise’, then invalid parsing will raise an exception; If ‘coerce’, then invalid parsing will be set as NaT; If ‘ignore’, then invalid parsing will return the input
         format='%Y-%m-%dT',
         exact=False # Some dates use the timezone (indicated by "Z") while others use UTC offset, so the format just has the ISO date format
     )
-
-    print(Dataframe.info())
 
     try:
         Dataframe['Resource_Name'] = Dataframe['Resource_Name'].astype('string')
@@ -176,8 +171,6 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['Access_Type'] = None
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')
     
-    print(Dataframe.info())
-
     #Subsection: Reorder Columns for Import to MySQL
     Dataframe = Dataframe[[
         'Interface',

@@ -39,6 +39,7 @@ This is a list of resources saved for referencing in the creation of this projec
 
 ## Getting Dataframes to and from MySQL
 - https://pythontic.com/pandas/serialization/mysql
+- https://stavshamir.github.io/python/dockerizing-a-flask-mysql-app-with-docker-compose/
 
 
 ## Creating the Docker Environment

@@ -13,6 +13,7 @@ import requests
 from requests import HTTPError, Timeout
 import pyinputplus
 import pandas
+#ToDo: potentially switch to mysql-connector: https://dev.mysql.com/doc/connector-python/en/
 import pymysql
 from sqlalchemy import create_engine
 # import dateutil.parser

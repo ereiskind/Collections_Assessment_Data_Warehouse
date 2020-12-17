@@ -414,21 +414,30 @@ for SUSHI_Call_Data in SUSHI_Data:
         logging.info(Master_Report_Dataframe.head())
 
         #Subsection: Load Dataframe into MySQL
-        #ToDo: Figure out detecting if an upload doesn't succeeded and error handling for that situation
-        with Engine.connect() as Connection:
-            with Connection.begin():
-                Master_Report_Dataframe.to_sql(
-                    name='R5_Usage',
-                    con=Engine,
-                    if_exists='append',
-                    index=False
-                )
-        
-        Check_Loading = pandas.read_sql(
-            sql='''SELECT * FROM R5_Usage;''',
-            con=Engine
-        )
-        logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database:\n{Check_Loading.tail()}")
+        #Alert: This exception handling won't necessarily pick up on a failure to load data into MySQL, but that problem should be resolved
+        try:
+            with Engine.connect() as Connection:
+                with Connection.begin(): # This creates a SQL transaction
+                    Master_Report_Dataframe.to_sql(
+                        name='R5_Usage',
+                        con=Engine,
+                        if_exists='append',
+                        index=False
+                    )
+            
+            Check_Loading = pandas.read_sql(
+                sql='''SELECT * FROM R5_Usage;''',
+                con=Engine
+            )
+            logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database:\n{Check_Loading.tail()}")
+        except:
+            Master_Report_Loading_Problem = dict(
+                Interface = SUSHI_Call_Data["JSON_Name"],
+                Type = Master_Report_Type,
+                Details = f"Unable to load {Master_Report_Type} dataframe to MySQL",
+            )
+            Platforms_Not_Collected.append(Master_Report_Loading_Problem)
+            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Unable to load {Master_Report_Type} dataframe to MySQL")
 
 #Section: Output Platforms_Not_Collected
 Platforms_Not_Collected_Location = str(Path('.', 'data', 'Platforms_Not_Collected.csv'))

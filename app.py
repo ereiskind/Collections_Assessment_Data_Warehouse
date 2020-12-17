@@ -181,7 +181,7 @@ Engine = create_engine(
     Database_Credentials.Password + '@' +
     Database_Credentials.Host + ':' + str(Database_Credentials.Post) + '/' +
     Database,
-    echo=False
+    echo=False # Should logging output be silenced?
 )
 
 

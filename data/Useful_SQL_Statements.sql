@@ -1,6 +1,11 @@
 /*
 This is a repository of SQL statements for use in querying the accopanying database.
-To query the database in the mysql-container Docker container, open the host command line interface and enter `docker exec -it mysql-container mysql --user=root --password`, then when propmpted for a password, enter the password for the root MySQL used set in the MySQL Dockerfile.
+
+To query the database in the mysql-container Docker container,
+1. Open the host command line interface
+2. `docker exec -it mysql-container mysql --user=root --password`
+3. enter the password for root set in the MySQL Dockerfile
+4. SQL shell: `USE Collections_Assessment_Warehouse_0.1;`
 */
 
 -- Find all the interfaces and platforms for a specific vendor based on a match to part of a vendor's name.

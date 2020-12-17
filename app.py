@@ -13,8 +13,7 @@ import requests
 from requests import HTTPError, Timeout
 import pyinputplus
 import pandas
-#ToDo: potentially switch to mysql-connector: https://dev.mysql.com/doc/connector-python/en/
-import pymysql
+import mysql.connector
 from sqlalchemy import create_engine
 # import dateutil.parser
 # from dateutil.rrule import rrule, MONTHLY
@@ -129,6 +128,7 @@ def API_Download_Not_Empty():
 
 
 #Subsection: Database Interactions
+'''
 def Execute_SQL_Statement(SQLStatement, DB):
     """Executes a SQL statement using a PyMySQL connection object.
     
@@ -153,6 +153,7 @@ def Execute_SQL_Statement(SQLStatement, DB):
     Cursor.execute(SQLStatement)
     Connection.commit()
     Connection.close()
+'''
 
 
 #Section: Establish Prerequisites for Script Execution
@@ -175,7 +176,7 @@ Database = 'Collections_Assessment_Warehouse_0.1'
 #ToDo: Investigate if this can be parsed from the first line of the SQL file referenced by the MySQL Dockerfile
 
 Engine = create_engine(
-    'mysql+pymysql://' +
+    'mysql+mysqlconnector://' +
     Database_Credentials.Username + ':' +
     Database_Credentials.Password + '@' +
     Database_Credentials.Host + ':' + str(Database_Credentials.Post) + '/' +

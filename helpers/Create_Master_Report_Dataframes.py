@@ -604,7 +604,10 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                         if len(Parent_Proprietary_ID) > Parent_Proprietary_ID_Length:
                             Update_Max_Parent_Proprietary_ID_Length = True
                             Parent_Proprietary_ID_Length = len(Parent_Proprietary_ID)
-        YOP = Item['YOP']
+        try:
+            YOP = Item['YOP']
+        except KeyError:
+            YOP = None
         Access_Type = Item['Access_Type']
         Access_Method = Item['Access_Method']
         for Time_Period in Item['Performance']:

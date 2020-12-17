@@ -423,8 +423,12 @@ for SUSHI_Call_Data in SUSHI_Data:
                     if_exists='append',
                     index=False
                 )
-            logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database")
-
+        
+        Check_Loading = pandas.read_sql(
+            sql='''SELECT * FROM R5_Usage;''',
+            con=Engine
+        )
+        logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database:\n{Check_Loading.tail()}")
 
 #Section: Output Platforms_Not_Collected
 Platforms_Not_Collected_Location = str(Path('.', 'data', 'Platforms_Not_Collected.csv'))

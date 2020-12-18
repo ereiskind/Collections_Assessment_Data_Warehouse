@@ -47,4 +47,5 @@ Collections_Assessment_Data_Warehouse/
 ┣ .gitignore
 ┣ README.md
 ┣ app.py
-┗ SQL_Query_to_CSV.py
+┣ SQL_Query_to_CSV.py
+┗ SUSHI_R5_Interfaces_and_Credentials.py

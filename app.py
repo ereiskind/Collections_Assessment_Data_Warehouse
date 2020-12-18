@@ -345,7 +345,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             for Month_Present in Usage_in_DB:
                 Usage_in_DB_Months.append(Month_Present.strftime('%Y-%m'))
             Usage_in_DB_Months = ", ".join(Usage_in_DB_Months)
-            Load_Usage_Data = pyinputplus.inputBool(f"The {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} for the month(s) of {Usage_in_DB_Months} are already in the database; should the loading of the usage just collected, which also inclodes those dates, be skipped? Type \"True\" for yes or \"False\" for no to answer. ")
+            Load_Usage_Data = pyinputplus.inputBool(f"The {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} for the month(s) of {Usage_in_DB_Months} are already in the database; should the loading of the usage just collected, which also includes those dates, be skipped? Type \"True\" for yes or \"False\" for no to answer. ")
             if Load_Usage_Data:
                 Duplicated_Usage_Data_Problem = dict(
                     Interface = SUSHI_Call_Data['JSON_Name'],

@@ -485,6 +485,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             )
             logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database:\n{Check_Loading.tail()}")
         except Exception as Error_Message:
+            #Alert: (mysql.connector.errors.OperationalError) 2055: Lost connection to MySQL server at 'database:3306', system error: 32 Broken pipe
+            #ToDo: Above error occurred for some larger reports
             Master_Report_Loading_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
                 Type = Master_Report_Type,

@@ -366,7 +366,6 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
                     "Report_Creation_Date": Report_Creation_Date,
                     "Resource_Name": Resource_Name,
                     "Publisher": Publisher,
-                    "Publisher_ID": Publisher_ID,
                     "Platform": Platform,
                     "Data_Type": Data_Type,
                     "Access_Method": Access_Method,
@@ -375,6 +374,12 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
                     "R5_Count": R5_Count,
                     "Proprietary_ID": Proprietary_ID,
                 }
+
+                try:
+                    Record["Publisher_ID"] = Publisher_ID
+                except UnboundLocalError: # There wasn't a Publisher_ID
+                    Record["Publisher_ID"] = None
+                
                 Dataframe_Records.append(Record)
     Dataframe = pandas.DataFrame(Dataframe_Records)
 
@@ -517,7 +522,6 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                     "Report_Creation_Date": Report_Creation_Date,
                     "Resource_Name": Resource_Name,
                     "Publisher": Publisher,
-                    "Publisher_ID": Publisher_ID,
                     "Platform": Platform,
                     "Data_Type": Data_Type,
                     "Section_Type": Section_Type,
@@ -533,6 +537,11 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                     Record["Proprietary_ID"] = Proprietary_ID
                 except UnboundLocalError: # There wasn't a Proprietary_ID
                     Record["Proprietary_ID"] = None
+                
+                try:
+                    Record["Publisher_ID"] = Publisher_ID
+                except UnboundLocalError: # There wasn't a Publisher_ID
+                    Record["Publisher_ID"] = None
 
                 try:
                     Record["DOI"] = DOI
@@ -747,7 +756,6 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                     "Report_Creation_Date": Report_Creation_Date,
                     "Resource_Name": Resource_Name,
                     "Publisher": Publisher,
-                    "Publisher_ID": Publisher_ID,
                     "Platform": Platform,
                     "Data_Type": Data_Type,
                     "Parent_Data_Type": Parent_Data_Type,
@@ -763,6 +771,11 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                     Record["Proprietary_ID"] = Proprietary_ID
                 except UnboundLocalError: # There wasn't a Proprietary_ID
                     Record["Proprietary_ID"] = None
+                
+                try:
+                    Record["Publisher_ID"] = Publisher_ID
+                except UnboundLocalError: # There wasn't a Publisher_ID
+                    Record["Publisher_ID"] = None
 
                 try:
                     Record["DOI"] = DOI

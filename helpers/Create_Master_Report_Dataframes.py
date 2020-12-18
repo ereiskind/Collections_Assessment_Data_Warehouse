@@ -226,19 +226,27 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
 
     Report = Master_Report_JSON['Report_Header']['Report_ID']
     Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
+    
     for Item in Master_Report_JSON['Report_Items']:
-        Platform = Item['Platform']
-        if len(Platform) > Platform_Length:
-            Update_Max_Platform_Length = True
-            Platform_Length = len(Platform)
+        
+        try:
+            Platform = Item['Platform']
+            if len(Platform) > Platform_Length:
+                Update_Max_Platform_Length = True
+                Platform_Length = len(Platform)
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Platform = None
+        
         try: # This handles situations where data types aren't included
             Data_Type = Item['Data_Type']
         except KeyError:
             Data_Type = None
+        
         try: # This handles situations where access methods aren't included
             Access_Method = Item['Access_Method']
         except KeyError:
             Access_Method = None
+        
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']
             for Statstic in Time_Period['Instance']:
@@ -287,33 +295,50 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
 
     Report = Master_Report_JSON['Report_Header']['Report_ID']
     Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
+    
     for Item in Master_Report_JSON['Report_Items']:
-        Resource_Name = Item['Database']
-        if len(Resource_Name) > Resource_Name_Length:
-            Update_Max_Resource_Name_Length = True
-            Resource_Name_Length = len(Resource_Name)
-        Publisher = Item['Publisher']
-        if len(Publisher) > Publisher_Length:
-            Update_Max_Publisher_Length = True
-            Publisher_Length = len(Publisher)
-        Platform = Item['Platform']
-        if len(Platform) > Platform_Length:
-            Update_Max_Platform_Length = True
-            Platform_Length = len(Platform)
+        
+        try:
+            Resource_Name = Item['Database']
+            if len(Resource_Name) > Resource_Name_Length:
+                Update_Max_Resource_Name_Length = True
+                Resource_Name_Length = len(Resource_Name)
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Resource_Name = None
+        
+        try:
+            Publisher = Item['Publisher']
+            if len(Publisher) > Publisher_Length:
+                Update_Max_Publisher_Length = True
+                Publisher_Length = len(Publisher)
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Publisher = None
+        
+        try:
+            Platform = Item['Platform']
+            if len(Platform) > Platform_Length:
+                Update_Max_Platform_Length = True
+                Platform_Length = len(Platform)
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Platform = None
+        
         try: # This handles situations where data types aren't included
             Data_Type = Item['Data_Type']
         except KeyError:
             Data_Type = None
+        
         try:  # This handles situations where access methods aren't included
             Access_Method = Item['Access_Method']
         except KeyError:
             Access_Method - None
+        
         try: # This handles situations where proprietary IDs aren't included
             for ID in Item['Item_ID']:
                 if ID['Type'] == "Proprietary":
                     Proprietary_ID = ID['Value']
         except KeyError:
             Proprietary_ID = None
+        
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']
             for Statstic in Time_Period['Instance']:
@@ -379,19 +404,33 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
 
     Report = Master_Report_JSON['Report_Header']['Report_ID']
     Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
+    
     for Item in Master_Report_JSON['Report_Items']:
-        Resource_Name = Item['Title']
-        if len(Resource_Name) > Resource_Name_Length:
-            Update_Max_Resource_Name_Length = True
-            Resource_Name_Length = len(Resource_Name)
-        Publisher = Item['Publisher']
-        if len(Publisher) > Publisher_Length:
-            Update_Max_Publisher_Length = True
-            Publisher_Length = len(Publisher)
-        Platform = Item['Platform']
-        if len(Platform) > Platform_Length:
-            Update_Max_Platform_Length = True
-            Platform_Length = len(Platform)
+        
+        try:
+            Resource_Name = Item['Title']
+            if len(Resource_Name) > Resource_Name_Length:
+                Update_Max_Resource_Name_Length = True
+                Resource_Name_Length = len(Resource_Name)
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Resource_Name = None
+        
+        try:
+            Publisher = Item['Publisher']
+            if len(Publisher) > Publisher_Length:
+                Update_Max_Publisher_Length = True
+                Publisher_Length = len(Publisher)
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Publisher = None
+        
+        try:
+            Platform = Item['Platform']
+            if len(Platform) > Platform_Length:
+                Update_Max_Platform_Length = True
+                Platform_Length = len(Platform)
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Platform = None
+        
         for ID in Item['Item_ID']:
             if ID['Type'] == "Proprietary":
                 Proprietary_ID = ID['Value']
@@ -414,14 +453,20 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                 if len(URI) > URI_Length:
                     Update_Max_URI_Length = True
                     URI_Length = len(URI)
+        
         Data_Type = Item['Data_Type']
+        
         try: # This handles situations where section types aren't included
             Section_Type = Item['Section_Type']
         except KeyError:
             Section_Type = None
+        
         YOP = Item['YOP']
+        
         Access_Type = Item['Access_Type']
+        
         Access_Method = Item['Access_Method']
+        
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']
             for Statstic in Time_Period['Instance']:
@@ -533,22 +578,37 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
 
     Report = Master_Report_JSON['Report_Header']['Report_ID']
     Report_Creation_Date = Master_Report_JSON['Report_Header']['Created']
+    
     for Item in Master_Report_JSON['Report_Items']:
-        Resource_Name = Item['Item']
-        if len(Resource_Name) > Resource_Name_Length:
-            Update_Max_Resource_Name_Length = True
-            Resource_Name_Length = len(Resource_Name)
-        try: # This handles situations where publishers aren't included
+        
+        try:
+            Resource_Name = Item['Item']
+            if len(Resource_Name) > Resource_Name_Length:
+                Update_Max_Resource_Name_Length = True
+                Resource_Name_Length = len(Resource_Name)
+        except KeyError: # The key wasn't included in the JSON
+            Resource_Name = None
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Resource_Name = None
+        
+        try:
             Publisher = Item['Publisher']
             if len(Publisher) > Publisher_Length:
                 Update_Max_Publisher_Length = True
                 Publisher_Length = len(Publisher)
-        except KeyError:
+        except KeyError: # the key wasn't included in the JSON
             Publisher = None
-        Platform = Item['Platform']
-        if len(Platform) > Platform_Length:
-            Update_Max_Platform_Length = True
-            Platform_Length = len(Platform)
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Publisher = None
+        
+        try:
+            Platform = Item['Platform']
+            if len(Platform) > Platform_Length:
+                Update_Max_Platform_Length = True
+                Platform_Length = len(Platform)
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Platform = None
+        
         try: # This handles situations where no item IDs are included
             for ID in Item['Item_ID']:
                 if ID['Type'] == "Proprietary":
@@ -574,7 +634,9 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                         URI_Length = len(URI)
         except KeyError:
             pass # The "try-except UnboundLocalError" blocks below will handle all of the variables from above
+        
         Data_Type = Item['Data_Type']
+        
         try:
             Parent_Data_Type = Item['Item_Parent']['Data_Type']
             for Parent_ID in Item['Item_Parent']['Item_ID']:
@@ -604,12 +666,16 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                         if len(Parent_Proprietary_ID) > Parent_Proprietary_ID_Length:
                             Update_Max_Parent_Proprietary_ID_Length = True
                             Parent_Proprietary_ID_Length = len(Parent_Proprietary_ID)
+        
         try:
             YOP = Item['YOP']
         except KeyError:
             YOP = None
+        
         Access_Type = Item['Access_Type']
+        
         Access_Method = Item['Access_Method']
+        
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']
             for Statstic in Time_Period['Instance']:

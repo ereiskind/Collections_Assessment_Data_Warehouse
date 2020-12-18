@@ -56,4 +56,12 @@ with open(str(Path('.', 'data', 'SUSHI_R5_Credentials.json'))) as JSON_File:
             
             Data.append(Record)
 R5_SUSHI_Credentials = pandas.DataFrame(Data)
-print(R5_SUSHI_Credentials.head())
+
+
+#Section: Join Dataframes
+R5_Interfaces = R5_SUSHI_Interfaces.set_index('Interface_ID').join(R5_SUSHI_Credentials.set_index('Interface_ID'))
+File = str(Path('.', 'data', 'SQL_Output', 'SUSHI_R5_Interfaces_with_Credentials.csv'))
+R5_Interfaces.to_csv(
+    path_or_buf=File,
+    index=False
+)

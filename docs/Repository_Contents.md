@@ -16,7 +16,7 @@ Collections_Assessment_Data_Warehouse/
 ┃ ┃ ┣ *Status_Check_Alert_Sample.json* (COUNTER response to /status GET request with an alert value)
 ┃ ┃ ┣ *Status_Check_Error_Sample.json* (COUNTER response to /status GET request containing Exception)
 ┃ ┃ ┗ *Status_Check_Sample.json* (COUNTER response to /status GET request)
-┃ ┣ API_Download/
+┃ ┣ SQL_Output/
 ┃ ┣ Create_Insert_Statements_for_Non-SUSHI_Data.py
 ┃ ┣ Create_Table_from_SUSHI_Credentials_JSON.py
 ┃ ┣ Data_Warehouse_DDL_Statements.sql
@@ -47,4 +47,4 @@ Collections_Assessment_Data_Warehouse/
 ┣ .gitignore
 ┣ README.md
 ┣ app.py
-┗ test.py
+┗ SQL_Query_to_CSV.py

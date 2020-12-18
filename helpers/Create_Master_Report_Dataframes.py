@@ -345,7 +345,7 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
         try:  # This handles situations where access methods aren't included
             Access_Method = Item['Access_Method']
         except KeyError:
-            Access_Method - None
+            Access_Method = None
         
         try: # This handles situations where proprietary IDs aren't included
             for ID in Item['Item_ID']:

@@ -15,7 +15,7 @@ import pyinputplus
 import pandas
 import mysql.connector
 from sqlalchemy import create_engine
-import dateutil.parser
+from dateutil import parser
 from dateutil.rrule import rrule, MONTHLY
 import data.Database_Credentials as Database_Credentials
 from helpers.SUSHI_R5_API_Calls import Single_Element_API_Call
@@ -321,9 +321,28 @@ for SUSHI_Call_Data in SUSHI_Data:
             dtstart = parser.isoparse(Credentials["begin_date"]),
             until = parser.isoparse(Credentials["end_date"])
         )) # rrule generates a object that can be unpacked into a list of datetime objects representing dates and/or times occurring on a recurring schedule
+        
+        Usage_in_DB = []
         for Month in Months_in_Range:
-            #ToDo: Execute query f"""SELECT COUNT(*) FROM R5_Usage WHERE Interface = {SUSHI_Call_Data['JSON_Name']} AND R5_Month = {Month} AND Report={Master_Report_Type};"""
-            #ToDo: If the result of the above is >0, add Month to list Usage_in_DB
+            Previous_Load_Check = pandas.read_sql(
+                sql=f'''
+                    SELECT COUNT(*) AS 'Value'
+                    FROM R5_Usage
+                    WHERE Interface = {SUSHI_Call_Data['JSON_Name']}
+                    AND R5_Month = '{Month}'
+                    AND Report = '{Master_Report_Type}';
+                ''', #ToDo: Determine if "Month" needs type juggling and/or to be explicitly identified as the first of the month
+                con=Engine
+            )
+            Previous_Load_Check = Previous_Load_Check.iloc[0]['Value'] # This changes the dataframe with a single value to a numpy.int64 data type
+            if Previous_Load_Check > 0:
+                Usage_in_DB.append(Month)
+        
+
+
+
+
+
         #ToDo: if len(Usage_in_DB): # Triggers if list isn't empty
             #ToDo (later): Increase sophistication of parsing dates, make partial runs possible
             #ToDo: Recollect_Data = pyinputplus.inputBool(Type \"True\" for yes or \"False\" for no to answer. ") saying the {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} for the month(s) of {str(Usage_in_DB)} is already in the database; should the stats be skipped? 

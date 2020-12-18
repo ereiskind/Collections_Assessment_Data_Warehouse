@@ -431,28 +431,34 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Platform = None
         
-        for ID in Item['Item_ID']:
-            if ID['Type'] == "Proprietary":
-                Proprietary_ID = ID['Value']
-                if len(Proprietary_ID) > Proprietary_ID_Length:
-                    Update_Max_Proprietary_ID_Length = True
-                    Proprietary_ID_Length = len(Proprietary_ID)
-            if ID['Type'] == "DOI":
-                DOI = ID['Value']
-                if len(DOI) > DOI_Length:
-                    Update_Max_DOI_Length = True
-                    DOI_Length = len(DOI)
-            if ID['Type'] == "ISBN":
-                ISBN = ID['Value']
-            if ID['Type'] == "Print_ISSN":
-                Print_ISSN = ID['Value']
-            if ID['Type'] == "Online_ISSN":
-                Online_ISSN = ID['Value']
-            if ID['Type'] == "URI":
-                URI = ID['Value']
-                if len(URI) > URI_Length:
-                    Update_Max_URI_Length = True
-                    URI_Length = len(URI)
+        try:
+            for ID in Item['Item_ID']:
+                if ID['Type'] == "Proprietary":
+                    Proprietary_ID = ID['Value']
+                    if len(Proprietary_ID) > Proprietary_ID_Length:
+                        Update_Max_Proprietary_ID_Length = True
+                        Proprietary_ID_Length = len(Proprietary_ID)
+                if ID['Type'] == "DOI":
+                    DOI = ID['Value']
+                    if len(DOI) > DOI_Length:
+                        Update_Max_DOI_Length = True
+                        DOI_Length = len(DOI)
+                if ID['Type'] == "ISBN":
+                    ISBN = ID['Value']
+                if ID['Type'] == "Print_ISSN":
+                    Print_ISSN = ID['Value']
+                if ID['Type'] == "Online_ISSN":
+                    Online_ISSN = ID['Value']
+                if ID['Type'] == "URI":
+                    URI = ID['Value']
+                    if len(URI) > URI_Length:
+                        Update_Max_URI_Length = True
+                        URI_Length = len(URI)
+        except KeyError: # The key wasn't included in the JSON
+            pass
+        except TypeError: # The JSON contained a null value, so trying to iterate through it put up an error
+            pass
+        # "pass" is used because the "try-except UnboundLocalError" blocks below will handle all of the variables from above
         
         Data_Type = Item['Data_Type']
         
@@ -609,7 +615,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Platform = None
         
-        try: # This handles situations where no item IDs are included
+        try:
             for ID in Item['Item_ID']:
                 if ID['Type'] == "Proprietary":
                     Proprietary_ID = ID['Value']
@@ -632,9 +638,12 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                     if len(URI) > URI_Length:
                         Update_Max_URI_Length = True
                         URI_Length = len(URI)
-        except KeyError:
-            pass # The "try-except UnboundLocalError" blocks below will handle all of the variables from above
-        
+        except KeyError: # The key wasn't included in the JSON
+            pass
+        except TypeError: # The JSON contained a null value, so trying to iterate through it put up an error
+            pass
+        # "pass" is used because the "try-except UnboundLocalError" blocks below will handle all of the variables from above
+
         Data_Type = Item['Data_Type']
         
         try:
@@ -653,6 +662,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         except KeyError: # This handles situations where item parent info isn't included
             Parent_Data_Type = None # The "try-except UnboundLocalError" blocks below will handle the parent ID variables
         except TypeError: # This handles situations where the value for the key "Item_Parent" is a list containing a single dictionary
+            #ToDo: This may need further error handling, but the exact nature of it is unknown at this time
             for Parent in Item['Item_Parent']:
                 Parent_Data_Type = Parent['Data_Type']
                 for Parent_ID in Parent['Item_ID']:

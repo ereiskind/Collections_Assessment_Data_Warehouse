@@ -338,23 +338,18 @@ for SUSHI_Call_Data in SUSHI_Data:
             if Previous_Load_Check > 0:
                 Usage_in_DB.append(Month)
         
-
-
-
-
-
-        #ToDo: if len(Usage_in_DB): # Triggers if list isn't empty
-            #ToDo (later): Increase sophistication of parsing dates, make partial runs possible
-            #ToDo: Recollect_Data = pyinputplus.inputBool(Type \"True\" for yes or \"False\" for no to answer. ") saying the {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} for the month(s) of {str(Usage_in_DB)} is already in the database; should the stats be skipped? 
-            #ToDo: if Recollect_Data:
-                #ToDo: Duplicated_Usage_Data_Problem = dict(
-                #     Interface = SUSHI_Call_Data['JSON_Name'],
-                #     Type = Master_Report_Type,
-                #     Details = f"Data for this report for the months {str(Usage_in_DB)} was already in the database",
-                # )
-                #ToDo: Platforms_Not_Collected.append(Duplicated_Usage_Data_Problem)
-                #ToDo: logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Data for this report for the months {str(Usage_in_DB)} was already in the database")
-                #ToDo: continue
+        if len(Usage_in_DB): # Triggers if list of month with usage already in database isn't empty
+            #ToDo: Increase sophistication of parsing dates to make running partial date ranges possible
+            Load_Usage_Data = pyinputplus.inputBool(f"The {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} for the month(s) of {str(Usage_in_DB)} are already in the database; should the loading of the usage just collected, which also inclodes those dates, be skipped? Type \"True\" for yes or \"False\" for no to answer. ")
+            if Load_Usage_Data:
+                Duplicated_Usage_Data_Problem = dict(
+                    Interface = SUSHI_Call_Data['JSON_Name'],
+                    Type = Master_Report_Type,
+                    Details = f"Data for this report for the months {str(Usage_in_DB)} was already in the database",
+                )
+                Platforms_Not_Collected.append(Duplicated_Usage_Data_Problem)
+                logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Data for this report for the months {str(Usage_in_DB)} was already in the database")
+                continue
 
         #Subsection: Add Parameters Specific to Type of Master Report
         # If the parameters for showing parent details in Item Master Report are in other master reports, an error message saying the parameter's been ignored is included in the report header; the below takes them out of the query

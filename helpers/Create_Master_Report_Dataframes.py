@@ -319,8 +319,8 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
         
         try:
             for Publisher_Data in Item['Publisher_ID']:
-                if ID['Type'] == "Proprietary":
-                    Proprietary_ID = ID['Value']
+                if Publisher_Data['Type'] == "Proprietary":
+                    Proprietary_ID = Publisher_Data['Value']
                     if len(Publisher_ID) > Publisher_ID_Length:
                         Update_Max_Publisher_ID_Length = True
                         Publisher_ID_Length = len(Publisher_ID)
@@ -445,8 +445,8 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
         
         try:
             for Publisher_Data in Item['Publisher_ID']:
-                if ID['Type'] == "Proprietary":
-                    Proprietary_ID = ID['Value']
+                if Publisher_Data['Type'] == "Proprietary":
+                    Proprietary_ID = Publisher_Data['Value']
                     if len(Publisher_ID) > Publisher_ID_Length:
                         Update_Max_Publisher_ID_Length = True
                         Publisher_ID_Length = len(Publisher_ID)
@@ -646,8 +646,8 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         
         try:
             for Publisher_Data in Item['Publisher_ID']:
-                if ID['Type'] == "Proprietary":
-                    Proprietary_ID = ID['Value']
+                if Publisher_Data['Type'] == "Proprietary":
+                    Proprietary_ID = Publisher_Data['Value']
                     if len(Publisher_ID) > Publisher_ID_Length:
                         Update_Max_Publisher_ID_Length = True
                         Publisher_ID_Length = len(Publisher_ID)

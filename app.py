@@ -321,6 +321,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             dtstart = parser.isoparse(Credentials["begin_date"]),
             until = parser.isoparse(Credentials["end_date"])
         )) # rrule generates a object that can be unpacked into a list of datetime objects representing dates and/or times occurring on a recurring schedule
+        #Note: The list doesn't seem to overwrite itself at each iteration, which is fine as the values in it will be the same every time the Master_Reports loop is run
         
         Usage_in_DB = []
         for Month in Months_in_Range:

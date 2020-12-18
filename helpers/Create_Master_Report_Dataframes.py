@@ -95,14 +95,16 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['Publisher'] = Dataframe['Publisher'].astype('string')
     
     try:
+        Dataframe['Publisher_ID'] = Dataframe['Publisher_ID'].astype('string')
+    except KeyError:
+        Dataframe['Publisher_ID'] = None
+        Dataframe['Publisher_ID'] = Dataframe['Publisher_ID'].astype('string')
+    
+    try:
         Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
     except KeyError:
         Dataframe['Access_Method'] = None
         Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
-
-    #ToDo: If adding Publisher_ID as data saved, change to add null value only if column not already present
-    Dataframe['Publisher_ID'] = None
-    Dataframe['Publisher_ID'] = Dataframe['Publisher_ID'].astype('string')
 
     try:
         Dataframe['DOI'] = Dataframe['DOI'].astype('string')
@@ -287,9 +289,11 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
     global Platform_Length
     global Resource_Name_Length
     global Publisher_Length
+    global Publisher_ID_Length
     Update_Max_Platform_Length = False
     Update_Max_Resource_Name_Length = False
     Update_Max_Publisher_Length = False
+    Update_Max_Publisher_ID_Length = False
 
     Dataframe_Records = []
 
@@ -313,6 +317,18 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
                 Publisher_Length = len(Publisher)
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Publisher = None
+        
+        try:
+            for Publisher_Data in Item['Publisher_ID']:
+                if ID['Type'] == "Proprietary":
+                    Proprietary_ID = ID['Value']
+                    if len(Publisher_ID) > Publisher_ID_Length:
+                        Update_Max_Publisher_ID_Length = True
+                        Publisher_ID_Length = len(Publisher_ID)
+        except KeyError: # The key wasn't included in the JSON
+            Publisher_ID = None
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Publisher_ID = None
         
         try:
             Platform = Item['Platform']
@@ -351,7 +367,7 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
                     "Report_Creation_Date": Report_Creation_Date,
                     "Resource_Name": Resource_Name,
                     "Publisher": Publisher,
-                    #ToDo: Should "Publisher_ID (len=50)" be kept in addition to or in favor of "Publisher"?
+                    "Publisher_ID": Publisher_ID,
                     "Platform": Platform,
                     "Data_Type": Data_Type,
                     "Access_Method": Access_Method,
@@ -372,6 +388,9 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
     if Update_Max_Publisher_Length:
         messagebox.showwarning(title="Max Field Length Exceeded", message=f"The database report for interface {Interface} has values for the field \"Publisher\" exceeding the field's max character length. Update the field to greater than {Publisher_Length} characters.")
         return f"Unable to create DR dataframe|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_Publisher_ID_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The database report for interface {Interface} has values for the field \"Publisher_ID\" exceeding the field's max character length. Update the field to greater than {Publisher_ID_Length} characters.")
+        return f"Unable to create DR dataframe|Values in \"Publisher_ID\" are {Publisher_ID_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe
 
@@ -390,12 +409,14 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
     global Platform_Length
     global Resource_Name_Length
     global Publisher_Length
+    global Publisher_ID_Length
     global DOI_Length
     global Proprietary_ID_Length
     global URI_Length
     Update_Max_Platform_Length = False
     Update_Max_Resource_Name_Length = False
     Update_Max_Publisher_Length = False
+    Update_Max_Publisher_ID_Length = False
     Update_Max_DOI_Length = False
     Update_Max_Proprietary_ID_Length = False
     Update_Max_URI_Length = False
@@ -422,6 +443,18 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                 Publisher_Length = len(Publisher)
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Publisher = None
+        
+        try:
+            for Publisher_Data in Item['Publisher_ID']:
+                if ID['Type'] == "Proprietary":
+                    Proprietary_ID = ID['Value']
+                    if len(Publisher_ID) > Publisher_ID_Length:
+                        Update_Max_Publisher_ID_Length = True
+                        Publisher_ID_Length = len(Publisher_ID)
+        except KeyError: # The key wasn't included in the JSON
+            Publisher_ID = None
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Publisher_ID = None
         
         try:
             Platform = Item['Platform']
@@ -485,7 +518,7 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                     "Report_Creation_Date": Report_Creation_Date,
                     "Resource_Name": Resource_Name,
                     "Publisher": Publisher,
-                    #ToDo: Should "Publisher_ID (len=50)" be kept in addition to or in favor of "Publisher"?
+                    "Publisher_ID": Publisher_ID,
                     "Platform": Platform,
                     "Data_Type": Data_Type,
                     "Section_Type": Section_Type,
@@ -539,6 +572,9 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
     if Update_Max_Publisher_Length:
         messagebox.showwarning(title="Max Field Length Exceeded", message=f"The title report for interface {Interface} has values for the field \"Publisher\" exceeding the field's max character length. Update the field to greater than {Publisher_Length} characters.")
         return f"Unable to create TR dataframe|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_Publisher_ID_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The database report for interface {Interface} has values for the field \"Publisher_ID\" exceeding the field's max character length. Update the field to greater than {Publisher_ID_Length} characters.")
+        return f"Unable to create DR dataframe|Values in \"Publisher_ID\" are {Publisher_ID_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_DOI_Length:
         messagebox.showwarning(title="Max Field Length Exceeded", message=f"The title report for interface {Interface} has values for the field \"DOI\" exceeding the field's max character length. Update the field to greater than {DOI_Length} characters.")
         return f"Unable to create TR dataframe|Values in \"DOI\" are {DOI_Length} characters long and would have been truncated on import to MySQL"
@@ -566,6 +602,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
     global Platform_Length
     global Resource_Name_Length
     global Publisher_Length
+    global Publisher_ID_Length
     global DOI_Length
     global Proprietary_ID_Length
     global URI_Length
@@ -574,6 +611,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
     Update_Max_Platform_Length = False
     Update_Max_Resource_Name_Length = False
     Update_Max_Publisher_Length = False
+    Update_Max_Publisher_ID_Length = False
     Update_Max_DOI_Length = False
     Update_Max_Proprietary_ID_Length = False
     Update_Max_URI_Length = False
@@ -606,6 +644,18 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
             Publisher = None
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Publisher = None
+        
+        try:
+            for Publisher_Data in Item['Publisher_ID']:
+                if ID['Type'] == "Proprietary":
+                    Proprietary_ID = ID['Value']
+                    if len(Publisher_ID) > Publisher_ID_Length:
+                        Update_Max_Publisher_ID_Length = True
+                        Publisher_ID_Length = len(Publisher_ID)
+        except KeyError: # The key wasn't included in the JSON
+            Publisher_ID = None
+        except TypeError: # The JSON contained a null value, so trying to find the length put up an error
+            Publisher_ID = None
         
         try:
             Platform = Item['Platform']
@@ -698,7 +748,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                     "Report_Creation_Date": Report_Creation_Date,
                     "Resource_Name": Resource_Name,
                     "Publisher": Publisher,
-                    #ToDo: Should "Publisher_ID (len=50)" be kept in addition to or in favor of "Publisher"?
+                    "Publisher_ID": Publisher_ID,
                     "Platform": Platform,
                     "Data_Type": Data_Type,
                     "Parent_Data_Type": Parent_Data_Type,
@@ -762,6 +812,9 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
     if Update_Max_Publisher_Length:
         messagebox.showwarning(title="Max Field Length Exceeded", message=f"The item report for interface {Interface} has values for the field \"Publisher\" exceeding the field's max character length. Update the field to greater than {Publisher_Length} characters.")
         return f"Unable to create IR dataframe|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
+    if Update_Max_Publisher_ID_Length:
+        messagebox.showwarning(title="Max Field Length Exceeded", message=f"The database report for interface {Interface} has values for the field \"Publisher_ID\" exceeding the field's max character length. Update the field to greater than {Publisher_ID_Length} characters.")
+        return f"Unable to create DR dataframe|Values in \"Publisher_ID\" are {Publisher_ID_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_DOI_Length:
         messagebox.showwarning(title="Max Field Length Exceeded", message=f"The item report for interface {Interface} has values for the field \"DOI\" exceeding the field's max character length. Update the field to greater than {DOI_Length} characters.")
         return f"Unable to create IR dataframe|Values in \"DOI\" are {DOI_Length} characters long and would have been truncated on import to MySQL"
@@ -785,6 +838,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
 #ToDo: Is there a way to read metadata from MySQL into Python?
 Resource_Name_Length = 1500
 Publisher_Length = 100
+Publisher_ID_Length = 50
 Platform_Length = 75
 DOI_Length = 50
 Proprietary_ID_Length = 50

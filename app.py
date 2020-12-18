@@ -8,6 +8,7 @@ import csv
 import time
 import os
 import sys
+from datetime import date
 from datetime import datetime
 import requests
 from requests import HTTPError, Timeout
@@ -208,6 +209,30 @@ with open(SUSHI_R5_Credentials_Path) as JSON_File:
             logging.info(f"Credentials for {SUSHI_Data[-1]['JSON_Name']} added to SUSHI_Data")
 
 
+#Subsection: Enter Date Range for Stats
+Begin_Date = pyinputplus.inputDate(
+    "Please enter the year and month for the first month of stats collection. The month must be two digits and the year must be four digits. ",
+    formats=[
+        '%m-%Y', # mm-yyyy
+        '%m/%Y', # mm/yyyy
+        '%Y-%m', # yyyy-mm
+        '%Y/%m', # yyyy/mm
+    ]
+)
+
+End_Date = date.min # This ensures that the while loop letting the user set End_Date runs at least once
+while End_Date < Begin_Date:
+    End_Date = pyinputplus.inputDate(
+        f"Please enter the year and month for the last month of stats collection; this must be after {Begin_Date.strftime('%Y-%m')}. The month must be two digits and the year must be four digits. ",
+        formats=[
+            '%m-%Y', # mm-yyyy
+            '%m/%Y', # mm/yyyy
+            '%Y-%m', # yyyy-mm
+            '%Y/%m', # yyyy/mm
+        ]
+    )
+
+
 #Section: Make API Calls for Status and Reports
 for SUSHI_Call_Data in SUSHI_Data:
     # These list comprehensions create another dictionary with just the content needed for the URL's query string--two are used because combining the Boolean expressions wasn't working
@@ -308,8 +333,8 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Section: Make API Calls for Individual Master Reports
     #Subsection: Add Date Parameters
-    Credentials["begin_date"] = "2020-02"
-    Credentials["end_date"] = "2020-03"
+    Credentials["begin_date"] = Begin_Date.strftime('%Y-%m')
+    Credentials["end_date"] = End_Date.strftime('%Y-%m')
 
     #Subsection: Add Parameters Specific to Type of Master Report
     for Master_Report in Available_Master_Reports:

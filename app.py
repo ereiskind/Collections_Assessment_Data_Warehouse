@@ -510,17 +510,15 @@ for SUSHI_Call_Data in SUSHI_Data:
 Error_Log_Location = str(Path('.', 'data', 'Error_Log.csv'))
 FileIO = open(Error_Log_Location, 'w', newline='')
 CSV_Writer = csv.DictWriter(FileIO, [
-    #ToDo: Decide if there are better column names to use and/or if more columns are needed
-    "Interface", # The interface where there was a problem
-    "Type", # The type of error
-    #ToDo: Develop fixed vocabulary for "Type"
-    "Details", # the details of the error
-    #ToDo: Determine what should and shouldn't go in details, and make other columns if necessary
+    "Interface",
+    "Report",
+    "Error",
+    "Description"
 ])
 CSV_Writer.writeheader()
 
-for Platform in Error_Log:
-    CSV_Writer.writerow(Platform)
+for Error in Error_Log:
+    CSV_Writer.writerow(Error)
 
 FileIO.close()
 #ToDo: Figure out how to open CSV so it stays open when program exits--os.startfile closes file at program exit

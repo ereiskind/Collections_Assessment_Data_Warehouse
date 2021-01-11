@@ -464,7 +464,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Master_Report_Items_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
                 Report = Master_Report_Type,
-                Error = "No data available"
+                Error = "No data available",
                 Description = "The report contained no report items",
             )
             Error_Log.append(Master_Report_Items_Problem)

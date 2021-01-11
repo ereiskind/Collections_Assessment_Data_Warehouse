@@ -115,22 +115,22 @@ def Single_Element_API_Call(Path_Addition, URL, Parameters):
         API_Response.raise_for_status()
         #Alert: MathSciNet doesn't have a status report, but does have the other reports with the needed data--how should this be handled so that it can pass through?
     except Timeout as error: # If the API request times out
-        return f"{URL}|{Path_Addition}|{format(error)}"
+        return f"{Path_Addition}|HTTP error|Timed out twice: {format(error)}"
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>":
             # This response could be because of an actual issue, or because the API prompts a JSON file download rather than making the JSON data the page content; the function below handles the latter case
             API_Response = Retrieve_Downloaded_JSON_File(API_Call_URL + "?" + Parameters)
             if API_Response == []:
-                return f"{URL}|{Path_Addition}|{format(error)}"
+                return f"{Path_Addition}|HTTP error|{format(error)}"
         else:
-            return f"{URL}|{Path_Addition}|{format(error)}"
+            return f"{Path_Addition}|HTTP error|{format(error)}"
     except: # If there's some other problem with the API request
-        return f"{URL}|{Path_Addition}|Some other error"
+        return f"{Path_Addition}|HTTP error|Error was with the API request, but it didn't return a requests HTTP error"
 
     if JSON_to_Python_Data_Types(API_Response):
         return JSON_to_Python_Data_Types(API_Response)
     else:
-        return f"{URL}|{Path_Addition}|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"
+        return f"{Path_Addition}|Encoding error|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"
 
 
 def Master_Report_API_Call(Report_ID, URL, Parameters):
@@ -156,23 +156,23 @@ def Master_Report_API_Call(Report_ID, URL, Parameters):
             API_Response = requests.get(API_Call_URL, params=Parameters, timeout=120, headers=Chrome_User_Agent)
             API_Response.raise_for_status()
         except Timeout as error:
-            return f"{Report_ID}|Timed out twice: {format(error)}"
+            return f"{Report_ID}|HTTP error|Timed out twice: {format(error)}"
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>":
             # This response could be because of an actual issue, or because the API prompts a JSON file download rather than making the JSON data the page content; the function below handles the latter case
             API_Response = Retrieve_Downloaded_JSON_File(API_Call_URL + "?" + Parameters)
             if API_Response == []:
-                return f"{Report_ID}|HTTP error: {format(error)}"
+                return f"{Report_ID}|HTTP error|{format(error)}"
         else:
-            return f"{Report_ID}|HTTP error: {format(error)}"
+            return f"{Report_ID}|HTTP error|{format(error)}"
     except: # If there's some other problem with the API request
-        return f"{Report_ID}|Some other error"
+        return f"{Report_ID}|HTTP error|Error was with the API request, but it didn't return a requests HTTP error"
 
     if API_Response.text == "":
         #ToDo: Confirm this works even with downloaded JSON
-        return f"{Report_ID}|No data in response"
+        return f"{Report_ID}|No data available|API response was an empty string"
 
     if JSON_to_Python_Data_Types(API_Response):
         return JSON_to_Python_Data_Types(API_Response)
     else:
-        return f"{Report_ID}|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"
+        return f"{Report_ID}|Encoding error|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"

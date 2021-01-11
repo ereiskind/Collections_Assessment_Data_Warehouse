@@ -269,7 +269,7 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
 
     if Update_Max_Platform_Length:
         input(f"The platform report for interface {Interface} has values for the field \"Platform\" exceeding the field's max character length. Update the field to greater than {Platform_Length} characters. Press enter to continue.")
-        return f"Unable to create PR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
+        return f"PR|Unable to load into database|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe
 
@@ -385,16 +385,16 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
 
     if Update_Max_Platform_Length:
         input(f"The database report for interface {Interface} has values for the field \"Platform\" exceeding the field's max character length. Update the field to greater than {Platform_Length} characters. Press enter to continue.")
-        return f"Unable to create DR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
+        return f"DR|Unable to load into database|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Resource_Name_Length:
         input(f"The database report for interface {Interface} has values for the field \"Resource_Name\" exceeding the field's max character length. Update the field to greater than {Resource_Name_Length} characters. Press enter to continue.")
-        return f"Unable to create DR dataframe|Values in \"Resource_Name\" are {Resource_Name_Length} characters long and would have been truncated on import to MySQL"
+        return f"DR|Unable to load into database|Values in \"Resource_Name\" are {Resource_Name_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Publisher_Length:
         input(f"The database report for interface {Interface} has values for the field \"Publisher\" exceeding the field's max character length. Update the field to greater than {Publisher_Length} characters. Press enter to continue.")
-        return f"Unable to create DR dataframe|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
+        return f"DR|Unable to load into database|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Publisher_ID_Length:
         input(f"The database report for interface {Interface} has values for the field \"Publisher_ID\" exceeding the field's max character length. Update the field to greater than {Publisher_ID_Length} characters. Press enter to continue.")
-        return f"Unable to create DR dataframe|Values in \"Publisher_ID\" are {Publisher_ID_Length} characters long and would have been truncated on import to MySQL"
+        return f"DR|Unable to load into database|Values in \"Publisher_ID\" are {Publisher_ID_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe
 
@@ -573,25 +573,25 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
 
     if Update_Max_Platform_Length:
         input(f"The title report for interface {Interface} has values for the field \"Platform\" exceeding the field's max character length. Update the field to greater than {Platform_Length} characters. Press enter to continue.")
-        return f"Unable to create TR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
+        return f"TR|Unable to load into database|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Resource_Name_Length:
         input(f"The title report for interface {Interface} has values for the field \"Resource_Name\" exceeding the field's max character length. Update the field to greater than {Resource_Name_Length} characters. Press enter to continue.")
-        return f"Unable to create TR dataframe|Values in \"Resource_Name\" are {Resource_Name_Length} characters long and would have been truncated on import to MySQL"
+        return f"TR|Unable to load into database|Values in \"Resource_Name\" are {Resource_Name_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Publisher_Length:
         input(f"The title report for interface {Interface} has values for the field \"Publisher\" exceeding the field's max character length. Update the field to greater than {Publisher_Length} characters. Press enter to continue.")
-        return f"Unable to create TR dataframe|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
+        return f"TR|Unable to load into database|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Publisher_ID_Length:
         input(f"The database report for interface {Interface} has values for the field \"Publisher_ID\" exceeding the field's max character length. Update the field to greater than {Publisher_ID_Length} characters. Press enter to continue.")
-        return f"Unable to create DR dataframe|Values in \"Publisher_ID\" are {Publisher_ID_Length} characters long and would have been truncated on import to MySQL"
+        return f"TR|Unable to load into database|Values in \"Publisher_ID\" are {Publisher_ID_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_DOI_Length:
         input(f"The title report for interface {Interface} has values for the field \"DOI\" exceeding the field's max character length. Update the field to greater than {DOI_Length} characters. Press enter to continue.")
-        return f"Unable to create TR dataframe|Values in \"DOI\" are {DOI_Length} characters long and would have been truncated on import to MySQL"
+        return f"TR|Unable to load into database|Values in \"DOI\" are {DOI_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Proprietary_ID_Length:
         input(f"The title report for interface {Interface} has values for the field \"Proprietary_ID\" exceeding the field's max character length. Update the field to greater than {Proprietary_ID_Length} characters. Press enter to continue.")
-        return f"Unable to create TR dataframe|Values in \"Proprietary_ID\" are {Proprietary_ID_Length} characters long and would have been truncated on import to MySQL"
+        return f"TR|Unable to load into database|Values in \"Proprietary_ID\" are {Proprietary_ID_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_URI_Length:
         input(f"The title report for interface {Interface} has values for the field \"URI\" exceeding the field's max character length. Update the field to greater than {URI_Length} characters. Press enter to continue.")
-        return f"Unable to create TR dataframe|Values in \"URI\" are {URI_Length} characters long and would have been truncated on import to MySQL"
+        return f"TR|Unable to load into database|Values in \"URI\" are {URI_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe
 
@@ -817,31 +817,31 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
 
     if Update_Max_Platform_Length:
         input(f"The item report for interface {Interface} has values for the field \"Platform\" exceeding the field's max character length. Update the field to greater than {Platform_Length} characters. Press enter to continue.")
-        return f"Unable to create IR dataframe|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
+        return f"IR|Unable to load into database|Values in \"Platform\" are {Platform_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Resource_Name_Length:
         input(f"The item report for interface {Interface} has values for the field \"Resource_Name\" exceeding the field's max character length. Update the field to greater than {Resource_Name_Length} characters. Press enter to continue.")
-        return f"Unable to create IR dataframe|Values in \"Resource_Name\" are {Resource_Name_Length} characters long and would have been truncated on import to MySQL"
+        return f"IR|Unable to load into database|Values in \"Resource_Name\" are {Resource_Name_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Publisher_Length:
         input(f"The item report for interface {Interface} has values for the field \"Publisher\" exceeding the field's max character length. Update the field to greater than {Publisher_Length} characters. Press enter to continue.")
-        return f"Unable to create IR dataframe|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
+        return f"IR|Unable to load into database|Values in \"Publisher\" are {Publisher_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Publisher_ID_Length:
         input(f"The database report for interface {Interface} has values for the field \"Publisher_ID\" exceeding the field's max character length. Update the field to greater than {Publisher_ID_Length} characters. Press enter to continue.")
-        return f"Unable to create DR dataframe|Values in \"Publisher_ID\" are {Publisher_ID_Length} characters long and would have been truncated on import to MySQL"
+        return f"IR|Unable to load into database|Values in \"Publisher_ID\" are {Publisher_ID_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_DOI_Length:
         input(f"The item report for interface {Interface} has values for the field \"DOI\" exceeding the field's max character length. Update the field to greater than {DOI_Length} characters. Press enter to continue.")
-        return f"Unable to create IR dataframe|Values in \"DOI\" are {DOI_Length} characters long and would have been truncated on import to MySQL"
+        return f"IR|Unable to load into database|Values in \"DOI\" are {DOI_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Proprietary_ID_Length:
         input(f"The item report for interface {Interface} has values for the field \"Proprietary_ID\" exceeding the field's max character length. Update the field to greater than {Proprietary_ID_Length} characters. Press enter to continue.")
-        return f"Unable to create IR dataframe|Values in \"Proprietary_ID\" are {Proprietary_ID_Length} characters long and would have been truncated on import to MySQL"
+        return f"IR|Unable to load into database|Values in \"Proprietary_ID\" are {Proprietary_ID_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_URI_Length:
         input(f"The item report for interface {Interface} has values for the field \"URI\" exceeding the field's max character length. Update the field to greater than {URI_Length} characters. Press enter to continue.")
-        return f"Unable to create IR dataframe|Values in \"URI\" are {URI_Length} characters long and would have been truncated on import to MySQL"
+        return f"IR|Unable to load into database|Values in \"URI\" are {URI_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Parent_DOI_Length:
         input(f"The item report for interface {Interface} has values for the field \"Parent_DOI\" exceeding the field's max character length. Update the field to greater than {Parent_DOI_Length} characters. Press enter to continue.")
-        return f"Unable to create IR dataframe|Values in \"Parent_DOI\" are {Parent_DOI_Length} characters long and would have been truncated on import to MySQL"
+        return f"IR|Unable to load into database|Values in \"Parent_DOI\" are {Parent_DOI_Length} characters long and would have been truncated on import to MySQL"
     if Update_Max_Parent_Proprietary_ID_Length:
         input(f"The item report for interface {Interface} has values for the field \"Parent_Proprietary_ID\" exceeding the field's max character length. Update the field to greater than {Parent_Proprietary_ID_Length} characters. Press enter to continue.")
-        return f"Unable to create IR dataframe|Values in \"Parent_Proprietary_ID\" are {Parent_Proprietary_ID_Length} characters long and would have been truncated on import to MySQL"
+        return f"IR|Unable to load into database|Values in \"Parent_Proprietary_ID\" are {Parent_Proprietary_ID_Length} characters long and would have been truncated on import to MySQL"
 
     return Dataframe
 

@@ -511,7 +511,7 @@ for SUSHI_Call_Data in SUSHI_Data:
             Master_Report_Loading_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
                 Report = Master_Report_Type,
-                Error = "Unable to load into database"
+                Error = "Unable to load into database",
                 Description = f"Dataframe didn't load into MySQL ({Error_Message})",
             )
             Error_Log.append(Master_Report_Loading_Problem)

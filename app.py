@@ -60,11 +60,12 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
         Problem_Message = f"Canceled collection from interface with {Type}: {Message}"
         Capture_Problem = dict(
             Interface = Source,
-            Type = "status",
-            Details = Problem_Message,
+            Report = "status",
+            Error = "COUNTER error",
+            Description = Problem_Message,
         )
         Error_Log.append(Capture_Problem)
-        logging.info(f"Added to Error_Log: {Source}|status|{Problem_Message}")
+        logging.info(f"Added to Error_Log: {Source}|status|COUNTER error|{Problem_Message}")
         return True
     return False
 
@@ -109,11 +110,12 @@ def Handle_Exception_Master_Report(Source, Report, Exception_List, Load_Report_I
         Problem_Message = f"Cancelled collection because of exception(s) {'|'.join(List_of_Exceptions)}"
         Capture_Problem = dict(
             Interface = Source,
-            Type = Report,
-            Details = Problem_Message,
+            Report = Report,
+            Error = "COUNTER error",
+            Description = Problem_Message,
         )
         Error_Log.append(Capture_Problem)
-        logging.info(f"Added to Error_Log: {Source}|{Report}|{Problem_Message}")
+        logging.info(f"Added to Error_Log: {Source}|{Report}|COUNTER error|{Problem_Message}")
         return True
     return False
 
@@ -259,8 +261,9 @@ for SUSHI_Call_Data in SUSHI_Data:
     if str(type(Status_Check)) == "<class 'str'>": # Meaning the API call returned an error
         Status_Check_Problem = dict(
             Interface = SUSHI_Call_Data["JSON_Name"],
-            Type = Status_Check.split("|")[0],
-            Details = Status_Check.split("|")[1],
+            Report = Status_Check.split("|")[0],
+            Error = Status_Check.split("|")[1],
+            Description = Status_Check.split("|")[2],
         )
         Error_Log.append(Status_Check_Problem)
         logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
@@ -299,8 +302,9 @@ for SUSHI_Call_Data in SUSHI_Data:
     if str(type(Available_Reports)) == "<class 'str'>": # Meaning the API call returned an error
         Available_Reports_Problem = dict(
             Interface = SUSHI_Call_Data["JSON_Name"],
-            Type = Status_Check.split("|")[0],
-            Details = Status_Check.split("|")[1],
+            Report = Status_Check.split("|")[0],
+            Error = Status_Check.split("|")[1],
+            Description = Status_Check.split("|")[2],
         )
         Error_Log.append(Available_Reports_Problem)
         logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
@@ -318,11 +322,12 @@ for SUSHI_Call_Data in SUSHI_Data:
     if Available_Master_Reports == []:
         No_Reports_Problem = dict(
             Interface = SUSHI_Call_Data["JSON_Name"],
-            Type = "reports",
-            Details = "No master reports available",
+            Report = "reports",
+            Error = "Missing reports",
+            Description = "No master reports available",
         )
         Error_Log.append(No_Reports_Problem)
-        logging.info("Added to Error_Log: " + SUSHI_Call_Data["JSON_Name"] + "|reports|No master reports available")
+        logging.info("Added to Error_Log: " + SUSHI_Call_Data["JSON_Name"] + "|reports|No data available|No master reports available")
         continue
 
     Captured_By_Master_Reports = []
@@ -335,11 +340,12 @@ for SUSHI_Call_Data in SUSHI_Data:
             # The number of these is small, and custom reports will be included in this number, so the list will need to be reviewed manually
             Extra_Report_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
-                Type = Report,
-                Details = "Standard report based on master report not offered",
+                Report = Report,
+                Error = "Missing reports",
+                Description = "Standard report based on master report not offered",
             )
             Error_Log.append(Extra_Report_Problem) 
-        logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Report}|Standard report based on master report not offered")
+        logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Report}|Missing reports|Standard report based on master report not offered")
     
     logging.info(f"Master report list collection successful: {len(Available_Master_Reports)} reports")
 
@@ -386,11 +392,12 @@ for SUSHI_Call_Data in SUSHI_Data:
             if Load_Usage_Data:
                 Duplicated_Usage_Data_Problem = dict(
                     Interface = SUSHI_Call_Data['JSON_Name'],
-                    Type = Master_Report_Type,
-                    Details = f"Data for this report for the months {Usage_in_DB_Months} was already in the database",
+                    Report = Master_Report_Type,
+                    Error = "Data already in database",
+                    Description = f"Data for this report for the months {Usage_in_DB_Months} was already in the database",
                 )
                 Error_Log.append(Duplicated_Usage_Data_Problem)
-                logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Data for this report for the months {Usage_in_DB_Months} was already in the database")
+                logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Data already in database|Data for this report for the months {Usage_in_DB_Months} was already in the database")
                 continue
 
         #Subsection: Add Parameters Specific to Type of Master Report
@@ -422,8 +429,9 @@ for SUSHI_Call_Data in SUSHI_Data:
         if str(type(Master_Report_Response)) == "<class 'str'>": # Meaning the API call returned an error
             Master_Report_Response_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
-                Type = Master_Report_Response.split("|")[0],
-                Details = Master_Report_Response.split("|")[1],
+                Report = Master_Report_Response.split("|")[0],
+                Error = Master_Report_Response.split("|")[1],
+                Description = Status_Check.split("|")[2],
             )
             Error_Log.append(Master_Report_Response_Problem)
             logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Response)
@@ -455,11 +463,12 @@ for SUSHI_Call_Data in SUSHI_Data:
         if len(Master_Report_Response["Report_Items"]) == 0:
             Master_Report_Items_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
-                Type = Master_Report_Type,
-                Details = f"{Master_Report_Type} empty",
+                Report = Master_Report_Type,
+                Error = "No data available"
+                Description = "The report contained no report items",
             )
             Error_Log.append(Master_Report_Items_Problem)
-            logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|{Master_Report_Type} empty")
+            logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|No data available|The report contained no report items")
             continue
         #Alert: Should DRs with a single database where the metrics are identical to the PR (see Project MUSE as example) be captured and silently disposed of here as well?
 
@@ -470,8 +479,9 @@ for SUSHI_Call_Data in SUSHI_Data:
         if str(type(Master_Report_Dataframe)) == "<class 'str'>": # Meaning the dataframe couldn't be created
             Master_Report_Dataframe_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
-                Type = Master_Report_Dataframe.split("|")[0],
-                Details = Master_Report_Dataframe.split("|")[1],
+                Report = Master_Report_Dataframe.split("|")[0],
+                Error = Master_Report_Dataframe.split("|")[1],
+                Description = Status_Check.split("|")[2],
             )
             Error_Log.append(Master_Report_Dataframe_Problem)
             logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Dataframe)
@@ -500,11 +510,12 @@ for SUSHI_Call_Data in SUSHI_Data:
             #ToDo: Above error occurred for some larger reports
             Master_Report_Loading_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
-                Type = Master_Report_Type,
-                Details = f"Unable to load {Master_Report_Type} dataframe to MySQL ({Error_Message})",
+                Report = Master_Report_Type,
+                Error = "Unable to load into database"
+                Description = f"Dataframe didn't load into MySQL ({Error_Message})",
             )
             Error_Log.append(Master_Report_Loading_Problem)
-            logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Unable to load {Master_Report_Type} dataframe to MySQL ({Error_Message})")
+            logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Unable to load into dataframe|Dataframe didn't load into MySQL ({Error_Message})")
 
 #Section: Output Error_Log
 Error_Log_Location = str(Path('.', 'data', 'Error_Log.csv'))

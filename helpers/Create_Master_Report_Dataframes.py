@@ -25,7 +25,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe = Create_IR_Dataframe(Interface, Master_Report_JSON)
     else:
         #ToDo: If saving data from reports where no master report is available, determine where to send the JSON here
-        # Currently, the function should never get here
+        # Currently, the function should never get here, thus unaccounted for in revision of Platforms_Not_Collected to Error_Log
         return f"Unable to create dataframe|Master report type {Master_Report_Type} not recognized for creating a dataframe"
     
     if str(type(Dataframe)) == "<class 'str'>": # Meaning one of the values exceeded the max length for the field

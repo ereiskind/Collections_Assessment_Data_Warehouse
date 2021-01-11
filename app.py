@@ -63,8 +63,8 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
             Type = "status",
             Details = Problem_Message,
         )
-        Platforms_Not_Collected.append(Capture_Problem)
-        logging.info(f"Added to Platforms_Not_Collected: {Source}|status|{Problem_Message}")
+        Error_Log.append(Capture_Problem)
+        logging.info(f"Added to Error_Log: {Source}|status|{Problem_Message}")
         return True
     return False
 
@@ -72,7 +72,7 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
 def Handle_Exception_Master_Report(Source, Report, Exception_List, Load_Report_Items = False):
     """Handles results of a SUSHI API call for a master report that is or contains exceptions.
     
-    The function parses the list of exceptions, remaking each exception into a string. Then, if the response contained a Report_Items section, it asks if the usage should be loaded into the database. Finally, if the usage isn't to be loaded into the database, the report is added to Platforms_Not_Collected and the corresponding log statement is output to the terminal. Note that because there are two different possible parmeters for including parent details, "include_parent_details" and "include_component_details", which an item report might use, most item reports will require handling through this function.
+    The function parses the list of exceptions, remaking each exception into a string. Then, if the response contained a Report_Items section, it asks if the usage should be loaded into the database. Finally, if the usage isn't to be loaded into the database, the report is added to Error_Log and the corresponding log statement is output to the terminal. Note that because there are two different possible parmeters for including parent details, "include_parent_details" and "include_component_details", which an item report might use, most item reports will require handling through this function.
     #ToDo: Skip over the messagebox if all of the exceptions are 3050 (parameter not available)
     
     Arguments:
@@ -112,8 +112,8 @@ def Handle_Exception_Master_Report(Source, Report, Exception_List, Load_Report_I
             Type = Report,
             Details = Problem_Message,
         )
-        Platforms_Not_Collected.append(Capture_Problem)
-        logging.info(f"Added to Platforms_Not_Collected: {Source}|{Report}|{Problem_Message}")
+        Error_Log.append(Capture_Problem)
+        logging.info(f"Added to Error_Log: {Source}|{Report}|{Problem_Message}")
         return True
     return False
 
@@ -167,10 +167,20 @@ for Folder, Subfolder, Files in os.walk(API_Download_Path):
     elif len(Subfolder) > 0:
         API_Download_Not_Empty()
 
-#Subsection: Initialize Variables for Reports Not Captured
-Platforms_Not_Collected = []
-    # This will contain the URLs for failed API calls that prevented any reports from being collected
-    # Format: SUSHI base URL|Source of problem|Error that caused failure
+#Subsection: Initialize List for Error_Log
+Error_Log = []
+# This is a log for all of the reports that couldn't be loaded into the database for some reason
+# Columns:
+    # Interface: interface ID
+    # Report: the report that provided the data with the error--"status", "reports", and the master report abbreviations
+    # Error: the fixed-text description of the problem
+        # HTTP error
+        # COUNTER error
+        # No reports available
+        # Data already loaded into database
+        # No data available
+        # Unable to load into database
+    # Description: the free-text description of the problem, often with program error data
 
 #Subsection: Create the SQLAlchemy Engine
 Database = 'Collections_Assessment_Warehouse_0.1'
@@ -252,8 +262,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             Type = Status_Check.split("|")[0],
             Details = Status_Check.split("|")[1],
         )
-        Platforms_Not_Collected.append(Status_Check_Problem)
-        logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
+        Error_Log.append(Status_Check_Problem)
+        logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
         continue
 
     #Subsection: Check if Status_Check Returns COUNTER Error
@@ -292,8 +302,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             Type = Status_Check.split("|")[0],
             Details = Status_Check.split("|")[1],
         )
-        Platforms_Not_Collected.append(Available_Reports_Problem)
-        logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
+        Error_Log.append(Available_Reports_Problem)
+        logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
         continue
     # This creates a list of all the reports offered by a platform excluding the consortium reports offered by Silverchair, which have a Report_ID value of "Silverchair:CR_??"
     Available_Reports_List = []
@@ -311,8 +321,8 @@ for SUSHI_Call_Data in SUSHI_Data:
             Type = "reports",
             Details = "No master reports available",
         )
-        Platforms_Not_Collected.append(No_Reports_Problem)
-        logging.info("Added to Platforms_Not_Collected: " + SUSHI_Call_Data["JSON_Name"] + "|reports|No master reports available")
+        Error_Log.append(No_Reports_Problem)
+        logging.info("Added to Error_Log: " + SUSHI_Call_Data["JSON_Name"] + "|reports|No master reports available")
         continue
 
     Captured_By_Master_Reports = []
@@ -328,8 +338,8 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Type = Report,
                 Details = "Standard report based on master report not offered",
             )
-            Platforms_Not_Collected.append(Extra_Report_Problem) 
-        logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Report}|Standard report based on master report not offered")
+            Error_Log.append(Extra_Report_Problem) 
+        logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Report}|Standard report based on master report not offered")
     
     logging.info(f"Master report list collection successful: {len(Available_Master_Reports)} reports")
 
@@ -379,8 +389,8 @@ for SUSHI_Call_Data in SUSHI_Data:
                     Type = Master_Report_Type,
                     Details = f"Data for this report for the months {Usage_in_DB_Months} was already in the database",
                 )
-                Platforms_Not_Collected.append(Duplicated_Usage_Data_Problem)
-                logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Data for this report for the months {Usage_in_DB_Months} was already in the database")
+                Error_Log.append(Duplicated_Usage_Data_Problem)
+                logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Data for this report for the months {Usage_in_DB_Months} was already in the database")
                 continue
 
         #Subsection: Add Parameters Specific to Type of Master Report
@@ -415,8 +425,8 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Type = Master_Report_Response.split("|")[0],
                 Details = Master_Report_Response.split("|")[1],
             )
-            Platforms_Not_Collected.append(Master_Report_Response_Problem)
-            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Response)
+            Error_Log.append(Master_Report_Response_Problem)
+            logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Response)
             continue
 
         #Subsection: Handle Master Reports with Exceptions
@@ -434,7 +444,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                     if Handle_Exception_Master_Report(SUSHI_Call_Data["JSON_Name"], Master_Report_Type, list(Master_Report_Response)):
                         continue
             except:
-                # Based on observed close-to-standard behavior, an interface could return a list of multiple Exception dictionaries, which JSON_to_Python_Data_Types would handle as an error, directing it to the Platforms_Not_Collected list. If that happens, error handling for that situation may be better handled within the JSON_to_Python_Data_Types function.
+                # Based on observed close-to-standard behavior, an interface could return a list of multiple Exception dictionaries, which JSON_to_Python_Data_Types would handle as an error, directing it to the Error_Log list. If that happens, error handling for that situation may be better handled within the JSON_to_Python_Data_Types function.
                 pass # A SUSHI JSON without an "Exceptions" key will return a KeyError for the above
 
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
@@ -445,12 +455,11 @@ for SUSHI_Call_Data in SUSHI_Data:
         if len(Master_Report_Response["Report_Items"]) == 0:
             Master_Report_Items_Problem = dict(
                 Interface = SUSHI_Call_Data["JSON_Name"],
-                # Source of problem|Error that caused failure
                 Type = Master_Report_Type,
                 Details = f"{Master_Report_Type} empty",
             )
-            Platforms_Not_Collected.append(Master_Report_Items_Problem)
-            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|{Master_Report_Type} empty")
+            Error_Log.append(Master_Report_Items_Problem)
+            logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|{Master_Report_Type} empty")
             continue
         #Alert: Should DRs with a single database where the metrics are identical to the PR (see Project MUSE as example) be captured and silently disposed of here as well?
 
@@ -464,8 +473,8 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Type = Master_Report_Dataframe.split("|")[0],
                 Details = Master_Report_Dataframe.split("|")[1],
             )
-            Platforms_Not_Collected.append(Master_Report_Dataframe_Problem)
-            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Dataframe)
+            Error_Log.append(Master_Report_Dataframe_Problem)
+            logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Dataframe)
             continue
         logging.info(Master_Report_Dataframe.head())
 
@@ -494,12 +503,12 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Type = Master_Report_Type,
                 Details = f"Unable to load {Master_Report_Type} dataframe to MySQL ({Error_Message})",
             )
-            Platforms_Not_Collected.append(Master_Report_Loading_Problem)
-            logging.info(f"Added to Platforms_Not_Collected: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Unable to load {Master_Report_Type} dataframe to MySQL ({Error_Message})")
+            Error_Log.append(Master_Report_Loading_Problem)
+            logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Unable to load {Master_Report_Type} dataframe to MySQL ({Error_Message})")
 
-#Section: Output Platforms_Not_Collected
-Platforms_Not_Collected_Location = str(Path('.', 'data', 'Platforms_Not_Collected.csv'))
-FileIO = open(Platforms_Not_Collected_Location, 'w', newline='')
+#Section: Output Error_Log
+Error_Log_Location = str(Path('.', 'data', 'Error_Log.csv'))
+FileIO = open(Error_Log_Location, 'w', newline='')
 CSV_Writer = csv.DictWriter(FileIO, [
     #ToDo: Decide if there are better column names to use and/or if more columns are needed
     "Interface", # The interface where there was a problem
@@ -510,7 +519,7 @@ CSV_Writer = csv.DictWriter(FileIO, [
 ])
 CSV_Writer.writeheader()
 
-for Platform in Platforms_Not_Collected:
+for Platform in Error_Log:
     CSV_Writer.writerow(Platform)
 
 FileIO.close()

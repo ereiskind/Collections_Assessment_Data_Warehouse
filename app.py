@@ -213,6 +213,7 @@ with open(SUSHI_R5_Credentials_Path) as JSON_File:
 Begin_Date = pyinputplus.inputDate(
     "Please enter the year and month for the first month of stats collection. The month must be two digits and the year must be four digits. ",
     formats=[
+        '%Y%m', # yyyymm
         '%m-%Y', # mm-yyyy
         '%m/%Y', # mm/yyyy
         '%Y-%m', # yyyy-mm
@@ -225,6 +226,7 @@ while End_Date < Begin_Date:
     End_Date = pyinputplus.inputDate(
         f"Please enter the year and month for the last month of stats collection; this must be after {Begin_Date.strftime('%Y-%m')}. The month must be two digits and the year must be four digits. ",
         formats=[
+            '%Y%m', # yyyymm
             '%m-%Y', # mm-yyyy
             '%m/%Y', # mm/yyyy
             '%Y-%m', # yyyy-mm

@@ -431,7 +431,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Interface = SUSHI_Call_Data["JSON_Name"],
                 Report = Master_Report_Response.split("|")[0],
                 Error = Master_Report_Response.split("|")[1],
-                Description = Status_Check.split("|")[2],
+                Description = Master_Report_Response.split("|")[2],
             )
             Error_Log.append(Master_Report_Response_Problem)
             logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Response)
@@ -485,7 +485,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Interface = SUSHI_Call_Data["JSON_Name"],
                 Report = Master_Report_Dataframe.split("|")[0],
                 Error = Master_Report_Dataframe.split("|")[1],
-                Description = Status_Check.split("|")[2],
+                Description = Master_Report_Dataframe.split("|")[2],
             )
             Error_Log.append(Master_Report_Dataframe_Problem)
             logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Dataframe)

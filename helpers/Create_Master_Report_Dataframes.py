@@ -170,6 +170,8 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
     except KeyError:
         Dataframe['YOP'] = None
         Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html)
+    except TypeError: # This is the error that occurs when YOP is already "None" 
+        Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html
 
     try:
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')

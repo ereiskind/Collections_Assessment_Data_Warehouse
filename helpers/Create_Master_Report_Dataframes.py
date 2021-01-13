@@ -892,7 +892,7 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
 #Section: Field Length Constants
 #ToDo: Is there a way to read metadata from MySQL into Python?
 Resource_Name_Length = 2000
-Publisher_Length = 100
+Publisher_Length = 125
 Publisher_ID_Length = 50
 Platform_Length = 75
 DOI_Length = 75

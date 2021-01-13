@@ -357,6 +357,8 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
             for ID in Item['Item_ID']:
                 if ID['Type'] == "Proprietary":
                     Proprietary_ID = ID['Value']
+                elif ID['Type'] == "Proprietary_ID": # Used by ProQuest
+                    Proprietary_ID = ID['Value']
         except KeyError:
             Proprietary_ID = None
         
@@ -378,13 +380,17 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
                     "R5_Month": R5_Month,
                     "Metric_Type": Metric_Type,
                     "R5_Count": R5_Count,
-                    "Proprietary_ID": Proprietary_ID,
                 }
 
                 try:
                     Record["Publisher_ID"] = Publisher_ID
                 except UnboundLocalError: # There wasn't a Publisher_ID
                     Record["Publisher_ID"] = None
+                
+                try:
+                    Record["Proprietary_ID"] = Proprietary_ID
+                except UnboundLocalError: # There wasn't a Proprietary_ID
+                    Record["Proprietary_ID"] = None
                 
                 Dataframe_Records.append(Record)
     Dataframe = pandas.DataFrame(Dataframe_Records)
@@ -485,6 +491,12 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                     if len(Proprietary_ID) > Proprietary_ID_Length:
                         Update_Max_Proprietary_ID_Length = True
                         Proprietary_ID_Length = len(Proprietary_ID)
+                elif ID['Type'] == "Proprietary_ID": # Used by ProQuest
+                    Proprietary_ID = ID['Value']
+                    if len(Proprietary_ID) > Proprietary_ID_Length:
+                        Update_Max_Proprietary_ID_Length = True
+                        Proprietary_ID_Length = len(Proprietary_ID)
+                
                 if ID['Type'] == "DOI":
                     DOI = ID['Value']
                     if len(DOI) > DOI_Length:
@@ -699,6 +711,12 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                     if len(Proprietary_ID) > Proprietary_ID_Length:
                         Update_Max_Proprietary_ID_Length = True
                         Proprietary_ID_Length = len(Proprietary_ID)
+                elif ID['Type'] == "Proprietary_ID": # Used by ProQuest
+                    Proprietary_ID = ID['Value']
+                    if len(Proprietary_ID) > Proprietary_ID_Length:
+                        Update_Max_Proprietary_ID_Length = True
+                        Proprietary_ID_Length = len(Proprietary_ID)
+                
                 if ID['Type'] == "DOI":
                     DOI = ID['Value']
                     if len(DOI) > DOI_Length:

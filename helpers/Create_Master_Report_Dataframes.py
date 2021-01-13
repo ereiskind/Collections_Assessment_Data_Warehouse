@@ -308,6 +308,8 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
             if len(Resource_Name) > Resource_Name_Length:
                 Update_Max_Resource_Name_Length = True
                 Resource_Name_Length = len(Resource_Name)
+        except KeyError: # The key wasn't included in the JSON
+            Resource_Name = None
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Resource_Name = None
         
@@ -316,6 +318,8 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
             if len(Publisher) > Publisher_Length:
                 Update_Max_Publisher_Length = True
                 Publisher_Length = len(Publisher)
+        except KeyError: # the key wasn't included in the JSON
+            Publisher = None
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Publisher = None
         
@@ -439,6 +443,8 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
             if len(Resource_Name) > Resource_Name_Length:
                 Update_Max_Resource_Name_Length = True
                 Resource_Name_Length = len(Resource_Name)
+        except KeyError: # The key wasn't included in the JSON
+            Resource_Name = None
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Resource_Name = None
         
@@ -447,6 +453,8 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
             if len(Publisher) > Publisher_Length:
                 Update_Max_Publisher_Length = True
                 Publisher_Length = len(Publisher)
+        except KeyError: # the key wasn't included in the JSON
+            Publisher = None
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Publisher = None
         
@@ -499,18 +507,27 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
             pass
         # "pass" is used because the "try-except UnboundLocalError" blocks below will handle all of the variables from above
         
-        Data_Type = Item['Data_Type']
+        try: # This handles situations where data types aren't included
+            Data_Type = Item['Data_Type']
+        except KeyError:
+            Data_Type = None
         
         try: # This handles situations where section types aren't included
             Section_Type = Item['Section_Type']
         except KeyError:
             Section_Type = None
         
-        YOP = Item['YOP']
+        try:
+            YOP = Item['YOP']
+        except KeyError:
+            YOP = None
         
         Access_Type = Item['Access_Type']
         
-        Access_Method = Item['Access_Method']
+        try:  # This handles situations where access methods aren't included
+            Access_Method = Item['Access_Method']
+        except KeyError:
+            Access_Method = None
         
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']
@@ -704,7 +721,10 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
             pass
         # "pass" is used because the "try-except UnboundLocalError" blocks below will handle all of the variables from above
 
-        Data_Type = Item['Data_Type']
+        try: # This handles situations where data types aren't included
+            Data_Type = Item['Data_Type']
+        except KeyError:
+            Data_Type = None
         
         try:
             Parent_Data_Type = Item['Item_Parent']['Data_Type']
@@ -744,7 +764,10 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         
         Access_Type = Item['Access_Type']
         
-        Access_Method = Item['Access_Method']
+        try:  # This handles situations where access methods aren't included
+            Access_Method = Item['Access_Method']
+        except KeyError:
+            Access_Method = None
         
         for Time_Period in Item['Performance']:
             R5_Month = Time_Period['Period']['Begin_Date']

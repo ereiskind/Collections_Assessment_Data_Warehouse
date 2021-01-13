@@ -452,8 +452,12 @@ for SUSHI_Call_Data in SUSHI_Data:
                     if Handle_Exception_Master_Report(SUSHI_Call_Data["JSON_Name"], Master_Report_Type, list(Master_Report_Response)):
                         continue
             except:
-                # Based on observed close-to-standard behavior, an interface could return a list of multiple Exception dictionaries, which JSON_to_Python_Data_Types would handle as an error, directing it to the Error_Log list. If that happens, error handling for that situation may be better handled within the JSON_to_Python_Data_Types function.
-                pass # A SUSHI JSON without an "Exceptions" key will return a KeyError for the above
+                try: # Master_Report_Response is a list of one or more JSON-like dictionaries for Exception(s)
+                    if str(type(Master_Report_Response)) == "<class 'list'>":
+                        if Handle_Exception_Master_Report(SUSHI_Call_Data['JSON_Name'], Master_Report_Type, Master_Report_Response):
+                            continue
+                except:
+                    pass # A SUSHI JSON without an "Exceptions" key will return a KeyError for the above
 
         logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
 

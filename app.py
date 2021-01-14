@@ -452,7 +452,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                     continue
         except:
             try: # Master_Report_Response is JSON-like dictionary containing only the content of a single Exception
-                if "Code" in Master_Report_Response:
+                if "Code" in Master_Report_Response: #Alert: {'Code': 400, 'Message': 'Invalid begin_date', 'Severity': 'Fatal'} not caught, so adding break point
                     if Handle_Exception_Master_Report(SUSHI_Call_Data["JSON_Name"], Master_Report_Type, list(Master_Report_Response)):
                         continue
             except:

@@ -494,10 +494,10 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error_Log.append(Master_Report_Dataframe_Problem)
             logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Dataframe)
             continue
-        logging.info(Master_Report_Dataframe.head())
+        logging.info(Master_Report_Dataframe.tail())
+        Number_of_Records = Master_Report_Dataframe.shape[0]
 
         #Subsection: Load Dataframe into MySQL
-        #Alert: This exception handling won't necessarily pick up on a failure to load data into MySQL, but that problem should be resolved
         try:
             with Engine.connect() as Connection:
                 with Connection.begin(): # This creates a SQL transaction
@@ -509,9 +509,18 @@ for SUSHI_Call_Data in SUSHI_Data:
                     )
             
             Check_Loading = pandas.read_sql(
-                sql='''SELECT * FROM R5_Usage;''',
+                sql=f'''
+                    SELECT *
+                    FROM (
+                        SELECT * FROM R5_Usage
+                        ORDER BY R5_Usage_ID DESC
+                        LIMIT {Number_of_Records}
+                    )
+                    ORDER BY R5_Usage_ID ASC;
+                ''',
                 con=Engine
-            )
+            ) # Reads the same number of records that were just loaded into the database from the database and appends them to the dataframe Check_Loading (unsure why it appends rather than overwrites)
+            #ToDo: Figure out way to compare Master_Report_Dataframe and Check_Loading for same info
             logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database:\n{Check_Loading.tail()}")
         except Exception as Error_Message:
             #Alert: (mysql.connector.errors.OperationalError) 2055: Lost connection to MySQL server at 'database:3306', system error: 32 Broken pipe

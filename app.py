@@ -368,7 +368,6 @@ for SUSHI_Call_Data in SUSHI_Data:
         
         Usage_in_DB = []
         for Month in Months_in_Range:
-            Start_Time = datetime.now()
             Previous_Load_Check = pandas.read_sql(
                 sql=f'''
                     SELECT COUNT(*) AS 'Value'
@@ -379,9 +378,6 @@ for SUSHI_Call_Data in SUSHI_Data:
                 ''', #ToDo: Determine if "Month" needs type juggling and/or to be explicitly identified as the first of the month
                 con=Engine
             )
-            Time_Interval = Start_Time - datetime.now()
-            with open('logfile.txt', 'a') as Logfile:
-                Logfile.write(f"Checking for {Month} for interface {SUSHI_Call_Data['JSON_Name']} took {Time_Interval} seconds.")
             Previous_Load_Check = Previous_Load_Check.iloc[0]['Value'] # This changes the dataframe with a single value to a numpy.int64 data type
             if Previous_Load_Check > 0:
                 Usage_in_DB.append(Month)

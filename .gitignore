@@ -1,6 +1,7 @@
 # Private data copied from runtime environment repository
 data/Database_Credentials.py
 data/SUSHI_R5_Credentials.json
+data/Error_Log.csv
 data/DML_CSVs/*
 data/Examples/*
 docs/Data_Saved_in_Warehouse.md

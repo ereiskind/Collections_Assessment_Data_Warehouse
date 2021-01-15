@@ -14,6 +14,7 @@ import requests
 from requests import HTTPError, Timeout
 import pyinputplus
 import pandas
+from pandas._testing import assert_frame_equal
 import mysql.connector
 from sqlalchemy import create_engine
 from dateutil import parser
@@ -518,11 +519,13 @@ for SUSHI_Call_Data in SUSHI_Data:
                 ''',
                 con=Engine
             ) # Reads the same number of records that were just loaded into the database from the database
+            Check_Loading_Sans_PK = Check_Loading.drop(columns='R5_Usage_ID')
+            # Below raises an error if the data for the last number of records equaling the number of records in Master_Report_Dataframe doesn't match that of Master_Report_Dataframe
+            assert_frame_equal(Master_Report_Dataframe, Check_Loading_Sans_PK, check_dtype=False)
             Time_Interval = datetime.now() - Start_Time
             Time_Logfile_Location = Path('.', 'data', 'Time_Logfile.txt')
             with open(Time_Logfile_Location, 'a') as Logfile:
                 Logfile.write(f"Reading {Master_Report_Type} for interface {SUSHI_Call_Data['JSON_Name']} ({Number_of_Records} records) from database took {Time_Interval} seconds.\n")
-            #ToDo: Figure out way to compare Master_Report_Dataframe and Check_Loading for same info
             logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database:\n{Check_Loading.tail()}")
         except Exception as Error_Message:
             #Alert: (mysql.connector.errors.OperationalError) 2055: Lost connection to MySQL server at 'database:3306', system error: 32 Broken pipe

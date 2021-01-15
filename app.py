@@ -512,7 +512,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                         SELECT * FROM R5_Usage
                         ORDER BY R5_Usage_ID DESC
                         LIMIT {Number_of_Records}
-                    )
+                    ) subquery
                     ORDER BY R5_Usage_ID ASC;
                 ''',
                 con=Engine

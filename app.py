@@ -237,7 +237,7 @@ Begin_Date = pyinputplus.inputDate(
 End_Date = date.min # This ensures that the while loop letting the user set End_Date runs at least once
 while End_Date < Begin_Date:
     End_Date = pyinputplus.inputDate(
-        f"Please enter the year and month for the last month of stats collection; this must be after {Begin_Date.strftime('%Y-%m')}. The month must be two digits and the year must be four digits. ",
+        f"Please enter the year and month for the last month of stats collection; this must be the same as or after {Begin_Date.strftime('%Y-%m')}. The month must be two digits and the year must be four digits. ",
         formats=[
             '%Y%m', # yyyymm
             '%m-%Y', # mm-yyyy

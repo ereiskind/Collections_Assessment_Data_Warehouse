@@ -504,6 +504,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                         index=False
                     )
             
+            Start_Time = datetime.now()
             Check_Loading = pandas.read_sql(
                 sql=f'''
                     SELECT *
@@ -516,6 +517,10 @@ for SUSHI_Call_Data in SUSHI_Data:
                 ''',
                 con=Engine
             ) # Reads the same number of records that were just loaded into the database from the database and appends them to the dataframe Check_Loading (unsure why it appends rather than overwrites)
+            Time_Interval = datetime.now() - Start_Time
+            Time_Logfile_Location = Path('.', 'data', 'Time_Logfile.txt')
+            with open(Time_Logfile_Location, 'a') as Logfile:
+                Logfile.write(f"Reading {Master_Report_Type} for interface {SUSHI_Call_Data['JSON_Name']} ({Number_of_Records} records) from database took {Time_Interval} seconds.\n")
             #ToDo: Figure out way to compare Master_Report_Dataframe and Check_Loading for same info
             logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database:\n{Check_Loading.tail()}")
         except Exception as Error_Message:

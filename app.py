@@ -517,7 +517,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                     ORDER BY R5_Usage_ID ASC;
                 ''',
                 con=Engine
-            ) # Reads the same number of records that were just loaded into the database from the database and appends them to the dataframe Check_Loading (unsure why it appends rather than overwrites)
+            ) # Reads the same number of records that were just loaded into the database from the database
             Time_Interval = datetime.now() - Start_Time
             Time_Logfile_Location = Path('.', 'data', 'Time_Logfile.txt')
             with open(Time_Logfile_Location, 'a') as Logfile:

@@ -506,7 +506,6 @@ for SUSHI_Call_Data in SUSHI_Data:
                         index=False
                     )
             
-            Start_Time = datetime.now()
             Check_Loading = pandas.read_sql(
                 sql=f'''
                     SELECT *
@@ -522,10 +521,6 @@ for SUSHI_Call_Data in SUSHI_Data:
             Check_Loading_Sans_PK = Check_Loading.drop(columns='R5_Usage_ID')
             # Below raises an error if the data for the last number of records equaling the number of records in Master_Report_Dataframe doesn't match that of Master_Report_Dataframe
             assert_frame_equal(Master_Report_Dataframe, Check_Loading_Sans_PK, check_dtype=False)
-            Time_Interval = datetime.now() - Start_Time
-            Time_Logfile_Location = Path('.', 'data', 'Time_Logfile.txt')
-            with open(Time_Logfile_Location, 'a') as Logfile:
-                Logfile.write(f"Reading {Master_Report_Type} for interface {SUSHI_Call_Data['JSON_Name']} ({Number_of_Records} records) from database took {Time_Interval} seconds.\n")
             logging.info(f"Successfully loaded {Master_Report_Type} for {SUSHI_Call_Data['JSON_Name']} into database:\n{Check_Loading.tail()}")
         except Exception as Error_Message:
             #Alert: (mysql.connector.errors.OperationalError) 2055: Lost connection to MySQL server at 'database:3306', system error: 32 Broken pipe

@@ -10,6 +10,7 @@ import os
 import sys
 from datetime import date
 from datetime import datetime
+import calendar
 import requests
 from requests import HTTPError, Timeout
 import pyinputplus
@@ -352,8 +353,8 @@ for SUSHI_Call_Data in SUSHI_Data:
 
     #Section: Make API Calls for Individual Master Reports
     #Subsection: Add Date Parameters
-    Credentials["begin_date"] = Begin_Date.strftime('%Y-%m')
-    Credentials["end_date"] = End_Date.strftime('%Y-%m')
+    Credentials["begin_date"] = Begin_Date.strftime('%Y-%m-01')
+    Credentials["end_date"] = End_Date.strftime(f'%Y-%m-{calendar.monthrange(End_Date.year, End_Date.month)[1]}')
 
     #Subsection: Add Parameters Specific to Type of Master Report
     for Master_Report in Available_Master_Reports:

@@ -240,14 +240,14 @@ def Create_PR_Dataframe(Interface, Master_Report_JSON):
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Platform = None
         
-        try: # This handles situations where data types aren't included
+        try:
             Data_Type = Item['Data_Type']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Data_Type = None
         
-        try: # This handles situations where access methods aren't included
+        try:
             Access_Method = Item['Access_Method']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Access_Method = None
         
         for Time_Period in Item['Performance']:
@@ -343,23 +343,23 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
         except TypeError: # The JSON contained a null value, so trying to find the length put up an error
             Platform = None
         
-        try: # This handles situations where data types aren't included
+        try:
             Data_Type = Item['Data_Type']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Data_Type = None
         
-        try:  # This handles situations where access methods aren't included
+        try:
             Access_Method = Item['Access_Method']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Access_Method = None
         
-        try: # This handles situations where proprietary IDs aren't included
+        try:
             for ID in Item['Item_ID']:
                 if ID['Type'] == "Proprietary":
                     Proprietary_ID = ID['Value']
                 elif ID['Type'] == "Proprietary_ID": # Used by ProQuest
                     Proprietary_ID = ID['Value']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Proprietary_ID = None
         
         for Time_Period in Item['Performance']:
@@ -384,12 +384,12 @@ def Create_DR_Dataframe(Interface, Master_Report_JSON):
 
                 try:
                     Record["Publisher_ID"] = Publisher_ID
-                except UnboundLocalError: # There wasn't a Publisher_ID
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Publisher_ID"] = None
                 
                 try:
                     Record["Proprietary_ID"] = Proprietary_ID
-                except UnboundLocalError: # There wasn't a Proprietary_ID
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Proprietary_ID"] = None
                 
                 Dataframe_Records.append(Record)
@@ -519,26 +519,26 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
             pass
         # "pass" is used because the "try-except UnboundLocalError" blocks below will handle all of the variables from above
         
-        try: # This handles situations where data types aren't included
+        try:
             Data_Type = Item['Data_Type']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Data_Type = None
         
-        try: # This handles situations where section types aren't included
+        try:
             Section_Type = Item['Section_Type']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Section_Type = None
         
         try:
             YOP = Item['YOP']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             YOP = None
         
         Access_Type = Item['Access_Type']
         
-        try:  # This handles situations where access methods aren't included
+        try:
             Access_Method = Item['Access_Method']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Access_Method = None
         
         for Time_Period in Item['Performance']:
@@ -566,37 +566,37 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
 
                 try:
                     Record["Proprietary_ID"] = Proprietary_ID
-                except UnboundLocalError: # There wasn't a Proprietary_ID
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Proprietary_ID"] = None
                 
                 try:
                     Record["Publisher_ID"] = Publisher_ID
-                except UnboundLocalError: # There wasn't a Publisher_ID
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Publisher_ID"] = None
 
                 try:
                     Record["DOI"] = DOI
-                except UnboundLocalError: # There wasn't a DOI
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["DOI"] = None
 
                 try:
                     Record["ISBN"] = ISBN
-                except UnboundLocalError: # There wasn't an ISBN
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["ISBN"] = None
 
                 try:
                     Record["Print_ISSN"] = Print_ISSN
-                except UnboundLocalError: # There wasn't a Print_ISSN
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Print_ISSN"] = None
 
                 try:
                     Record["Online_ISSN"] = Online_ISSN
-                except UnboundLocalError: # There wasn't an Online_ISSN
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Online_ISSN"] = None
 
                 try:
                     Record["URI"] = URI
-                except UnboundLocalError: # There wasn't an URI
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["URI"] = None
 
                 Dataframe_Records.append(Record)
@@ -739,9 +739,9 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
             pass
         # "pass" is used because the "try-except UnboundLocalError" blocks below will handle all of the variables from above
 
-        try: # This handles situations where data types aren't included
+        try:
             Data_Type = Item['Data_Type']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Data_Type = None
         
         try:
@@ -777,14 +777,14 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
         
         try:
             YOP = Item['YOP']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             YOP = None
         
         Access_Type = Item['Access_Type']
         
-        try:  # This handles situations where access methods aren't included
+        try:
             Access_Method = Item['Access_Method']
-        except KeyError:
+        except KeyError: # The key wasn't included in the JSON
             Access_Method = None
         
         for Time_Period in Item['Performance']:
@@ -812,47 +812,47 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
 
                 try:
                     Record["Proprietary_ID"] = Proprietary_ID
-                except UnboundLocalError: # There wasn't a Proprietary_ID
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Proprietary_ID"] = None
                 
                 try:
                     Record["Publisher_ID"] = Publisher_ID
-                except UnboundLocalError: # There wasn't a Publisher_ID
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Publisher_ID"] = None
 
                 try:
                     Record["DOI"] = DOI
-                except UnboundLocalError: # There wasn't a DOI
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["DOI"] = None
 
                 try:
                     Record["ISBN"] = ISBN
-                except UnboundLocalError: # There wasn't an ISBN
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["ISBN"] = None
 
                 try:
                     Record["Print_ISSN"] = Print_ISSN
-                except UnboundLocalError: # There wasn't a Print_ISSN
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Print_ISSN"] = None
 
                 try:
                     Record["Online_ISSN"] = Online_ISSN
-                except UnboundLocalError: # There wasn't an Online_ISSN
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Online_ISSN"] = None
 
                 try:
                     Record["URI"] = URI
-                except UnboundLocalError: # There wasn't an URI
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["URI"] = None
 
                 try:
                     Record["Parent_DOI"] = Parent_DOI
-                except UnboundLocalError: # There wasn't a Parent_DOI
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Parent_DOI"] = None
 
                 try:
                     Record["Parent_Proprietary_ID"] = Parent_Proprietary_ID
-                except UnboundLocalError: # There wasn't a Parent_Proprietary_ID
+                except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Parent_Proprietary_ID"] = None
 
                 Dataframe_Records.append(Record)

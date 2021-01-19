@@ -37,7 +37,7 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         ## "Report" string --> Report CHAR
         # "Resource_Name" string --> Resource_Name VARCHAR
         # "Publisher" string --> Publisher VARCHAR
-        # Publisher_ID VARCHAR
+        # "Publisher_ID" string --> Publisher_ID VARCHAR
         ## "Platform" string --> Platform VARCHAR
         # "DOI" string --> DOI VARCHAR
         # "Proprietary_ID" string --> Proprietary_ID VARCHAR
@@ -62,10 +62,16 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         'Interface': 'int64',
         'Report': 'string',
         'Platform': 'string',
-        'Data_Type': 'string',
+        'Data_Type': 'string',# Null in interfaces 17, 39, 55, 110
+        # Access_Method: Null in interfaces 21, 45, 201
         'Metric_Type': 'string',
         'R5_Count': 'int64'
     })
+    try:
+        Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
+    except KeyError:
+        Dataframe['Access_Method'] = None
+        Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
 
     Dataframe['R5_Month'] = pandas.to_datetime(
         Dataframe['R5_Month'],
@@ -99,12 +105,6 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['Publisher_ID'] = None
         Dataframe['Publisher_ID'] = Dataframe['Publisher_ID'].astype('string')
     
-    try:
-        Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
-    except KeyError:
-        Dataframe['Access_Method'] = None
-        Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
-
     try:
         Dataframe['DOI'] = Dataframe['DOI'].astype('string')
     except KeyError:
@@ -172,13 +172,13 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html)
     except TypeError: # This is the error that occurs when YOP is already "None" 
         Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html
-
+    
     try:
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')
     except KeyError:
         Dataframe['Access_Type'] = None
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')
-    
+
     #Subsection: Reorder Columns for Import to MySQL
     Dataframe = Dataframe[[
         'Interface',

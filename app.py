@@ -504,6 +504,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                         name='R5_Usage',
                         con=Engine,
                         if_exists='append',
+                        chunksize=1000,
                         index=False
                     )
             

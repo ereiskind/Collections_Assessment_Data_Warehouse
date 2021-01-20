@@ -49,3 +49,8 @@ Collections_Assessment_Data_Warehouse/
 ┣ app.py
 ┣ SQL_Query_to_CSV.py
 ┗ SUSHI_R5_Interfaces_and_Credentials.py
+
+To turn app.py into a script for downloading the JSON files, with only one interface in SUSHI_R5_Credentials.json, add the below to the end of "Subsection: Return Notice for Empty Reports" (~ line 486) and comment out the remainder of the program with three double quotes
+
+with open(f'{Master_Report_Type}.json', 'w') as WriteJSON:
+    json.dump(Master_Report_Response, WriteJSON)

@@ -585,11 +585,21 @@ def Create_TR_Dataframe(Interface, Master_Report_JSON):
                     Record["ISBN"] = None
 
                 try:
+                    Record["Print_ISSN"] = Print_ISSN.strip() # Removes padding spaces from string
+                except TypeError: # The ISSN wasn't a string
+                    # Convert ISSN to format nnnn-nnn[nX]
+                    Print_ISSN = str(Print_ISSN)
+                    Print_ISSN = Print_ISSN[0:5] + "-" + Print_ISSN[5:9]
                     Record["Print_ISSN"] = Print_ISSN
                 except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Print_ISSN"] = None
 
                 try:
+                    Record["Online_ISSN"] = Online_ISSN.strip() # Removes padding spaces from string
+                except TypeError: # The ISSN wasn't a string
+                    # Convert ISSN to format nnnn-nnn[nX]
+                    Online_ISSN = str(Online_ISSN)
+                    Online_ISSN = Online_ISSN[0:5] + "-" + Online_ISSN[5:9]
                     Record["Online_ISSN"] = Online_ISSN
                 except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Online_ISSN"] = None
@@ -831,11 +841,21 @@ def Create_IR_Dataframe(Interface, Master_Report_JSON):
                     Record["ISBN"] = None
 
                 try:
+                    Record["Print_ISSN"] = Print_ISSN.strip() # Removes padding spaces from string
+                except TypeError: # The ISSN wasn't a string
+                    # Convert ISSN to format nnnn-nnn[nX]
+                    Print_ISSN = str(Print_ISSN)
+                    Print_ISSN = Print_ISSN[0:5] + "-" + Print_ISSN[5:9]
                     Record["Print_ISSN"] = Print_ISSN
                 except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Print_ISSN"] = None
 
                 try:
+                    Record["Online_ISSN"] = Online_ISSN.strip() # Removes padding spaces from string
+                except TypeError: # The ISSN wasn't a string
+                    # Convert ISSN to format nnnn-nnn[nX]
+                    Online_ISSN = str(Online_ISSN)
+                    Online_ISSN = Online_ISSN[0:5] + "-" + Online_ISSN[5:9]
                     Record["Online_ISSN"] = Online_ISSN
                 except UnboundLocalError: # The key wasn't included in the JSON
                     Record["Online_ISSN"] = None

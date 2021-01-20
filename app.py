@@ -91,7 +91,12 @@ def Handle_Exception_Master_Report(Source, Report, Exception_List, Load_Report_I
     """
     List_of_Exceptions = []
 
-    for SUSHI_Exception in Exception_List:
+    for e in Exception_List:
+        SUSHI_Exception = {}
+        # This ensures the keys all start with uppercase letters--if they don't, the function breaks early, causing the program to crash
+        for Key, Value in e.items():
+            SUSHI_Exception[Key.capitalize()] = Value
+
         # Combined, below confirms SUSHI_Exception["Code"] is a series of digits, meaning that it's an exception code
         if str(type(SUSHI_Exception["Code"])) == "<class 'int'>":
             Code = "exception " + str(SUSHI_Exception["Code"])
@@ -450,7 +455,7 @@ for SUSHI_Call_Data in SUSHI_Data:
                     continue
         except:
             try: # Master_Report_Response is JSON-like dictionary containing only the content of a single Exception
-                if "Code" in Master_Report_Response:
+                if "Code" in Master_Report_Response or "code" in Master_Report_Response:
                     Master_Report_Response = [Master_Report_Response] # Using a list constructor creates a list of the keys; what's needed is a list with one item that's a dictionary
                     if Handle_Exception_Master_Report(SUSHI_Call_Data["JSON_Name"], Master_Report_Type, Master_Report_Response):
                         continue

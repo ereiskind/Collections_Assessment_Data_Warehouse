@@ -543,7 +543,7 @@ for SUSHI_Call_Data in SUSHI_Data:
 
 #Section: Output Error_Log
 Error_Log_Location = str(Path('.', 'data', 'Error_Log.csv'))
-FileIO = open(Error_Log_Location, 'w', newline='')
+FileIO = open(Error_Log_Location, 'a', newline='')
 CSV_Writer = csv.DictWriter(FileIO, [
     "Interface",
     "Report",

@@ -548,11 +548,13 @@ CSV_Writer = csv.DictWriter(FileIO, [
     "Interface",
     "Report",
     "Error",
-    "Description"
+    "Description",
+    "Dates"
 ])
 CSV_Writer.writeheader()
 
 for Error in Error_Log:
+    Error["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
     CSV_Writer.writerow(Error)
 
 FileIO.close()

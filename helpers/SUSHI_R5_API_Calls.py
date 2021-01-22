@@ -125,12 +125,9 @@ def Single_Element_API_Call(Path_Addition, URL, Parameters):
         else:
             return f"{Path_Addition}|HTTP error|{format(error)}"
     except Exception as error: # If there's some other problem with the API request
-        # Current error handling for SSL certificate not matching domain is hard-coded to look for Allen Press, interface with that problem, and go around it with request that doesn't use certificate verification
         #ToDo: Be able to view error information and confirm or deny if site is safe
-        if str(error) == "HTTPSConnectionPool(host='pinnacle-secure.allenpress.com', port=443): Max retries exceeded with url: /status?customer_id=786-26-602&requestor_id=lib-eresources@fsu.edu (Caused by SSLError(SSLCertVerificationError(\"hostname 'pinnacle-secure.allenpress.com' doesn't match either of '*.literatumonline.com', 'literatumonline.com'\")))":
-            API_Response = requests.get(API_Call_URL, params=Parameters, timeout=15, headers=Chrome_User_Agent, verify=False)
-        else:
-            return f"{Path_Addition}|API error|Problem with API call: {format(error)}"
+        # Attempt to isolate Allen Press by SSLError message and redo request without checking certificate led to ConnectionError
+        return f"{Path_Addition}|API error|Problem with API call: {format(error)}"
 
     if JSON_to_Python_Data_Types(API_Response):
         return JSON_to_Python_Data_Types(API_Response)

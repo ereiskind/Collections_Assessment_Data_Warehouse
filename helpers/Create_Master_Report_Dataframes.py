@@ -172,9 +172,13 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html)
     except TypeError: # This is the error that occurs when YOP is already "None" 
         Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html
-    except ValueError: # This is the error that occurs when YOP isn't a number
-        Year_Value = input(f"The value for the year of publication was the non-number \"{Dataframe['YOP']}\". Please enter the four digits for what the year value should be. ") #ToDo: Figure out how to output just the non-number value (currently outputs all in field up to that value)
-        Dataframe['YOP'] = int(Year_Value)
+    except ValueError: # This is the error that occurs when YOP isn't a number or a null
+        for Record_Number, Year_of_Publication in enumerate(Dataframe['YOP']):
+            try:
+                Year_of_Publication = int(Year_of_Publication)
+            except ValueError:
+                Year_Value = input(f"The value for the year of publication was the non-number \"{Year_of_Publication}\". Please enter the four digits for what the year value should be. ")
+                Year_of_Publication = int(Year_Value)
     
     try:
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')

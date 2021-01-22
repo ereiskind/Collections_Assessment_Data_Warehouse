@@ -66,7 +66,10 @@ def Handle_Status_Check_Problem(Source, Message, Error = None, Type = "alert"):
             Error = "COUNTER error",
             Description = Problem_Message,
         )
-        Error_Log.append(Capture_Problem)
+        with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+            Capture_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+            CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+            CSV_Row_Writer.writerow(Capture_Problem)
         logging.info(f"Added to Error_Log: {Source}|status|COUNTER error|{Problem_Message}")
         return True
     return False
@@ -121,7 +124,10 @@ def Handle_Exception_Master_Report(Source, Report, Exception_List, Load_Report_I
             Error = "COUNTER error",
             Description = Problem_Message,
         )
-        Error_Log.append(Capture_Problem)
+        with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+            Capture_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+            CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+            CSV_Row_Writer.writerow(Capture_Problem)
         logging.info(f"Added to Error_Log: {Source}|{Report}|COUNTER error|{Problem_Message}")
         return True
     return False
@@ -176,20 +182,28 @@ for Folder, Subfolder, Files in os.walk(API_Download_Path):
     elif len(Subfolder) > 0:
         API_Download_Not_Empty()
 
-#Subsection: Initialize List for Error_Log
-Error_Log = []
+#Subsection: Create Error_Log
 # This is a log for all of the reports that couldn't be loaded into the database for some reason
-# Columns:
-    # Interface: interface ID
-    # Report: the report that provided the data with the error--"status", "reports", and the master report abbreviations
-    # Error: the fixed-text description of the problem
+Error_Log_Location = Path('.', 'data', 'Error_Log.csv')
+Error_Log_Headers = [
+    "Interface", # Interface ID
+    "Report", # The report that provided the data with the error--"status", "reports", and the master report abbreviations
+    "Error", # The fixed-text description of the problem
         # HTTP error
         # COUNTER error
         # No reports available
         # Data already loaded into database
         # No data available
-        # Unable to load into database
-    # Description: the free-text description of the problem, often with program error data
+         # Unable to load into database
+    "Description", # The free-text description of the problem, often with program error data
+    "Dates", # The date range of the SUSHI harvest
+]
+
+if not Path.exists(Error_Log_Location):
+    Write_Header = open(str(Error_Log_Location), 'a', newline='')
+    CSV_Header_Writer = csv.DictWriter(Write_Header, Error_Log_Headers)
+    CSV_Header_Writer.writeheader()
+    Write_Header.close()
 
 #Subsection: Create the SQLAlchemy Engine
 Database = 'Collections_Assessment_Warehouse_0.1'
@@ -272,7 +286,10 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error = Status_Check.split("|")[1],
             Description = Status_Check.split("|")[2],
         )
-        Error_Log.append(Status_Check_Problem)
+        with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+            Status_Check_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+            CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+            CSV_Row_Writer.writerow(Status_Check_Problem)
         logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
         continue
 
@@ -313,7 +330,10 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error = Status_Check.split("|")[1],
             Description = Status_Check.split("|")[2],
         )
-        Error_Log.append(Available_Reports_Problem)
+        with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+            Available_Reports_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+            CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+            CSV_Row_Writer.writerow(Available_Reports_Problem)
         logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Status_Check)
         continue
     # This creates a list of all the reports offered by a platform excluding the consortium reports offered by Silverchair, which have a Report_ID value of "Silverchair:CR_??"
@@ -333,7 +353,10 @@ for SUSHI_Call_Data in SUSHI_Data:
             Error = "Missing reports",
             Description = "No master reports available",
         )
-        Error_Log.append(No_Reports_Problem)
+        with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+            No_Reports_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+            CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+            CSV_Row_Writer.writerow(No_Reports_Problem)
         logging.info("Added to Error_Log: " + SUSHI_Call_Data["JSON_Name"] + "|reports|No data available|No master reports available")
         continue
 
@@ -351,7 +374,10 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Error = "Missing reports",
                 Description = "Standard report based on master report not offered",
             )
-            Error_Log.append(Extra_Report_Problem) 
+            with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+                Extra_Report_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+                CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+                CSV_Row_Writer.writerow(Extra_Report_Problem)
         logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Report}|Missing reports|Standard report based on master report not offered")
     
     logging.info(f"Master report list collection successful: {len(Available_Master_Reports)} reports")
@@ -403,7 +429,10 @@ for SUSHI_Call_Data in SUSHI_Data:
                     Error = "Data already in database",
                     Description = f"Data for this report for the months {Usage_in_DB_Months} was already in the database",
                 )
-                Error_Log.append(Duplicated_Usage_Data_Problem)
+                with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+                    Duplicated_Usage_Data_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+                    CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+                    CSV_Row_Writer.writerow(Duplicated_Usage_Data_Problem)
                 logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Data already in database|Data for this report for the months {Usage_in_DB_Months} was already in the database")
                 continue
 
@@ -440,7 +469,10 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Error = Master_Report_Response.split("|")[1],
                 Description = Master_Report_Response.split("|")[2],
             )
-            Error_Log.append(Master_Report_Response_Problem)
+            with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+                Master_Report_Response_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+                CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+                CSV_Row_Writer.writerow(Master_Report_Response_Problem)
             logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Response)
             continue
 
@@ -479,7 +511,10 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Error = "No data available",
                 Description = "The report contained no report items",
             )
-            Error_Log.append(Master_Report_Items_Problem)
+            with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+                Master_Report_Items_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+                CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+                CSV_Row_Writer.writerow(Master_Report_Items_Problem)
             logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|No data available|The report contained no report items")
             continue
         #Alert: Should DRs with a single database where the metrics are identical to the PR (see Project MUSE as example) be captured and silently disposed of here as well?
@@ -495,7 +530,10 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Error = Master_Report_Dataframe.split("|")[1],
                 Description = Master_Report_Dataframe.split("|")[2],
             )
-            Error_Log.append(Master_Report_Dataframe_Problem)
+            with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+                Master_Report_Dataframe_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+                CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+                CSV_Row_Writer.writerow(Master_Report_Dataframe_Problem)
             logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|" + Master_Report_Dataframe)
             continue
         logging.info(Master_Report_Dataframe.tail())
@@ -538,24 +576,8 @@ for SUSHI_Call_Data in SUSHI_Data:
                 Error = "Unable to load into database",
                 Description = f"Dataframe didn't load into MySQL ({Error_Message})",
             )
-            Error_Log.append(Master_Report_Loading_Problem)
+            with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+                Master_Report_Loading_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+                CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+                CSV_Row_Writer.writerow(Master_Report_Loading_Problem)
             logging.info(f"Added to Error_Log: {SUSHI_Call_Data['JSON_Name']}|{Master_Report_Type}|Unable to load into dataframe|Dataframe didn't load into MySQL ({Error_Message})")
-
-#Section: Output Error_Log
-Error_Log_Location = str(Path('.', 'data', 'Error_Log.csv'))
-FileIO = open(Error_Log_Location, 'a', newline='')
-CSV_Writer = csv.DictWriter(FileIO, [
-    "Interface",
-    "Report",
-    "Error",
-    "Description",
-    "Dates"
-])
-CSV_Writer.writeheader()
-
-for Error in Error_Log:
-    Error["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
-    CSV_Writer.writerow(Error)
-
-FileIO.close()
-#ToDo: Figure out how to open CSV so it stays open when program exits--os.startfile closes file at program exit

@@ -155,7 +155,7 @@ def Master_Report_API_Call(Report_ID, URL, Parameters):
     except Timeout as error: # If the API request times out
         try: # Timeout errors seem to be random, so going to try get request again with more time
             time.sleep(1) # Some platforms return a 1020 error if SUSHI requests aren't spaced out; this provides spacing
-            API_Response = requests.get(API_Call_URL, params=Parameters, timeout=300, headers=Chrome_User_Agent)
+            API_Response = requests.get(API_Call_URL, params=Parameters, timeout=299, headers=Chrome_User_Agent)
             API_Response.raise_for_status()
         except Timeout as error:
             return f"{Report_ID}|HTTP error|Timed out twice: {format(error)}"

@@ -61,11 +61,13 @@ Engine = create_engine(
 JSON_Files = Path('.', 'data', 'Load_to_Database')
 for Folders, Subfolders, Files in os.walk(JSON_Files):
     for File in Files:
-        #ToDo: Interface_ID = interface ID from part of file name before underscore
-        #ToDo: Master_Report_Type = report type from file name after underscore
-        #ToDo: fileIO = open(path to JSON)
-        #ToDo: dictionary = json.load(fileIO)
-        #ToDo: Master_Report_Dataframe = Create_Dataframe(Interface_ID, Master_Report_Type, dictionary)
+        # Files must be named {Interface_ID}.{Master_Report_Type}.json
+        Interface_ID = File.split(".")[0]
+        Master_Report_Type = File.split(".")[1]
+        FileIO = open(JSON_Files / File) # The "/" can be used to concatenate parts of a file path provided the first item is a path object
+        R5_Report = json.load(FileIO)
+        FileIO.close()
+        Master_Report_Dataframe = Create_Dataframe(Interface_ID, Master_Report_Type, R5_Report)
         if str(type(Master_Report_Dataframe)) == "<class 'str'>": # Meaning the dataframe couldn't be created
             Master_Report_Dataframe_Problem = dict(
                 Interface = Interface_ID,

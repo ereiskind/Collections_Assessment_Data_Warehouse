@@ -26,11 +26,11 @@ Additional guidance:
 - Add notes as appropriate.
 
 #### TR_B1
-Metric_Types: Unique_Title_Requests
-Report_Filters: Data_Type=Book; Access_Type=Controlled; Access_Method=Regular*
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Title_Requests' AND Data_Type='Book' AND Access_Type='Controlled' AND Access_Method='Regular' AND Report='TR';`
+(Value was same with and without "Report='TR'")
+
 #### IR_M1
-Metric_Types: Total_Item_Requests
-Report_Filters: Data_Type=Multimedia; Access_Method=Regular*
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Total_Item_Requests' AND Data_Type='Multimedia' AND Access_Method='Regular' AND Report='IR';`
 
 
 ### 63. E-Serials Usage: Digital/Electronic
@@ -53,5 +53,4 @@ Additional guidelines:
 - Add notes as appropriate.
 
 #### TR_J1
-Metric_Types: Unique_Item_Requests
-Report_Filters: Data_Type=Journal; Access_Type=Controlled; Access_Method=Regular*
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Item_Requests' AND Data_Type='Journal' AND Access_Type='Controlled' AND Access_Method='Regular' AND Report='TR';`

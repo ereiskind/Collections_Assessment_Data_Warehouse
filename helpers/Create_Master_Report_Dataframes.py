@@ -63,15 +63,10 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         'Report': 'string',
         'Platform': 'string',
         'Data_Type': 'string',# Null in interfaces 17, 39, 55, 110
-        # Access_Method: Null in interfaces 21, 45, 201
+        'Access_Method': 'string',# Null in interfaces 21, 45, 201
         'Metric_Type': 'string',
         'R5_Count': 'int64'
     })
-    try:
-        Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
-    except KeyError:
-        Dataframe['Access_Method'] = None
-        Dataframe['Access_Method'] = Dataframe['Access_Method'].astype('string')
 
     Dataframe['R5_Month'] = pandas.to_datetime(
         Dataframe['R5_Month'],

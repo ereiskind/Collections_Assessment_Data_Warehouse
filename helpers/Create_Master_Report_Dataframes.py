@@ -101,37 +101,61 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['Publisher_ID'] = Dataframe['Publisher_ID'].astype('string')
     
     try:
-        Dataframe['DOI'] = Dataframe['DOI'].astype('string')
+        if len(Dataframe['DOI']) == 0:
+            Dataframe['DOI'] = None
+            Dataframe['DOI'] = Dataframe['DOI'].astype('string')
+        else:
+            Dataframe['DOI'] = Dataframe['DOI'].astype('string')
     except KeyError:
         Dataframe['DOI'] = None
         Dataframe['DOI'] = Dataframe['DOI'].astype('string')
 
     try:
-        Dataframe['Proprietary_ID'] = Dataframe['Proprietary_ID'].astype('string')
+        if len(Dataframe['Proprietary_ID']) == 0:
+            Dataframe['Proprietary_ID'] = None
+            Dataframe['Proprietary_ID'] = Dataframe['Proprietary_ID'].astype('string')
+        else:
+            Dataframe['Proprietary_ID'] = Dataframe['Proprietary_ID'].astype('string')
     except KeyError:
         Dataframe['Proprietary_ID'] = None
         Dataframe['Proprietary_ID'] = Dataframe['Proprietary_ID'].astype('string')
 
     try:
-        Dataframe['ISBN'] = Dataframe['ISBN'].astype('string')
+        if len(Dataframe['ISBN']) == 0:
+            Dataframe['ISBN'] = None
+            Dataframe['ISBN'] = Dataframe['ISBN'].astype('string')
+        else:
+            Dataframe['ISBN'] = Dataframe['ISBN'].astype('string')
     except KeyError:
         Dataframe['ISBN'] = None
         Dataframe['ISBN'] = Dataframe['ISBN'].astype('string')
 
     try:
-        Dataframe['Print_ISSN'] = Dataframe['Print_ISSN'].astype('string')
+        if len(Dataframe['Print_ISSN']) == 0:
+            Dataframe['Print_ISSN'] = None
+            Dataframe['Print_ISSN'] = Dataframe['Print_ISSN'].astype('string')
+        else:
+            Dataframe['Print_ISSN'] = Dataframe['Print_ISSN'].astype('string')
     except KeyError:
         Dataframe['Print_ISSN'] = None
         Dataframe['Print_ISSN'] = Dataframe['Print_ISSN'].astype('string')
 
     try:
-        Dataframe['Online_ISSN'] = Dataframe['Online_ISSN'].astype('string')
+        if len(Dataframe['Online_ISSN']) == 0:
+            Dataframe['Online_ISSN'] = None
+            Dataframe['Online_ISSN'] = Dataframe['Online_ISSN'].astype('string')
+        else:
+            Dataframe['Online_ISSN'] = Dataframe['Online_ISSN'].astype('string')
     except KeyError:
         Dataframe['Online_ISSN'] = None
         Dataframe['Online_ISSN'] = Dataframe['Online_ISSN'].astype('string')
 
     try:
-        Dataframe['URI'] = Dataframe['URI'].astype('string')
+        if len(Dataframe['URI']) == 0:
+            Dataframe['URI'] = None
+            Dataframe['URI'] = Dataframe['URI'].astype('string')
+        else:
+            Dataframe['URI'] = Dataframe['URI'].astype('string')
     except KeyError:
         Dataframe['URI'] = None
         Dataframe['URI'] = Dataframe['URI'].astype('string')
@@ -149,13 +173,21 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         Dataframe['Parent_Data_Type'] = Dataframe['Parent_Data_Type'].astype('string')
 
     try:
-        Dataframe['Parent_DOI'] = Dataframe['Parent_DOI'].astype('string')
+        if len(Dataframe['Parent_DOI']) == 0:
+            Dataframe['Parent_DOI'] = None
+            Dataframe['Parent_DOI'] = Dataframe['Parent_DOI'].astype('string')
+        else:
+            Dataframe['Parent_DOI'] = Dataframe['Parent_DOI'].astype('string')
     except KeyError:
         Dataframe['Parent_DOI'] = None
         Dataframe['Parent_DOI'] = Dataframe['Parent_DOI'].astype('string')
 
     try:
-        Dataframe['Parent_Proprietary_ID'] = Dataframe['Parent_Proprietary_ID'].astype('string')
+        if len(Dataframe['Parent_Proprietary_ID']) == 0:
+            Dataframe['Parent_Proprietary_ID'] = None
+            Dataframe['Parent_Proprietary_ID'] = Dataframe['Parent_Proprietary_ID'].astype('string')
+        else:
+            Dataframe['Parent_Proprietary_ID'] = Dataframe['Parent_Proprietary_ID'].astype('string')
     except KeyError:
         Dataframe['Parent_Proprietary_ID'] = None
         Dataframe['Parent_Proprietary_ID'] = Dataframe['Parent_Proprietary_ID'].astype('string')

@@ -176,9 +176,11 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
         for Record_Number, Year_of_Publication in enumerate(Dataframe['YOP']): # This loop evaluates each value in the YOP series individually
             try:
                 Year_of_Publication = int(Year_of_Publication)
-            except ValueError:
-                Year_Value = input(f"The value for the year of publication was the non-number \"{Year_of_Publication}\". Please enter the four digits for what the year value should be. ")
-                Year_of_Publication = int(Year_Value)
+                Dataframe['YOP'] = Year_of_Publication
+            except ValueError: # This handles the individual members of the series that cannot be converted into integers
+                # Attempts to manually change individual YOP values failed
+                Dataframe['YOP'] = None
+                Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html)
     
     try:
         Dataframe['Access_Type'] = Dataframe['Access_Type'].astype('string')

@@ -67,6 +67,7 @@ for Folders, Subfolders, Files in os.walk(JSON_Files):
         FileIO = open(JSON_Files / File) # The "/" can be used to concatenate parts of a file path provided the first item is a path object
         R5_Report = json.load(FileIO)
         FileIO.close()
+        logging.info(f"Data for {Master_Report_Type} from interface {Interface_ID} loaded into memory.")
         Master_Report_Dataframe = Create_Dataframe(Interface_ID, Master_Report_Type, R5_Report)
         if str(type(Master_Report_Dataframe)) == "<class 'str'>": # Meaning the dataframe couldn't be created
             Master_Report_Dataframe_Problem = dict(

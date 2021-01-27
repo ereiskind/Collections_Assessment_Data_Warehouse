@@ -46,3 +46,4 @@ COPY ./Private_Info/Non-COUNTER_Resources.md ./root/Collections_Assessment_Data_
 COPY ./Documentation/Data_Saved_in_Warehouse.md ./root/Collections_Assessment_Data_Warehouse/docs/Data_Saved_in_Warehouse.md
 COPY ./Private_Info/SUSHI_R5_Credentials.json ./root/Collections_Assessment_Data_Warehouse/data/SUSHI_R5_Credentials.json
 COPY ./Private_Info/Data_Warehouse_Data/ ./root/Collections_Assessment_Data_Warehouse/data/DML_CSVs/
+COPY ./Private_Info/JSON_to_Upload/ ./root/Collections_Assessment_Data_Warehouse/data/Load_to_Database/

@@ -34,6 +34,8 @@ Collections_Assessment_Data_Warehouse_Runtime/
 ┣ Private_Info/
 ┃ ┣ Data_Warehouse_Data/
 ┃ ┃ ┗ *the CSVs containing the raw data for inclusion in the data warehouse entities other than "R5_Usage"*
+┃ ┣ JSON_to_Upload/
+┃ ┃ ┗ *the JSONs containing the COUNTER usage that can't be pulled through the SUSHI API*
 ┃ ┣ Database_Credentials.py (see "Creating Database_Credentials.py" above)
 ┃ ┗ SUSHI_R5_Credentials.json (a list of the SUSHI credentials for all available resources formatted according to SUSHI_R5_Credentials_Template.json)
 ┣ docker-compose.yml (the Docker Compose file)

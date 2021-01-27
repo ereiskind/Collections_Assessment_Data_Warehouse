@@ -4,6 +4,7 @@ data/SUSHI_R5_Credentials.json
 data/Error_Log.csv
 data/DML_CSVs/*
 data/Examples/*
+data/Load_to_Database/*
 docs/Data_Saved_in_Warehouse.md
 docs/Non-COUNTER_Resources.md
 

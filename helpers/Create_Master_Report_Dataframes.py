@@ -206,6 +206,9 @@ def Create_Dataframe(Interface, Master_Report_Type, Master_Report_JSON):
                 # Attempts to manually change individual YOP values failed
                 Dataframe['YOP'] = None
                 Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html)
+            except TypeError: # This handles the individual members of the series that are already null values
+                # Attempts to manually change individual YOP values failed
+                Dataframe['YOP'] = Dataframe['YOP'].astype('Int64') # The capital "I" is a pandas data type that allows for nulls (https://pandas.pydata.org/pandas-docs/stable/user_guide/integer_na.html)
     except ValueError: # This is the error that occurs when there's a value in YOP that isn't a number or a null
         for Record_Number, Year_of_Publication in enumerate(Dataframe['YOP']): # This loop evaluates each value in the YOP series individually
             try:

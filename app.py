@@ -194,7 +194,8 @@ Error_Log_Headers = [
         # No reports available
         # Data already loaded into database
         # No data available
-         # Unable to load into database
+        # Unable to load into database
+        # Problem with program execution
     "Description", # The free-text description of the problem, often with program error data
     "Dates", # The date range of the SUSHI harvest
 ]
@@ -499,7 +500,21 @@ for SUSHI_Call_Data in SUSHI_Data:
                 except:
                     pass # A SUSHI JSON without an "Exceptions" key will return a KeyError for the above
 
-        logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
+        try: # There seems to be an issue with some error Master_Report_Response values not being caught by the error handling above; this will put those uncaught problems in the error log instead of having them crash the program
+            logging.info(f"API call to {SUSHI_Call_Data['URL']} for {Master_Report_Type} successful: {len(Master_Report_Response['Report_Items'])} resources")
+        except TypeError:
+            Handle_Exception_Master_Report_Problem = dict(
+                Interface = SUSHI_Call_Data["JSON_Name"],
+                Report = Master_Report_Type,
+                Error = "Problem with program execution",
+                Description = f"Handle_Exception_Master_Report was unable to parse {Master_Report_Response}."
+            )
+            with open(str(Error_Log_Location), 'a', newline='') as Write_Row:
+                Handle_Exception_Master_Report_Problem["Dates"] = f"{Begin_Date.strftime('%Y-%m')} to {End_Date.strftime('%Y-%m')}"
+                CSV_Row_Writer = csv.DictWriter(Write_Row, Error_Log_Headers)
+                CSV_Row_Writer.writerow(Handle_Exception_Master_Report_Problem)
+            input(f"Handle_Exception_Master_Report was unable to parse {Master_Report_Response}. Investigate the problem.")
+            continue
 
         #Subsection: Return Notice for Empty Reports
         # These cause problems when passed into the dataframe creation functions, so they're handled here; more investigation is needed, however, as an empty report can be either correct behavior (some interfaces seem to offer DR even though there aren't any databases on the constituent platform(s)/user interface(s)) or a problem

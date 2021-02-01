@@ -66,6 +66,15 @@ Below are alternate methods for accessing the contents of the runtime environmen
 10. Change the Username to the value of "user" created in step four
 11. Add the password created in step two to the vault
 
+### Accessing the MySQL Container Bash Shell for `mysqldump` via VS Code
+1. Attach a VS Code window to a running container
+2. Select "mysql-container" as the running container
+3. Open the integrated terminal
+4. `mysqldump --password --extended-insert database table > filename.sql` where "database" is the name of the database the data is coming from, "table" is the name of the table being saved, and "filename" is the name of the file the data is being saved to 
+5. Enter the password for the root user set in the MySQL Dockerfile
+6. In the left-hand menu, right click the new file and select "Download..."
+7. Download the SQL text file to the local machine
+
 ### Accessing the Python Container via CLI
 1. Open the host CLI
 2. `docker exec -it python-container bash`

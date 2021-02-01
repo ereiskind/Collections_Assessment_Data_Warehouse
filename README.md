@@ -1,5 +1,5 @@
 # Collections Assessment Data Warehouse
-A program for performing collections assessment in academic libraries.
+A program for performing collections assessment in academic libraries. (Note: Running the SUSHI harvester for three months of stats takes 60-80 minutes.)
 
 ## Goals of this program
 

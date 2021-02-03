@@ -6,31 +6,37 @@
 ## ACRL/IPEDS Instructions
 
 ### 60b. Initial Circulation: Digital/Electronic
-Report usage of digital/electronic titles whether viewed, downloaded, or streamed.
-
-Include: 
-- Usage for e-books and e-media titles only. 
-- Titles even if they were purchased as part of a collection or database.
+Report usage of digital/electronic titles whether viewed, downloaded, or streamed. **Include usage for e-books, e-serials, and e-media titles** even if they were purchased as part of a collection or database.
 
 Exclude: 
 - E-serials and institutional repository documents, which are reported separately. 
 - Usage of titles in demand-driven acquisition (DDA) or patron-driven acquisition (PDA) collections until they have been purchased or leased by the library. 
 - Transactions of VHS, CDs, or DVDs, as the transactions of these materials are reported under "physical circulation." 
 
-Most vendors will provide usage statistics in COUNTER reports. As of January 2019, Release 5 became the current Code of Practice (see Project COUNTER Release 5 Code of Practice [https://www.projectcounter.org/wpcontent/uploads/2019/11/Release_5_for_Providers_20191030.pdf]). Relevant COUNTER Release 5 reports for e-books are: **TR_B1**: Book Requests (Excluding OA_Gold). As to the COUNTER 5 metric type for e-books, **report "unique title requests."** For e-media, use **IR_M1**: Multimedia Item Requests, **report metric type for "total_item_requests"** is the most relevant. **If you have access to COUNTER Release 5 reports and can provide an answer for 60 Column B, skip questions 61 and 62 and leave them blank.** If COUNTER Release 5 reports are unavailable but COUNTER Release 4 reports are available, skip 60 Column B and leave it blank. Follow the instructions for questions 61 and 62 and provide answers accordingly. 
+Most vendors will provide usage statistics in COUNTER reports. As of January 2019, Release 5 became the current Code of Practice (see Project COUNTER Release 5 Code of Practice [https://www.projectcounter.org/wpcontent/uploads/2019/11/Release_5_for_Providers_20191030.pdf]). Relevant COUNTER Release 5 reports for e-books are: **TR_B1**: Book Requests (Excluding OA_Gold). As to the COUNTER 5 metric type for e-books, **report "unique title requests."** For e-media, use **IR_M1**: Multimedia Item Requests, **report metric type for "total_item_requests"** is the most relevant. **If you have access to COUNTER Release 5 reports and can provide an answer for 60 Column B, skip questions 61 and 62 and leave them blank.** 
+
+If you have access to COUNTER Release 5 reports and can provide an answer for 60 Column B, skip questions 61 and 62 and leave them blank. 
+
+If COUNTER Release 5 reports are unavailable but COUNTER Release 4 reports are available, skip 60 Column B and leave it blank. Follow the instructions for questions 61 and 62 and provide answers accordingly.
 
 Additional guidance: 
 - Libraries may need to ask vendors for usage reports; reports may not be delivered automatically or in easily understood formats by the vendor to the library. 
 - Viewing documents is defined as having the full text of a digital document or electronic resource downloaded. [NISO Z39.7-2013, section 7.7] 
-- An electronic resource management system (ERMS) and/or a usage consolidation service may be helpful for collecting e-book usage statistics. 
+- An electronic resource management system (ERMS) and/or a usage consolidation service may be helpful for collecting e-book usage statistics.
 - Add notes as appropriate.
 
-#### TR_B1
+#### Calculating 60b
+60b = TR_B1 + IR_M1 + TR_J1
+
+##### TR_B1
 `SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Title_Requests' AND Data_Type='Book' AND Access_Type='Controlled' AND Access_Method='Regular' AND Report='TR';`
 (Value was same with and without "Report='TR'")
 
-#### IR_M1
+##### IR_M1
 `SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Total_Item_Requests' AND Data_Type='Multimedia' AND Access_Method='Regular' AND Report='IR';`
+
+##### TR_J1
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Item_Requests' AND Data_Type='Journal' AND Access_Type='Controlled' AND Access_Method='Regular' AND Report='TR';`
 
 
 ### 63. E-Serials Usage: Digital/Electronic
@@ -52,5 +58,8 @@ Additional guidelines:
 - An electronic resource management system (ERMS) and/or a usage consolidation service may be helpful for collecting e-serial usage statistics.
 - Add notes as appropriate.
 
-#### TR_J1
+#### Calculating 63
+63 = TR_J1
+
+##### TR_J1
 `SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Item_Requests' AND Data_Type='Journal' AND Access_Type='Controlled' AND Access_Method='Regular' AND Report='TR';`

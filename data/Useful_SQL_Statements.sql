@@ -80,3 +80,16 @@ FROM
     R5_Usage
 WHERE
     Resource_Name LIKE '%';
+
+-- Getting a count for a given metric for all of the databases on a given platform
+SELECT
+    Resource_Name,
+    SUM(R5_Count)
+FROM
+    R5_Usage
+WHERE
+    Report='DR'
+    AND Metric_Type='Total_Item_Requests'
+    AND Platform='NewsBank'
+GROUP BY
+    Resource_Name;

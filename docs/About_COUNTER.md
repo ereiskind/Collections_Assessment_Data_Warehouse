@@ -68,8 +68,8 @@ Additional guidelines:
 ## Other COUNTER Reports
 
 ### DR_D1
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='DR' AND Access_Method='Regular'`
 - Metric_Type=Searches_Automated; Searches_Federated; Searches_Regular; Total_Item_Investigations; Total_Item_Requests
-- Access_Method=Regular
 
 ### PR_P1
 - Metric_Type = Searches_Platform; Total_Item_Requests; Unique_Item_Requests; Unique_Title_Requests

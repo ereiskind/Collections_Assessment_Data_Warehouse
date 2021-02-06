@@ -69,3 +69,14 @@ WHERE
     AND Report='TR'
 GROUP BY
     YOP;
+
+-- Searching for a resource by name
+SELECT
+    DISTINCT Resource_Name,
+    Platform,
+    Proprietary_ID,
+    Report
+FROM
+    R5_Usage
+WHERE
+    Resource_Name LIKE '%';

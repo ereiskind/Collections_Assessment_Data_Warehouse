@@ -63,3 +63,69 @@ Additional guidelines:
 
 ##### TR_J1
 `SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Item_Requests' AND Data_Type='Journal' AND Access_Type='Controlled' AND Access_Method='Regular' AND Report='TR';`
+
+
+## Other COUNTER Reports
+
+### DR_D1
+- Metric_Type=Searches_Automated; Searches_Federated; Searches_Regular; Total_Item_Investigations; Total_Item_Requests
+- Access_Method=Regular
+
+### PR_P1
+- Metric_Type = Searches_Platform; Total_Item_Requests; Unique_Item_Requests; Unique_Title_Requests
+- Access_Method=Regular
+
+### DR_D1 actually goes here
+
+### DR_D2
+- Metric_Type=Limit_Exceeded; No_License
+- Access_Method=Regular
+
+### TR_B1
+- Metric_Type=Total_Item_Requests; Unique_Title_Requests
+- Data_Type=Book
+- Access_Type=Controlled
+- Access_Method=Regular
+
+### TR_B2
+- Metric_Type=Limit_Exceeded; No_License
+- Data_Type=Book
+- Access_Method=Regular
+
+### TR_B3
+- Metric_Type=Total_Item_Investigations; Total_Item_Requests; Unique_Item_Investigations; Unique_Item_Requests; Unique_Title_Investigations; Unique_Title_Requests
+- Data_Type=Book
+- Access_Method=Regular
+
+### TR_J1
+- Metric_Type=Total_Item_Requests; Unique_Item_Requests
+- Data_Type=Journal
+- Access_Type=Controlled
+- Access_Method=Regular
+
+### TR_J2
+- Metric_Type=Limit_Exceeded; No_License
+- Data_Type=Journal
+- Access_Method=Regular
+
+### TR_J3
+- Metric_Type=Total_Item_Investigations; Total_Item_Requests; Unique_Item_Investigations; Unique_Item_Requests
+- Data_Type=Journal
+- Access_Method=Regular
+
+### TR_J4
+- Metric_Type=Total_Item_Requests; Unique_Item_Requests
+- Data_Type=Journal
+- Access_Type=Controlled
+- Access_Method=Regular
+
+### IR_A1
+- Metric_Type=Total_Item_Requests; Unique_Items_Requests
+- Data_Type=Article
+- Parent_Data_Type=Journal
+- Access_Method=Regular
+
+### IR_M1
+- Metric_Type=Total_Item_Requests
+- Data_Type=Multimedia
+- Access_Method=Regular

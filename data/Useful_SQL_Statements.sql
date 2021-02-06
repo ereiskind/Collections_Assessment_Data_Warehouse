@@ -59,4 +59,13 @@ GROUP BY
     R5_Usage.Proprietary_ID;
 
 -- Get the YOP and frequency of those YOP for a given Interface and Report
-SELECT DISTINCT YOP, COUNT(YOP) FROM R5_Usage WHERE Interface=144 AND Report='TR' GROUP BY YOP;
+SELECT
+    DISTINCT YOP,
+    COUNT(YOP)
+FROM
+    R5_Usage
+WHERE
+    Interface=144
+    AND Report='TR'
+GROUP BY
+    YOP;

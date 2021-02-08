@@ -112,6 +112,12 @@
     },
     {
         "op": "core/column-rename",
+        "oldColumnName": "ISSN",
+        "newColumnName": "Online_ISSN",
+        "description": "Rename column ``ISSN`` to ``Online_ISSN``"
+    },
+    {
+        "op": "core/column-rename",
         "oldColumnName": "Access Denied Category",
         "newColumnName": "Metric_Type",
         "description": "Rename column ``Access Denied Category`` to ``Metric_Type``"

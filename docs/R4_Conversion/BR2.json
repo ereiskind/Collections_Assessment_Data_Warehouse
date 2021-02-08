@@ -111,6 +111,12 @@
         "description": "Rename column ``Proprietary Identifier`` to ``Proprietary_ID``"
     },
     {
+        "op": "core/column-rename",
+        "oldColumnName": "ISSN",
+        "newColumnName": "Online_ISSN",
+        "description": "Rename column ``ISSN`` to ``Online_ISSN``"
+    },
+    {
         "op": "core/column-addition",
         "engineConfig": {
             "facets": [],

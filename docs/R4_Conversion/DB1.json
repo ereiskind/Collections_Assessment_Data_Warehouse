@@ -87,6 +87,6 @@
         "onError": "set-to-blank",
         "newColumnName": "Data_Type",
         "columnInsertIndex": 4,
-        "description": "Add column ``Data_Type`` containing value `Database`"
+        "description": "Creat column ``Data_Type`` containing value `Database`"
     }
 ]

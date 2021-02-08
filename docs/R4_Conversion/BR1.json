@@ -121,7 +121,7 @@
         "onError": "set-to-blank",
         "newColumnName": "Metric_Type",
         "columnInsertIndex": 7,
-        "description": "Add column ``Metric_Type`` containing value `Successful Title Requests`"
+        "description": "Create column ``Metric_Type`` containing value `Successful Title Requests`"
     },
     {
         "op": "core/column-addition",
@@ -134,6 +134,6 @@
         "onError": "set-to-blank",
         "newColumnName": "Data_Type",
         "columnInsertIndex": 8,
-        "description": "Add column ``Data_Type`` containing value `Book`"
+        "description": "Create column ``Data_Type`` containing value `Book`"
     }
 ]

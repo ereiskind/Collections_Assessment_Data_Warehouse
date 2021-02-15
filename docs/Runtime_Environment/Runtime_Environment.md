@@ -85,14 +85,15 @@ Below are alternate methods for accessing the contents of the runtime environmen
 11. Add the password created in step two to the vault
 
 ### Create a Copy of the MySQL Container Contents in DDL and DML
-(The first three steps are about accessing the bash shell for the MySQL container)
-1. Attach a VS Code window to a running container (this process needs )
-2. Select "mysql-container" as the running container
-3. Open the integrated terminal
-4. `mysqldump --password database > filename.sql` where "database" is the name of the database the data is coming from and "filename" is the name of the file the data is being saved to 
-5. Enter the password for the root user set in the MySQL Dockerfile
-6. In the left-hand menu, right click the new file and select "Download..."
-7. Download the SQL text file to the local machine
+(The first two steps are about accessing the bash shell for the MySQL container through VS Code--ideally, would like a method not bound to a specific code editor)
+1. Attach a VS Code window to the running MySQL container
+2. Open the integrated terminal in the MySQL container window
+3. Use one of the commands below, where "database" is the name of the database the data is coming from, "table" is the table the data is coming from, and "filename" is the name of the file the data is being saved to
+   - For a table, `mysqldump --password database table > filename.sql`
+   - For a database, `mysqldump --password database > filename.sql`
+4. Enter the password for the root user set in the MySQL Dockerfile
+5. In the left-hand menu, right click the new file and select "Download..."
+6. Download the SQL text file to the local machine
 
 ### Accessing the Python Container via CLI
 1. Open the host CLI

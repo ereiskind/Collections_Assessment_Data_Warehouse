@@ -19,12 +19,12 @@ Collections_Assessment_Data_Warehouse/
 ┃ ┣ SQL_Output/
 ┃ ┣ Create_Insert_Statements_for_Non-SUSHI_Data.py
 ┃ ┣ Create_Table_from_SUSHI_Credentials_JSON.py
-┃ ┣ Data_Warehouse_DDL_Statements.sql
 ┃ ┣ *Database_Credentials.py* (the credentials for the MySQL database)
 ┃ ┣ *SUSHI_R5_Credentials.json* (a list of the SUSHI credentials for all available resources formatted according to SUSHI_R5_Credentials_Template.json)
 ┃ ┗ Useful_SQL_Statements.sql
 ┣ docs/
 ┃ ┣ Runtime_Environment/
+┃ ┃ ┣ **Data_Warehouse_DDL_Statements.sql** (the DDL statements used to create the connected database)
 ┃ ┃ ┣ **Docker_Compose.txt** (the contents of the docker-compose.yml creating the runtime environment)
 ┃ ┃ ┣ **MySQL_Dockerfile.txt** (the contents of the Dockerfile creating the MySQL container)
 ┃ ┃ ┣ **Python_Dockerfile.txt** (the contents of the Dockerfile creating the Python container)

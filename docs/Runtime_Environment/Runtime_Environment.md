@@ -2,14 +2,31 @@
 Instead of using a standard virtual environment, this repository runs in a series of Docker containers, where the Python container serves the functions of the virtual environment. A second Git repository on a local machine or in a shared folder contains the Dockerfiles and Docker Compose file and files with private information used by the programs in this repository.
 
 ## The File Overlay Process
-The complete contents of the Collections_Assessment_Data_Warehouse folder, described in Repository_Contents.md, are created by cloning the GitHub repository of the same name at https://github.com/ereiskind/Collections_Assessment_Data_Warehouse.git into this Docker container and then copying files from the runtime environment into this container at paths that coincide with the file structure of the above repository. For example, if the GitHub repository contains a directory ./root/repo/foo with no subdirectories, and the Python container Dockerfile contains instructions to copy files into a directory ./root/repo/foo/bar, when the contents of the container are viewed, ./root/repo/foo will have a subdirectory bar with files from the host machine. Including the files added to the container though that process to the .gitignore keeps them from being added to the GitHub repository.
+While the programming functionality and documentation for the data warehouse are stored in a public Git repo, the runtime folder--the folder from which the Docker containers are launched--contains the following prerequisite data:
 
-### Creating "Database_Credentials.py"
+- The Dockerfiles for the Python and MySQL containers, and the Docker Compose file for building them together
+- The SQL files for creating and loading the database
+- The list of Python dependencies
+- The JSON with the SUSHI credentials
+- The Python file with the credentials for accessing the database
+
+The above files, as well as other documentation and examples containing private information, are combined with the files in the public repo through a file overlay process where files in the runtime folder are copied into the Docker containers through "copy" commands in the Dockerfiles. For example, if the container contains a directory ./root/repo/foo with no subdirectories, and a Dockerfile contains instructions to copy files into a directory ./root/repo/foo/bar, when the contents of the container are viewed, ./root/repo/foo will have a subdirectory bar with files from the host machine.
+
+For a complete list of the runtime folder's content, see "The Runtime Environment Repository File Structure."
+
+### Creating the Application
+The functionality of the data warehouse is in the Python container's Collections_Assessment_Data_Warehouse folder, described in Repository_Contents.md, which is created by cloning the GitHub repository of the same name at https://github.com/ereiskind/Collections_Assessment_Data_Warehouse.git into the container and then copying files saved in the runtime folder for privacy reasons into that container at paths that coincide with the file structure of the above repository. All files in the Collections_Assessment_Data_Warehouse folder, including those added through the file overlay process, will be committed to the public repo unless added to the .gitignore file.
+
+#### Creating "Database_Credentials.py"
 One of the files added to the GitHub repository's file structure in the container through the above process is "Database_Credentials.py". It sets four variables:
 - `Username`: the username for the account being used to access the database; with the Dockerfile provided, the database's only user is "root"
 - `Password`: the password assigned to the username; in the sample Dockerfile provided, the user "root" was given the password "root"
 - `Host`: the host name of the MySQL container given in the Docker Compose file; in the sample, this is "database"
 - `Post`: the external port assigned to the MySQL container in the Docker Compose file; in the sample, this is "3306"
+
+### Creating the Database
+The database can be constructed and pre-populated through the file overlay process. Copying SQL files to the `/docker-entrypoint-initdb.d/` folder has the same effect as running all the statements in the file in the MySQL instance at build time. Multiple files can be used, but data definition language files need to go before data manipulation language files.
+
 
 ## The Runtime Environment Repository File Structure
 Note: Italics represent snips
@@ -30,7 +47,8 @@ Collections_Assessment_Data_Warehouse_Runtime/
 ┃   ┗ Status_Check_Sample.json (COUNTER response to /status GET request)
 ┣ mysql/
 ┃ ┣ Dockerfile (the Dockerfile to create the MySQL container)
-┃ ┗ Version_0.1_DDL.sql (the SQL statements to create the schema for the database and load in any information wanted in the database at initialization)
+┃ ┣ Version_0.1_DDL.sql (the SQL statements to create the schema for the database)
+┃ ┗ Version_0.1_DML.sql (the SQL statements to load in any information wanted in the database at initialization)
 ┣ Private_Info/
 ┃ ┣ Data_Warehouse_Data/
 ┃ ┃ ┗ *the CSVs containing the raw data for inclusion in the data warehouse entities other than "R5_Usage"*

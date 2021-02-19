@@ -95,5 +95,18 @@
         "newColumnName": "Data_Type",
         "columnInsertIndex": 3,
         "description": "Creat column ``Data_Type`` containing value `Platform`"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Publisher",
+        "expression": "grel:if(isBlank(value),\"NULL\",value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change null values to `NULL` in column ``Publisher``"
     }
 ]

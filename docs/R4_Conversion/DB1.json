@@ -101,5 +101,31 @@
         "newColumnName": "Data_Type",
         "columnInsertIndex": 4,
         "description": "Creat column ``Data_Type`` containing value `Database`"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Resource_Name",
+        "expression": "grel:if(isBlank(value),\"NULL\",value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change null values to `NULL` in column ``Resource_Name``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Publisher",
+        "expression": "grel:if(isBlank(value),\"NULL\",value)",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change null values to `NULL` in column ``Publisher``"
     }
 ]

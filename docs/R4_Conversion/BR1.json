@@ -28,6 +28,43 @@
         "description": "Remove total rows"
     },
     {
+        "op": "core/column-rename",
+        "oldColumnName": "Column",
+        "newColumnName": "Resource",
+        "description": "Rename column ``Column`` to ``Resource``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Book DOI",
+        "newColumnName": "DOI",
+        "description": "Rename column ``Book DOI`` to ``DOI``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Proprietary Identifier",
+        "newColumnName": "Proprietary_ID",
+        "description": "Rename column ``Proprietary Identifier`` to ``Proprietary_ID``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "ISSN",
+        "newColumnName": "Online_ISSN",
+        "description": "Rename column ``ISSN`` to ``Online_ISSN``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Resource",
+        "expression": "grel:value.unicode().join(\",\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change characters in ``Resource`` to their Unicode code points"
+    },
+    {
         "op": "core/transpose-columns-into-rows",
         "startColumnName": "Reporting Period Total",
         "columnCount": -1,
@@ -91,30 +128,6 @@
         "repeat": false,
         "repeatCount": 10,
         "description": "Make ``R4_Month`` date data types"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Column",
-        "newColumnName": "Resource",
-        "description": "Rename column ``Column`` to ``Resource``"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Book DOI",
-        "newColumnName": "DOI",
-        "description": "Rename column ``Book DOI`` to ``DOI``"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Proprietary Identifier",
-        "newColumnName": "Proprietary_ID",
-        "description": "Rename column ``Proprietary Identifier`` to ``Proprietary_ID``"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "ISSN",
-        "newColumnName": "Online_ISSN",
-        "description": "Rename column ``ISSN`` to ``Online_ISSN``"
     },
     {
         "op": "core/column-addition",

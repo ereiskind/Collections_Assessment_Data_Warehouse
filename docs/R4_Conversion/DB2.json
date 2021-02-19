@@ -28,6 +28,31 @@
         "description": "Remove total rows"
     },
     {
+        "op": "core/column-rename",
+        "oldColumnName": "Database",
+        "newColumnName": "Resource_Name",
+        "description": "Rename column ``Database`` to ``Resource_Name``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Access denied category",
+        "newColumnName": "Metric_Type",
+        "description": "Rename column ``Access denied category`` to ``Metric_Type``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Platform",
+        "expression": "grel:value.unicode().join(\",\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change characters in ``Resource_Name`` to their Unicode code points"
+    },
+    {
         "op": "core/transpose-columns-into-rows",
         "startColumnName": "Reporting Period Total",
         "columnCount": -1,
@@ -91,18 +116,6 @@
         "repeat": false,
         "repeatCount": 10,
         "description": "Make ``R4_Month`` date data types"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Database",
-        "newColumnName": "Resource_Name",
-        "description": "Rename column ``Database`` to ``Resource_Name``"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Access denied category",
-        "newColumnName": "Metric_Type",
-        "description": "Rename column ``Access denied category`` to ``Metric_Type``"
     },
     {
         "op": "core/column-addition",

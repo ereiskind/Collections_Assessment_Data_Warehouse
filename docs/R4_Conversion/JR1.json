@@ -153,7 +153,7 @@
             "facets": [],
             "mode": "row-based"
         },
-        "baseColumnName": "Online_ISSN",
+        "baseColumnName": "Resource_Name",
         "expression": "grel:\"Successful Full-text Article Requests\"",
         "onError": "set-to-blank",
         "newColumnName": "Metric_Type",

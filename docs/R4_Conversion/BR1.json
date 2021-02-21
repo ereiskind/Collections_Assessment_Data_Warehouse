@@ -135,7 +135,7 @@
             "facets": [],
             "mode": "row-based"
         },
-        "baseColumnName": "ISSN",
+        "baseColumnName": "Resource_Name",
         "expression": "grel:\"Successful Title Requests\"",
         "onError": "set-to-blank",
         "newColumnName": "Metric_Type",

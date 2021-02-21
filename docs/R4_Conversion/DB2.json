@@ -45,7 +45,7 @@
             "facets": [],
             "mode": "row-based"
         },
-        "columnName": "Platform",
+        "columnName": "Resource_Name",
         "expression": "grel:value.unicode().join(\",\")",
         "onError": "keep-original",
         "repeat": false,

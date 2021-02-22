@@ -121,19 +121,19 @@
         },
         "description": "Remove rows with a title total"
     },
-      {
-    "op": "core/text-transform",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "R4_Month",
+        "expression": "grel:if(value.contains(/E[D|S]T/),value.replace(\"EDT\",\"EST\").toDate(),(substring(value,0,4)+\"1-\"+substring(value,4)).toDate())",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Change the values in column ``R4_Month`` to date data type"
     },
-    "columnName": "R4_Month",
-    "expression": "grel:if(value.contains(/E[D|S]T/),value.replace(\"EDT\",\"EST\").toDate(),(substring(value,0,4)+\"1-\"+substring(value,4)).toDate())",
-    "onError": "keep-original",
-    "repeat": false,
-    "repeatCount": 10,
-    "description": "Change the values in column ``R4_Month`` to date data type"
-  },
     {
         "op": "core/column-addition",
         "engineConfig": {

@@ -5,9 +5,9 @@
             "facets": [
                 {
                     "type": "list",
-                    "name": "Column",
-                    "expression": "grel:or(value==\"Total for all Titles\",value==\"Total for all titles\")",
-                    "columnName": "Column",
+                    "name": "Journal",
+                    "expression": "grel:or(value==\"Total for all Journals\",value==\"Total for all journals\")",
+                    "columnName": "Journal",
                     "invert": false,
                     "omitBlank": false,
                     "omitError": false,
@@ -29,15 +29,15 @@
     },
     {
         "op": "core/column-rename",
-        "oldColumnName": "Column",
+        "oldColumnName": "Journal",
         "newColumnName": "Resource_Name",
-        "description": "Rename column ``Column`` to ``Resource_Name``"
+        "description": "Rename column ``Journal`` to ``Resource_Name``"
     },
     {
         "op": "core/column-rename",
-        "oldColumnName": "Book DOI",
+        "oldColumnName": "Journal DOI",
         "newColumnName": "DOI",
-        "description": "Rename column ``Book DOI`` to ``DOI``"
+        "description": "Rename column ``Journal DOI`` to ``DOI``"
     },
     {
         "op": "core/column-rename",
@@ -47,9 +47,21 @@
     },
     {
         "op": "core/column-rename",
-        "oldColumnName": "ISSN",
+        "oldColumnName": "Print ISSN",
+        "newColumnName": "Print_ISSN",
+        "description": "Rename column ``Print ISSN`` to ``Print_ISSN``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Online ISSN",
         "newColumnName": "Online_ISSN",
-        "description": "Rename column ``ISSN`` to ``Online_ISSN``"
+        "description": "Rename column ``Online ISSN`` to ``Online_ISSN``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Access Denied Category",
+        "newColumnName": "Metric_Type",
+        "description": "Rename column ``Access Denied Category`` to ``Metric_Type``"
     },
     {
         "op": "core/text-transform",
@@ -90,6 +102,18 @@
                     "selection": [
                         {
                             "v": {
+                                "v": "Reporting Period HTML",
+                                "l": "Reporting Period HTML"
+                            }
+                        },
+                        {
+                            "v": {
+                                "v": "Reporting Period PDF",
+                                "l": "Reporting Period PDF"
+                            }
+                        },
+                        {
+                            "v": {
                                 "v": "Reporting Period Total",
                                 "l": "Reporting Period Total"
                             }
@@ -101,7 +125,7 @@
             ],
             "mode": "row-based"
         },
-        "description": "Remove rows with a ``R4_Month`` value of `Reporting Period Total`"
+        "description": "Remove rows with a title total"
     },
     {
         "op": "core/text-transform",
@@ -122,25 +146,12 @@
             "facets": [],
             "mode": "row-based"
         },
-        "baseColumnName": "Resource_Name",
-        "expression": "grel:\"Successful Title Requests\"",
-        "onError": "set-to-blank",
-        "newColumnName": "Metric_Type",
-        "columnInsertIndex": 7,
-        "description": "Create column ``Metric_Type`` containing value `Successful Title Requests`"
-    },
-    {
-        "op": "core/column-addition",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
         "baseColumnName": "Metric_Type",
-        "expression": "grel:\"Book\"",
+        "expression": "grel:\"Serial\"",
         "onError": "set-to-blank",
         "newColumnName": "Data_Type",
         "columnInsertIndex": 8,
-        "description": "Create column ``Data_Type`` containing value `Book`"
+        "description": "Create column ``Data_Type`` containing value `Serial`"
     },
     {
         "op": "core/text-transform",
@@ -200,12 +211,12 @@
             "facets": [],
             "mode": "row-based"
         },
-        "columnName": "ISBN",
+        "columnName": "Print_ISSN",
         "expression": "grel:if(isBlank(value),\"NULL\",value)",
         "onError": "keep-original",
         "repeat": false,
         "repeatCount": 10,
-        "description": "Change null values to `NULL` in column ``ISBN``"
+        "description": "Change null values to `NULL` in column ``Print_ISSN``"
     },
     {
         "op": "core/text-transform",

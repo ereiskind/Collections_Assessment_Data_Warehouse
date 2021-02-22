@@ -6,7 +6,7 @@
                 {
                     "type": "list",
                     "name": "Column",
-                    "expression": "grel:value==\"Total for all Titles\"",
+                    "expression": "grel:or(value==\"Total for all Titles\",value==\"Total for all titles\")",
                     "columnName": "Column",
                     "invert": false,
                     "omitBlank": false,
@@ -116,24 +116,11 @@
             "mode": "row-based"
         },
         "columnName": "R4_Month",
-        "expression": "grel:substring(value,0,4)+\"1-\"+substring(value,4)",
+        "expression": "grel:if(value.contains(/E[D|S]T/),value.replace(\"EDT\",\"EST\").toDate(),(substring(value,0,4)+\"1-\"+substring(value,4)).toDate())",
         "onError": "keep-original",
         "repeat": false,
         "repeatCount": 10,
-        "description": "Change the month-day values in ``R4_Month`` to the first day of the month"
-    },
-    {
-        "op": "core/text-transform",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "columnName": "R4_Month",
-        "expression": "value.toDate()",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "Make ``R4_Month`` date data types"
+        "description": "Change the values in column ``R4_Month`` to date data type"
     },
     {
         "op": "core/column-addition",

@@ -6,7 +6,7 @@
                 {
                     "type": "list",
                     "name": "Journal",
-                    "expression": "grel:value==\"Total for all Journals\"",
+                    "expression": "grel:or(value==\"Total for all Journals\",value==\"Total for all journals\")",
                     "columnName": "Journal",
                     "invert": false,
                     "omitBlank": false,
@@ -121,32 +121,19 @@
         },
         "description": "Remove rows with a title total"
     },
-    {
-        "op": "core/text-transform",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "columnName": "R4_Month",
-        "expression": "grel:substring(value,0,4)+\"1-\"+substring(value,4)",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "Change the month-day values in ``R4_Month`` to the first day of the month"
+      {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
     },
-    {
-        "op": "core/text-transform",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "columnName": "R4_Month",
-        "expression": "value.toDate()",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "Make ``R4_Month`` date data types"
-    },
+    "columnName": "R4_Month",
+    "expression": "grel:if(value.contains(/E[D|S]T/),value.replace(\"EDT\",\"EST\").toDate(),(substring(value,0,4)+\"1-\"+substring(value,4)).toDate())",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Change the values in column ``R4_Month`` to date data type"
+  },
     {
         "op": "core/column-addition",
         "engineConfig": {

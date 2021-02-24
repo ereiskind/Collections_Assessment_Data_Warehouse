@@ -64,19 +64,6 @@
         "description": "Rename column ``Access Denied Category`` to ``Metric_Type``"
     },
     {
-        "op": "core/text-transform",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "columnName": "Resource_Name",
-        "expression": "grel:value.unicode().join(\",\")",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "Change characters in ``Resource_Name`` to their Unicode code points"
-    },
-    {
         "op": "core/transpose-columns-into-rows",
         "startColumnName": "Reporting Period Total",
         "columnCount": -1,
@@ -126,6 +113,34 @@
             "mode": "row-based"
         },
         "description": "Remove rows with a title total"
+    },
+    {
+        "op": "core/row-removal",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "R4_Count",
+                    "expression": "grel:value==0",
+                    "columnName": "R4_Count",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "description": "Remove rows with a ``R4_Count`` value of zero"
     },
     {
         "op": "core/text-transform",

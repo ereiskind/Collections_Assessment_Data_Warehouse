@@ -2,7 +2,7 @@
 To allow for the preservation of historical usage statistics, data from COUNTER Release 4 reports can be uploaded into the "R4_Usage" table in the database, but only after it has been converted to match with the table's schema. That conversion requires changing tabular data into a matching SQL insert statement, done through the following process:
 
 1. The tabular R4 report is uploaded into OpenRefine.
-2. An OpenRefine project is created from the uploaded worksheet by skipping the first seven rows and using the next row as the header.
+2. An OpenRefine project is created from the uploaded worksheet by skipping the first seven rows and using the next row as the header. The project is named `{origin workbook name}_{report name}_FY {fiscal year}` where the curly braces are placeholders for the content described inside them.
 3. The JSON in this folder named for the report type is applied to the project.
 4. The SQL Exporter is chosen as the export option.
 5. The R4_Month and R4_Count types are changed to "Date" and "Int" respectively.

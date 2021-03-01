@@ -28,7 +28,7 @@ RUN git clone https://github.com/ereiskind/Collections_Assessment_Data_Warehouse
 # Performing File Overlay
 # Note: Use a trailing slash to indicate a folder
 
-# Add Docker files to Runtime_Environment folder
+# Add files used by Docker to Runtime_Environment folder
 COPY ./Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/Python_Dockerfile.txt
 COPY ./mysql/Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/MySQL_Dockerfile.txt
 COPY ./docker-compose.yml ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/Docker_Compose.txt
@@ -51,4 +51,4 @@ COPY ./Private_Info/Non-COUNTER_Resources.md ./root/Collections_Assessment_Data_
 COPY ./Documentation/Data_Saved_in_Warehouse.md ./root/Collections_Assessment_Data_Warehouse/docs/Data_Saved_in_Warehouse.md
 COPY ./Private_Info/SUSHI_R5_Credentials.json ./root/Collections_Assessment_Data_Warehouse/data/SUSHI_R5_Credentials.json
 COPY ./Private_Info/Data_Warehouse_Data/ ./root/Collections_Assessment_Data_Warehouse/data/DML_CSVs/
-COPY ./Private_Info/JSON_to_Upload/ ./root/Collections_Assessment_Data_Warehouse/data/Load_to_Database/
+# To upload individual JSON files for use with Load_JSON_Files_into_Database.py: COPY ./Private_Info/JSON_to_Upload/ ./root/Collections_Assessment_Data_Warehouse/data/Load_to_Database/

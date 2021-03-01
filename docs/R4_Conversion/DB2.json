@@ -149,7 +149,7 @@
         "onError": "set-to-blank",
         "newColumnName": "Data_Type",
         "columnInsertIndex": 4,
-        "description": "Creat column ``Data_Type`` containing value `Database`"
+        "description": "Create column ``Data_Type`` containing value `Database`"
     },
     {
         "op": "core/text-transform",

@@ -33,6 +33,11 @@ COPY ./Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Envi
 COPY ./mysql/Dockerfile ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/MySQL_Dockerfile.txt
 COPY ./docker-compose.yml ./root/Collections_Assessment_Data_Warehouse/docs/Runtime_Environment/Docker_Compose.txt
 COPY requirements.txt ./root/Collections_Assessment_Data_Warehouse/docs/requirements.txt
+COPY ./mysql/Version_0.1_DDL.sql ./root/Collections_Assessment_Data_Warehouse/docs/Data_Warehouse_DDL_Statements.sql
+
+# Add R4 content files
+COPY ./Example_Data/Samples/OpenRefine_SQL_Exporter.sql ./root/Collections_Assessment_Data_Warehouse/docs/R4_Conversion/OpenRefine_SQL_Export_Output.txt
+COPY Add_Insert_Statements_to_DML.py ./root/Collections_Assessment_Data_Warehouse/docs/R4_Conversion/Add_Insert_Statements_to_DML.py
 
 # Add example data to data/Example subfolders
 COPY ./Example_Data/Samples/ ./root/Collections_Assessment_Data_Warehouse/data/Examples/

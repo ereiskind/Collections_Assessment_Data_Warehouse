@@ -64,6 +64,12 @@
         "description": "Rename column ``Access Denied Category`` to ``Metric_Type``"
     },
     {
+        "op": "core/column-rename",
+        "oldColumnName": "Access denied category",
+        "newColumnName": "Metric_Type",
+        "description": "Rename column ``Access denied category`` to ``Metric_Type``"
+    },
+    {
         "op": "core/text-transform",
         "engineConfig": {
             "facets": [],

@@ -34,6 +34,19 @@
         "description": "Rename column ``Collection`` to ``Resource_Name``"
     },
     {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Resource_Name",
+        "expression": "grel:value.replace(/\\n/,\"\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Remove errant newlines from ``Resource_Name`` values"
+    },
+    {
         "op": "core/column-rename",
         "oldColumnName": "Content Provider",
         "newColumnName": "Publisher",

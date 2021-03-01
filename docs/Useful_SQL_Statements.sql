@@ -93,3 +93,24 @@ WHERE
     AND Platform='NewsBank'
 GROUP BY
     Resource_Name;
+
+-- Having two JOIN statements with Interfaces.Interface_ID seems to produce a Cartesian product
+SELECT
+    Interfaces.Interface_Name,
+    COUNT(R5_Usage.Resource_Name),
+    COUNT(R4_Usage.Resource_Name)
+FROM
+    Interfaces
+    JOIN R5_Usage ON Interfaces.Interface_ID = R5_Usage.Interface
+    JOIN R4_Usage ON Interfaces.Interface_ID = R4_Usage.Interface
+GROUP BY
+    Interfaces.Interface_ID;
+
+SELECT
+    Interfaces.Interface_Name,
+    COUNT(R4_Usage.Resource_Name)
+FROM
+    Interfaces
+    JOIN R4_Usage ON Interfaces.Interface_ID = R4_Usage.Interface
+GROUP BY
+    Interfaces.Interface_ID;

@@ -74,6 +74,31 @@ Fiscal_Years.Fiscal_Year_ID = Stats_Collection_Info.Fiscal_Year
 */
 
 
+-- Export R5 for Pivot Table
+SELECT
+    Interfaces.Interface_Name,
+    R5_Usage.Report,
+    R5_Usage.Data_Type,
+    R5_Usage.Access_Method,
+    R5_Usage.Platform,
+    R5_Usage.Metric_Type,
+    R5_Usage.R5_Month,
+    SUM(R5_Usage.R5_Count)
+FROM
+    Interfaces
+    JOIN R5_Usage ON Interfaces.Interface_ID = R5_Usage.Interface
+GROUP BY
+    Interfaces.Interface_Name,
+    R5_Usage.Report,
+    R5_Usage.Data_Type,
+    R5_Usage.Access_Method,
+    R5_Usage.Platform,
+    R5_Usage.Metric_Type,
+    R5_Usage.R5_Month;
+
+
+-- Export R4 for Pivot Table
+
 -- ---------
 -- TEMPLATES
 -- ---------
@@ -101,25 +126,3 @@ WHERE
     AND Metric_Type='<metric>'
 GROUP BY
     Resource_Name;
-
-
--- Having two JOIN statements with Interfaces.Interface_ID seems to produce a Cartesian product
-SELECT
-    Interfaces.Interface_Name,
-    COUNT(R5_Usage.Resource_Name),
-    COUNT(R4_Usage.Resource_Name)
-FROM
-    Interfaces
-    JOIN R5_Usage ON Interfaces.Interface_ID = R5_Usage.Interface
-    JOIN R4_Usage ON Interfaces.Interface_ID = R4_Usage.Interface
-GROUP BY
-    Interfaces.Interface_ID;
-
-SELECT
-    Interfaces.Interface_Name,
-    COUNT(R4_Usage.Resource_Name)
-FROM
-    Interfaces
-    JOIN R4_Usage ON Interfaces.Interface_ID = R4_Usage.Interface
-GROUP BY
-    Interfaces.Interface_ID;

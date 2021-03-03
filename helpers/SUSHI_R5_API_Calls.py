@@ -90,9 +90,12 @@ def JSON_to_Python_Data_Types(JSON):
             False
     elif str(type(JSON)) == "<class 'requests.models.Response'>":
         try:
+            #ToDo: Figure out how to ensure that Unicode is used--some titles are being saved to the database with the replacement character
             return JSON.json()
         except:
             return False
+    else:
+        return False
 
 
 #Section: API Calls

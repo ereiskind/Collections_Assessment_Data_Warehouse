@@ -38,11 +38,23 @@ def Prepare_Record_for_Database(Record, Interface_ID, Number_of_Fields):
 #Section: Set Up Logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s: %(message)s")
 
-#Section: Open Files as Binary Files
-#subsection: Open Main DML File
-Main_DML_File = open(f'.\\mysql\\Version_0.1_DML.sql', 'ab')
+#Section: Recreate Main DML File//Open Files as Binary Files
+#Subsection: Overwrite Main DML File Contents
+with open(f'.\\mysql\\Version_0.1_DML.sql', 'wb') as Main_DML_File: # Using "with" automatically closes the write connection at completion
+    # This effectively recreates the file by overwriting the current contents
+    Main_DML_File.write(b"USE `Collections_Assessment_Warehouse_0.1`;\n\n")
+    logging.debug("Overwrite of main DML file complete.")
 
-#Subsection: Open the OpenRefine SQL Exporter Files, Collecting the Interface_ID Along the Way
+#Subsection: Add Non-Usage Data to Main DML File
+Main_DML_File = open(f'.\\mysql\\Version_0.1_DML.sql', 'ab')
+with open('.\\Private_Info\\Data_Warehouse_Data\\All_Data_Warehouse_Data_DML.sql', 'rb') as Data_Warehouse_Data:
+    for Line in Data_Warehouse_Data.readlines():
+        Main_DML_File.write(Line)
+Main_DML_File.write(b"\n\n-- Table R4_Usage\n")
+logging.debug("INSERT statements for non-usage data added to main DML file.")
+
+
+#Section: Open the OpenRefine SQL Exporter Files, Collecting the Interface_ID Along the Way
 for Folder in os.listdir('.\\Private_Info\\R4_Data'):
     if Path(f'.\\Private_Info\\R4_Data\\{Folder}').is_dir():
         logging.debug(f"Checking folder {Folder} for SQL files.")
@@ -51,9 +63,9 @@ for Folder in os.listdir('.\\Private_Info\\R4_Data'):
             if File.endswith(".sql"):
                 try:
                     Insert_Statement = open(f'.\\Private_Info\\R4_Data\\{Folder}\\{File}', 'rb')
-                    logging.debug(f"Adding insert statement {File} to DML file.")
+                    logging.debug(f"Adding INSERT statement {File} to DML file.")
                 except: # Sometimes, a "OSError: [Errno 22] Invalid argument" error is raised despite the file names coming from a read of folder contents
-                    logging.debug(f"The insert statement {File} couldn't be added to the database. To avoid having a missing insert statement, the program is ending.")
+                    logging.debug(f"The INSERT statement {File} couldn't be added to the database. To avoid having a missing INSERT statement, the program is ending.")
                     #toDo: Find a more elegant way to handle an insert statement tht can't be added to the main DML file because of a problem with opening it
                     Main_DML_File.close()
                     sys.exit()
@@ -98,6 +110,6 @@ for Folder in os.listdir('.\\Private_Info\\R4_Data'):
                             sys.exit()
                 
                 Main_DML_File.write(b"\n\n")
-                logging.debug(f"Insert statement {File} in main DML file.")
+                logging.debug(f"INSERT statement {File} in main DML file.")
 
 Main_DML_File.close()

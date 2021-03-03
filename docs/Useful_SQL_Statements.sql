@@ -8,6 +8,7 @@ To query the database in the mysql-container Docker container,
 4. SQL shell: `USE Collections_Assessment_Warehouse_0.1;`
 */
 
+
 -- Find all the interfaces and platforms for a specific vendor based on a match to part of a vendor's name.
 SELECT
     Vendors.Vendor_ID,
@@ -23,22 +24,18 @@ FROM
 WHERE
     Vendors.Vendor_Name LIKE '%';
 
--- Interfaces and Stats Used for Reporting
-/*
-Interfaces.Interface_Name
-Fiscal_Years.Fiscal_Year
-Stats_Collection_Info.Collection_Required
-Stats_Collection_Info.Manual_Collection_Required
-Stats_Collection_Info.Manual_Collection_Completed
-Stats_Collection_Info.Note
-Stats_Collection_Info.In_eBooks_Report
-Stats_Collection_Info.In_eJournals_Report
-Stats_Collection_Info.In_Databases_Report
-Stats_Collection_Info.In_Multimedia_Report
 
-Interfaces.Interface_ID = Stats_Collection_Info.Interface
-Fiscal_Years.Fiscal_Year_ID = Stats_Collection_Info.Fiscal_Year
-*/
+-- Searching for a resource by name
+SELECT
+    DISTINCT Resource_Name,
+    Platform,
+    Proprietary_ID,
+    Report
+FROM
+    R5_Usage
+WHERE
+    Resource_Name LIKE '%';
+
 
 -- Usage for Resources by Interface (based on text matching to interface name)
 SELECT
@@ -58,41 +55,53 @@ WHERE
 GROUP BY
     R5_Usage.Proprietary_ID;
 
--- Get the YOP and frequency of those YOP for a given Interface and Report
+
+-- Interfaces and Stats Used for Reporting
+/*
+Interfaces.Interface_Name
+Fiscal_Years.Fiscal_Year
+Stats_Collection_Info.Collection_Required
+Stats_Collection_Info.Manual_Collection_Required
+Stats_Collection_Info.Manual_Collection_Completed
+Stats_Collection_Info.Note
+Stats_Collection_Info.In_eBooks_Report
+Stats_Collection_Info.In_eJournals_Report
+Stats_Collection_Info.In_Databases_Report
+Stats_Collection_Info.In_Multimedia_Report
+
+Interfaces.Interface_ID = Stats_Collection_Info.Interface
+Fiscal_Years.Fiscal_Year_ID = Stats_Collection_Info.Fiscal_Year
+*/
+
+
+-- ---------
+-- TEMPLATES
+-- ---------
+
+-- Generate a frequency report for <field> for R5 report type <report>
 SELECT
-    DISTINCT YOP,
-    COUNT(YOP)
+    DISTINCT <field>,
+    COUNT(<field>)
 FROM
     R5_Usage
 WHERE
-    Interface=144
-    AND Report='TR'
+    Report='<report>'
 GROUP BY
-    YOP;
+    <field>;
 
--- Searching for a resource by name
-SELECT
-    DISTINCT Resource_Name,
-    Platform,
-    Proprietary_ID,
-    Report
-FROM
-    R5_Usage
-WHERE
-    Resource_Name LIKE '%';
 
--- Getting a count for a given metric for all of the databases on a given platform
+-- Get the <metric> count for each resource in R5 report type <report>
 SELECT
     Resource_Name,
     SUM(R5_Count)
 FROM
     R5_Usage
 WHERE
-    Report='DR'
-    AND Metric_Type='Total_Item_Requests'
-    AND Platform='NewsBank'
+    Report='<report>'
+    AND Metric_Type='<metric>'
 GROUP BY
     Resource_Name;
+
 
 -- Having two JOIN statements with Interfaces.Interface_ID seems to produce a Cartesian product
 SELECT

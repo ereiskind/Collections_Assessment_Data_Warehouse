@@ -62,7 +62,7 @@ def Retrieve_Downloaded_JSON_File(URL):
             return Files
         for File in Files: # There is actually only one file, but the iterator is needed to extract it from the list data structure
             Download_File_Path = str(Path('.', 'API_Download', File))
-            with open(Download_File_Path) as JSONfile:
+            with open(Download_File_Path, 'rb') as JSONfile: #Alert: Not yet tested with bytes
                 JSON_File_Data = json.load(JSONfile)
             os.unlink(Download_File_Path)
 
@@ -90,7 +90,12 @@ def JSON_to_Python_Data_Types(JSON):
             False
     elif str(type(JSON)) == "<class 'requests.models.Response'>":
         try:
-            #ToDo: Figure out how to ensure that Unicode is used--some titles are being saved to the database with the replacement character
+            #ToDo: Figure out how to get titles with Unicode replacement character to encode properly
+                # json.loads(JSON.text.encode('utf8')) still has replacement character
+                # json.loads(JSON.text.decode('utf8')) still has replacement character
+                # json.loads(JSON.text) still has replacement character
+                # json.loads(JSON.content.decode('utf8')) creates a JSON from the first item in Report_Items rather than the complete content, so ability to handle replacement characters unknown
+            # how to ensure that is used--some titles are being saved to the database with the 
             return JSON.json()
         except:
             return False

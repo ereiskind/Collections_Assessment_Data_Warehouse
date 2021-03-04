@@ -98,6 +98,23 @@ GROUP BY
 
 
 -- Export R4 for Pivot Table
+SELECT
+    Interfaces.Interface_Name,
+    R4_Usage.Data_Type,
+    R4_Usage.Platform,
+    R4_Usage.Metric_Type,
+    R4_Usage.R4_Month,
+    SUM(R4_Usage.R4_Count)
+FROM
+    Interfaces
+    JOIN R4_Usage ON Interfaces.Interface_ID = R4_Usage.Interface
+GROUP BY
+    Interfaces.Interface_Name,
+    R4_Usage.Data_Type,
+    R4_Usage.Platform,
+    R4_Usage.Metric_Type,
+    R4_Usage.R4_Month;
+
 
 -- ---------
 -- TEMPLATES

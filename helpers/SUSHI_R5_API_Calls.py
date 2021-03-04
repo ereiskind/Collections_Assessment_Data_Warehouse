@@ -90,12 +90,12 @@ def JSON_to_Python_Data_Types(JSON):
             False
     elif str(type(JSON)) == "<class 'requests.models.Response'>":
         try:
+            # For "status" and the master reports, need to return dictionary; "reports" needs to return a list--the json() method for the response object is able to handle this automatically with the seeming help of the code at https://github.com/Cosmius/complexjson/blob/master/complexjson.py
             #ToDo: Figure out how to get titles with Unicode replacement character to encode properly
                 # json.loads(JSON.text.encode('utf8')) still has replacement character
                 # json.loads(JSON.text.decode('utf8')) still has replacement character
                 # json.loads(JSON.text) still has replacement character
                 # json.loads(JSON.content.decode('utf8')) creates a JSON from the first item in Report_Items rather than the complete content, so ability to handle replacement characters unknown
-            # how to ensure that is used--some titles are being saved to the database with the 
             return JSON.json()
         except:
             return False
@@ -138,6 +138,7 @@ def Single_Element_API_Call(Path_Addition, URL, Parameters):
         return f"{Path_Addition}|API error|Problem with API call: {format(error)}"
 
     if JSON_to_Python_Data_Types(API_Response):
+        # "status" should return a dictionary, "reports" should return a list
         return JSON_to_Python_Data_Types(API_Response)
     else:
         return f"{Path_Addition}|Encoding error|Return couldn't be changed into JSON-like dictionary: {API_Response.text}"

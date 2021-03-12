@@ -65,6 +65,40 @@ Additional guidelines:
 `SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Item_Requests' AND Data_Type='Journal' AND Access_Method='Regular' AND Report='TR';`
 
 
+## ARL Instructions
+
+### 18. Number of successful full-text article requests (journals)
+Items reported should follow definitions as defined in the COUNTER 5 Code of Practice (https://www.projectcounter.org/release-5-code-practice/). The COUNTER 5 report that corresponds to Question 18 is **TR_J3** Journal Usage by Access Type. The metric from this COUNTER 5 report is **Unique Item Requests**. In a footnote, please *include the types of resources for which you are reporting* data.
+
+#### Calculating 18
+18 = TR_J3
+
+##### TR_J3
+- Metric_Type=Unique_Item_Requests
+- Data_Type=Journal
+- Access_Method=Regular
+
+
+### 19. Number of regular searches (databases)
+Items reported should follow definitions as defined in the COUNTER 5 Code of Practice (https://www.projectcounter.org/release-5-codepractice/). The COUNTER 5 report that corresponds to Question 19 is **DR_D1** Database Search and Item Usage. The metric from this COUNTER 5 report is **Searches_Regular**. If this report is unavailable, the **PR_P1** report can be used as an alternative, with the PR_P1 **Searches Platform** metric. In a footnote, please *include the types of resources for which you are reporting* data. Please be sure to indicate whether you **used DR_D1 or PR_P1**. It is recommended that ONLY data that follow the COUNTER definitions be reported. Any exceptions should be documented in a footnote.
+
+#### Calculating 19
+19 = ???
+
+##### Either DR_D1 or PR_P1
+
+
+### 20. Number of federated searches (databases)
+Items reported should follow definitions as defined in the COUNTER 5 Code of Practice (https://www.projectcounter.org/release-5-code-practice/). The COUNTER 5 report that corresponds to Question 20 is **DR_D1** Searches_Federated. Metric options include **"Searches_Federated", "Total_Item_Requests for full text databases", and "Total_Item_Investigations for non-full text databases"**. If a *combination of these metrics must be used to capture all the federated search data at your institution, please sum the numbers* accordingly, provided the information is not duplicative, and *indicate in a footnote*. The goal is to capture the totality of federated searches. In a footnote, please *include the types of resources for which you are reporting* data, and please **specify the COUNTER 5 metric used** to report this value. It is recommended that ONLY data that follow the COUNTER definitions be reported. Any exceptions should be documented in a footnote.
+
+#### Calculating 20
+20 = DR_D1 **what metric(s)???**
+
+##### DR_D1--need to select metric(s)
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='DR' AND Access_Method='Regular'`
+- Metric_Type=Searches_Automated; Searches_Federated; Searches_Regular; Total_Item_Investigations; Total_Item_Requests
+
+
 ## Other COUNTER Reports
 
 ### DR_D1

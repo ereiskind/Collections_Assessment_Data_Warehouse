@@ -41,7 +41,7 @@ Additional guidance:
 
 ### 63. E-Serials Usage: Digital/Electronic
 Please note that the ACRL Academic Library Trend and Statistics Survey is not collecting use of print serial titles separately from other physical initial circulation.
-Report usage of e-serial titles whether viewed, downloaded, or streamed. Include usage for e-serial titles only, even if the title was purchased as part of a database. Viewing a document is defined as having the full text of a digital document or electronic resource downloaded. [NISO Z39.7-2013, section 7.7] If available, **include the count for open access e-journal usage** if the title is accessible through the library’s catalog or discovery system. Libraries may need to ask vendors for e-serial usage reports; reports may not be delivered automatically or in easily understood formats by the vendor to the library. Most vendors will provide usage statistics in COUNTER Release 5 reports. The most relevant COUNTER Release 5 report for e-serial usage is **TR_J1**: Journal Requests (Excluding OA_Gold). For the metric type, **report "unique item requests."** If COUNTER Release 5 reports are unavailable, the most relevant COUNTER Release 4 report is JR1 (defined as the "Number of Successful Full-Text Article Requests by Month and Journal").
+Report usage of e-serial titles whether viewed, downloaded, or streamed. Include usage for e-serial titles only, even if the title was purchased as part of a database. Viewing a document is defined as having the full text of a digital document or electronic resource downloaded. [NISO Z39.7-2013, section 7.7] If available, include the count for open access e-journal usage if the title is accessible through the library’s catalog or discovery system. Libraries may need to ask vendors for e-serial usage reports; reports may not be delivered automatically or in easily understood formats by the vendor to the library. Most vendors will provide usage statistics in COUNTER Release 5 reports. The most relevant COUNTER Release 5 report for e-serial usage is **TR_J1**: Journal Requests (Excluding OA_Gold). For the metric type, **report "unique item requests."** If COUNTER Release 5 reports are unavailable, the most relevant COUNTER Release 4 report is JR1 (defined as the "Number of Successful Full-Text Article Requests by Month and Journal").
 
 Applicable COUNTER Release 5 definitions:
 - Article: "An item of original written work published in a journal, other serial publication, or in a book."
@@ -59,10 +59,10 @@ Additional guidelines:
 - Add notes as appropriate.
 
 #### Calculating 63
-63 = TR_J1 with OA
+63 = TR_J1
 
-##### TR_J1 with OA
-`SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Item_Requests' AND Data_Type='Journal' AND Access_Method='Regular' AND Report='TR';`
+##### TR_J1
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Item_Requests' AND Data_Type='Journal' AND Access_Type='Controlled' AND Access_Method='Regular' AND Report='TR';`
 
 
 ## ARL Instructions
@@ -132,8 +132,10 @@ Items reported should follow definitions as defined in the COUNTER 5 Code of Pra
 - Access_Method=Regular
 
 ### TR_J1
-`SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Metric_Type='Unique_Item_Requests' AND Data_Type='Journal' AND Access_Type='Controlled' AND Access_Method='Regular' AND Report='TR';`
 - Metric_Type=Total_Item_Requests; Unique_Item_Requests
+- Data_Type=Journal
+- Access_Type=Controlled
+- Access_Method=Regular
 
 ### TR_J2
 - Metric_Type=Limit_Exceeded; No_License

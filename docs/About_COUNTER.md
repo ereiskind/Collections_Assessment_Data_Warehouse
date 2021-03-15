@@ -84,7 +84,7 @@ Items reported should follow definitions as defined in the COUNTER 5 Code of Pra
 19 = DR_D1
 
 ##### DR_D1
-SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Report='DR' AND Access_Method='Regular' AND Metric_Type='Searches_Regular';
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE R5_Month>='2019-07-01' AND R5_Month<='2020-06-30' AND Report='DR' AND Access_Method='Regular' AND Metric_Type='Searches_Regular';`
 
 
 ### 20. Number of federated searches (databases)
@@ -99,65 +99,49 @@ Items reported should follow definitions as defined in the COUNTER 5 Code of Pra
 
 ## Other COUNTER Reports
 
+### PR_P1
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='PR' AND Access_Method='Regular'`
+- Metric_Type = Searches_Platform; Total_Item_Requests; Unique_Item_Requests; Unique_Title_Requests
+
 ### DR_D1
 `SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='DR' AND Access_Method='Regular'`
 - Metric_Type=Searches_Automated; Searches_Federated; Searches_Regular; Total_Item_Investigations; Total_Item_Requests
 
-### PR_P1
-- Metric_Type = Searches_Platform; Total_Item_Requests; Unique_Item_Requests; Unique_Title_Requests
-- Access_Method=Regular
-
-### DR_D1 actually goes here
-
 ### DR_D2
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='DR' AND Access_Method='Regular'`
 - Metric_Type=Limit_Exceeded; No_License
-- Access_Method=Regular
 
 ### TR_B1
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='TR' AND Data_Type='Book' AND Access_Type='Controlled' AND Access_Method='Regular'`
 - Metric_Type=Total_Item_Requests; Unique_Title_Requests
-- Data_Type=Book
-- Access_Type=Controlled
-- Access_Method=Regular
 
 ### TR_B2
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='TR' AND Data_Type='Book' AND Access_Method='Regular'`
 - Metric_Type=Limit_Exceeded; No_License
-- Data_Type=Book
-- Access_Method=Regular
 
 ### TR_B3
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='TR' AND Data_Type='Book' AND Access_Method='Regular'`
 - Metric_Type=Total_Item_Investigations; Total_Item_Requests; Unique_Item_Investigations; Unique_Item_Requests; Unique_Title_Investigations; Unique_Title_Requests
-- Data_Type=Book
-- Access_Method=Regular
 
 ### TR_J1
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='TR' AND Data_Type='Journal' AND Access_Type='Controlled' AND Access_Method='Regular'`
 - Metric_Type=Total_Item_Requests; Unique_Item_Requests
-- Data_Type=Journal
-- Access_Type=Controlled
-- Access_Method=Regular
 
 ### TR_J2
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='TR' AND Data_Type='Journal' AND Access_Method='Regular'`
 - Metric_Type=Limit_Exceeded; No_License
-- Data_Type=Journal
-- Access_Method=Regular
 
 ### TR_J3
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='TR' AND Data_Type='Journal' AND Access_Method='Regular'`
 - Metric_Type=Total_Item_Investigations; Total_Item_Requests; Unique_Item_Investigations; Unique_Item_Requests
-- Data_Type=Journal
-- Access_Method=Regular
 
 ### TR_J4
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='TR' AND Data_Type='Journal' AND Access_Type='Controlled' AND Access_Method='Regular'`
 - Metric_Type=Total_Item_Requests; Unique_Item_Requests
-- Data_Type=Journal
-- Access_Type=Controlled
-- Access_Method=Regular
 
 ### IR_A1
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='IR' AND Data_Type='Article' AND Parent_Data_Type='Journal' AND Access_Method='Regular'`
 - Metric_Type=Total_Item_Requests; Unique_Items_Requests
-- Data_Type=Article
-- Parent_Data_Type=Journal
-- Access_Method=Regular
 
 ### IR_M1
-- Metric_Type=Total_Item_Requests
-- Data_Type=Multimedia
-- Access_Method=Regular
+`SELECT SUM(R5_Count) FROM R5_Usage WHERE Report='IR' AND Data_Type='Multimedia' AND Access_Method='Regular' AND Metric_Type='Total_Item_Requests';`

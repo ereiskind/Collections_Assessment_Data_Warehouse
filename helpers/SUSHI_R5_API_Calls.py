@@ -168,6 +168,16 @@ def Master_Report_API_Call(Report_ID, URL, Parameters):
             API_Response.raise_for_status()
         except Timeout as error:
             return f"{Report_ID}|HTTP error|Timed out twice: {format(error)}"
+        except HTTPError as error: # If the API request returns a 4XX HTTP code
+            if format(error.response) == "<Response [403]>":
+                # This response could be because of an actual issue, or because the API prompts a JSON file download rather than making the JSON data the page content; the function below handles the latter case
+                API_Response = Retrieve_Downloaded_JSON_File(API_Call_URL + "?" + Parameters)
+                if API_Response == []:
+                    return f"{Report_ID}|HTTP error|{format(error)}"
+            else:
+                return f"{Report_ID}|HTTP error|{format(error)}"
+        except Exception as error: # If there's some other problem with the API request
+            return f"{Report_ID}||API error|Problem with API call: {format(error)}"
     except HTTPError as error: # If the API request returns a 4XX HTTP code
         if format(error.response) == "<Response [403]>":
             # This response could be because of an actual issue, or because the API prompts a JSON file download rather than making the JSON data the page content; the function below handles the latter case

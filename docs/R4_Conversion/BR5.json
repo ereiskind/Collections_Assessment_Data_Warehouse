@@ -36,6 +36,12 @@
         "description": "Rename column ``User activity`` to ``Metric_Type``"
     },
     {
+        "op": "core/column-rename",
+        "oldColumnName": "User Activity",
+        "newColumnName": "Metric_Type",
+        "description": "Rename column ``User Activity`` to ``Metric_Type``"
+    },
+    {
         "op": "core/row-removal",
         "engineConfig": {
             "facets": [

@@ -25,6 +25,12 @@
         "description": "Rename column ``User Activity`` to ``Metric_Type``"
     },
     {
+        "op": "core/column-rename",
+        "oldColumnName": "User Activity",
+        "newColumnName": "Metric_Type",
+        "description": "Rename column ``User Activity`` to ``Metric_Type``"
+    },
+    {
         "op": "core/transpose-columns-into-rows",
         "startColumnName": "Reporting Period Total",
         "columnCount": -1,

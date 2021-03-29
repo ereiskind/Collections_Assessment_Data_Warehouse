@@ -23,8 +23,8 @@
             "facets": [
                 {
                     "type": "list",
-                    "name": "Database",
-                    "expression": "grel:or(value==\"Total for all Databases\",value==\"Total for all databases\")",
+                    "name": "Title",
+                    "expression": "grel:value.toLowercase().startsWith(\"total for all databases\")",
                     "columnName": "Resource_Name",
                     "invert": false,
                     "omitBlank": false,
@@ -41,7 +41,7 @@
                     "selectError": false
                 }
             ],
-            "mode": "record-based"
+            "mode": "row-based"
         },
         "description": "Remove total rows"
     },

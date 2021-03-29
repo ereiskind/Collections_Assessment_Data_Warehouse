@@ -35,8 +35,8 @@
             "facets": [
                 {
                     "type": "list",
-                    "name": "Column",
-                    "expression": "grel:or(startsWith(value,\"Total searches\"), startsWith(value,\"Total Searches\"))",
+                    "name": "Title",
+                    "expression": "grel:value.toLowercase().startsWith(\"total searches\")",
                     "columnName": "Resource_Name",
                     "invert": false,
                     "omitBlank": false,

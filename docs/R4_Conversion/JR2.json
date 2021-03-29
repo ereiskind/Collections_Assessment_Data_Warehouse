@@ -47,8 +47,8 @@
             "facets": [
                 {
                     "type": "list",
-                    "name": "Journal",
-                    "expression": "grel:or(value==\"Total for all Journals\",value==\"Total for all journals\")",
+                    "name": "Title",
+                    "expression": "grel:value.toLowercase().startsWith(\"total for all journals\")",
                     "columnName": "Resource_Name",
                     "invert": false,
                     "omitBlank": false,

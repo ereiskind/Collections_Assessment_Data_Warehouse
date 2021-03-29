@@ -7,6 +7,12 @@
     },
     {
         "op": "core/column-rename",
+        "oldColumnName": "Title",
+        "newColumnName": "Resource_Name",
+        "description": "Rename column ``Title`` to ``Resource_Name``"
+    },
+    {
+        "op": "core/column-rename",
         "oldColumnName": "Book DOI",
         "newColumnName": "DOI",
         "description": "Rename column ``Book DOI`` to ``DOI``"

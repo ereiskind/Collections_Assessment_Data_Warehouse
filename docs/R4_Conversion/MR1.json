@@ -1,5 +1,17 @@
 [
     {
+        "op": "core/column-rename",
+        "oldColumnName": "Collection",
+        "newColumnName": "Resource_Name",
+        "description": "Rename column ``Collection`` to ``Resource_Name``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Content Provider",
+        "newColumnName": "Publisher",
+        "description": "Rename column ``Content Provider`` to ``Publisher``"
+    },
+    {
         "op": "core/row-removal",
         "engineConfig": {
             "facets": [
@@ -7,7 +19,7 @@
                     "type": "list",
                     "name": "Collection",
                     "expression": "grel:or(value==\"Total for all Collections\",value==\"Total for all collections\")",
-                    "columnName": "Collection",
+                    "columnName": "Resource_Name",
                     "invert": false,
                     "omitBlank": false,
                     "omitError": false,
@@ -28,12 +40,6 @@
         "description": "Remove total rows"
     },
     {
-        "op": "core/column-rename",
-        "oldColumnName": "Collection",
-        "newColumnName": "Resource_Name",
-        "description": "Rename column ``Collection`` to ``Resource_Name``"
-    },
-    {
         "op": "core/text-transform",
         "engineConfig": {
             "facets": [],
@@ -45,12 +51,6 @@
         "repeat": false,
         "repeatCount": 10,
         "description": "Remove errant newlines from ``Resource_Name`` values"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Content Provider",
-        "newColumnName": "Publisher",
-        "description": "Rename column ``Content Provider`` to ``Publisher``"
     },
     {
         "op": "core/transpose-columns-into-rows",

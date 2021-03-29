@@ -1,5 +1,29 @@
 [
     {
+        "op": "core/column-rename",
+        "oldColumnName": "Column",
+        "newColumnName": "Resource_Name",
+        "description": "Rename column ``Column`` to ``Resource_Name``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Book DOI",
+        "newColumnName": "DOI",
+        "description": "Rename column ``Book DOI`` to ``DOI``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Proprietary Identifier",
+        "newColumnName": "Proprietary_ID",
+        "description": "Rename column ``Proprietary Identifier`` to ``Proprietary_ID``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "ISSN",
+        "newColumnName": "Online_ISSN",
+        "description": "Rename column ``ISSN`` to ``Online_ISSN``"
+    },
+    {
         "op": "core/row-removal",
         "engineConfig": {
             "facets": [
@@ -7,7 +31,7 @@
                     "type": "list",
                     "name": "Column",
                     "expression": "grel:or(value==\"Total for all Titles\",value==\"Total for all titles\")",
-                    "columnName": "Column",
+                    "columnName": "Resource_Name",
                     "invert": false,
                     "omitBlank": false,
                     "omitError": false,
@@ -28,12 +52,6 @@
         "description": "Remove total rows"
     },
     {
-        "op": "core/column-rename",
-        "oldColumnName": "Column",
-        "newColumnName": "Resource_Name",
-        "description": "Rename column ``Column`` to ``Resource_Name``"
-    },
-    {
         "op": "core/text-transform",
         "engineConfig": {
             "facets": [],
@@ -45,24 +63,6 @@
         "repeat": false,
         "repeatCount": 10,
         "description": "Remove errant newlines from ``Resource_Name`` values"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Book DOI",
-        "newColumnName": "DOI",
-        "description": "Rename column ``Book DOI`` to ``DOI``"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Proprietary Identifier",
-        "newColumnName": "Proprietary_ID",
-        "description": "Rename column ``Proprietary Identifier`` to ``Proprietary_ID``"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "ISSN",
-        "newColumnName": "Online_ISSN",
-        "description": "Rename column ``ISSN`` to ``Online_ISSN``"
     },
     {
         "op": "core/transpose-columns-into-rows",

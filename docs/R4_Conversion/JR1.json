@@ -1,50 +1,9 @@
 [
     {
-        "op": "core/row-removal",
-        "engineConfig": {
-            "facets": [
-                {
-                    "type": "list",
-                    "name": "Journal",
-                    "expression": "grel:or(value==\"Total for all Journals\",value==\"Total for all journals\")",
-                    "columnName": "Journal",
-                    "invert": false,
-                    "omitBlank": false,
-                    "omitError": false,
-                    "selection": [
-                        {
-                            "v": {
-                                "v": true,
-                                "l": "true"
-                            }
-                        }
-                    ],
-                    "selectBlank": false,
-                    "selectError": false
-                }
-            ],
-            "mode": "row-based"
-        },
-        "description": "Remove total rows"
-    },
-    {
         "op": "core/column-rename",
         "oldColumnName": "Journal",
         "newColumnName": "Resource_Name",
         "description": "Rename column ``Journal`` to ``Resource_Name``"
-    },
-    {
-        "op": "core/text-transform",
-        "engineConfig": {
-            "facets": [],
-            "mode": "row-based"
-        },
-        "columnName": "Resource_Name",
-        "expression": "grel:value.replace(/\\n/,\"\")",
-        "onError": "keep-original",
-        "repeat": false,
-        "repeatCount": 10,
-        "description": "Remove errant newlines from ``Resource_Name`` values"
     },
     {
         "op": "core/column-rename",
@@ -69,6 +28,47 @@
         "oldColumnName": "Online ISSN",
         "newColumnName": "Online_ISSN",
         "description": "Rename column ``Online ISSN`` to ``Online_ISSN``"
+    },
+    {
+        "op": "core/row-removal",
+        "engineConfig": {
+            "facets": [
+                {
+                    "type": "list",
+                    "name": "Journal",
+                    "expression": "grel:or(value==\"Total for all Journals\",value==\"Total for all journals\")",
+                    "columnName": "Resource_Name",
+                    "invert": false,
+                    "omitBlank": false,
+                    "omitError": false,
+                    "selection": [
+                        {
+                            "v": {
+                                "v": true,
+                                "l": "true"
+                            }
+                        }
+                    ],
+                    "selectBlank": false,
+                    "selectError": false
+                }
+            ],
+            "mode": "row-based"
+        },
+        "description": "Remove total rows"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Resource_Name",
+        "expression": "grel:value.replace(/\\n/,\"\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Remove errant newlines from ``Resource_Name`` values"
     },
     {
         "op": "core/transpose-columns-into-rows",

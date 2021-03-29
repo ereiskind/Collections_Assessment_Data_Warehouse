@@ -1,5 +1,23 @@
 [
     {
+        "op": "core/column-rename",
+        "oldColumnName": "Database",
+        "newColumnName": "Resource_Name",
+        "description": "Rename column ``Database`` to ``Resource_Name``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Access Denied Category",
+        "newColumnName": "Metric_Type",
+        "description": "Rename column ``Access Denied Category`` to ``Metric_Type``"
+    },
+    {
+        "op": "core/column-rename",
+        "oldColumnName": "Access denied category",
+        "newColumnName": "Metric_Type",
+        "description": "Rename column ``Access denied category`` to ``Metric_Type``"
+    },
+    {
         "op": "core/row-removal",
         "engineConfig": {
             "facets": [
@@ -7,7 +25,7 @@
                     "type": "list",
                     "name": "Database",
                     "expression": "grel:or(value==\"Total for all Databases\",value==\"Total for all databases\")",
-                    "columnName": "Database",
+                    "columnName": "Resource_Name",
                     "invert": false,
                     "omitBlank": false,
                     "omitError": false,
@@ -28,12 +46,6 @@
         "description": "Remove total rows"
     },
     {
-        "op": "core/column-rename",
-        "oldColumnName": "Database",
-        "newColumnName": "Resource_Name",
-        "description": "Rename column ``Database`` to ``Resource_Name``"
-    },
-    {
         "op": "core/text-transform",
         "engineConfig": {
             "facets": [],
@@ -45,18 +57,6 @@
         "repeat": false,
         "repeatCount": 10,
         "description": "Remove errant newlines from ``Resource_Name`` values"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Access Denied Category",
-        "newColumnName": "Metric_Type",
-        "description": "Rename column ``Access Denied Category`` to ``Metric_Type``"
-    },
-    {
-        "op": "core/column-rename",
-        "oldColumnName": "Access denied category",
-        "newColumnName": "Metric_Type",
-        "description": "Rename column ``Access denied category`` to ``Metric_Type``"
     },
     {
         "op": "core/transpose-columns-into-rows",

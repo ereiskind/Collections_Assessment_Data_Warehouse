@@ -23,7 +23,7 @@
             "facets": [
                 {
                     "type": "list",
-                    "name": "Title",
+                    "name": "Resource_Name",
                     "expression": "grel:value.toLowercase().startsWith(\"total for all databases\")",
                     "columnName": "Resource_Name",
                     "invert": false,

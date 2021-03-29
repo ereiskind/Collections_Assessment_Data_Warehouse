@@ -23,6 +23,7 @@ CREATE TABLE Interfaces (
         REFERENCES Vendors(Vendor_ID)
         ON UPDATE cascade
         ON DELETE restrict
+    -- Add index for Interface_Name?
 );
 
 
@@ -146,6 +147,7 @@ CREATE TABLE R5_Usage (
         REFERENCES Interfaces(Interface_ID)
         ON UPDATE cascade
         ON DELETE restrict
+    -- Add index on Metric_Type, R5_Month?
 );
 
 
@@ -169,4 +171,5 @@ CREATE TABLE R4_Usage (
         REFERENCES Interfaces(Interface_ID)
         ON UPDATE cascade
         ON DELETE restrict
+    -- Add index on Metric_Type, R4_Month?
 );

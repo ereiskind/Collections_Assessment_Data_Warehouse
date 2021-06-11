@@ -252,5 +252,44 @@
         "repeat": false,
         "repeatCount": 10,
         "description": "Change null values to `NULL` in column ``Online_ISSN``"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Resource_Name",
+        "expression": "grel:value.reinterpret(\"utf-8\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Ensure values in column ``Resource_Name`` are encoded with UTF-8"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Publisher",
+        "expression": "grel:value.reinterpret(\"utf-8\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Ensure values in column ``Publisher`` are encoded with UTF-8"
+    },
+    {
+        "op": "core/text-transform",
+        "engineConfig": {
+            "facets": [],
+            "mode": "row-based"
+        },
+        "columnName": "Platform",
+        "expression": "grel:value.reinterpret(\"utf-8\")",
+        "onError": "keep-original",
+        "repeat": false,
+        "repeatCount": 10,
+        "description": "Ensure values in column ``Platform`` are encoded with UTF-8"
     }
 ]

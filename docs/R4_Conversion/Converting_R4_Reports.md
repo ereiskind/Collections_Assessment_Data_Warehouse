@@ -14,3 +14,4 @@ Running Add_Insert_Statements_to_DML.py in the root directory of the runtime fol
 ### Notes
 - The journal reports use the Data_type value "serial" because some content falls into other R5 data types; book reports are just about always books or parts of books
 - JR5 reports are by FY, so they'll need a normalized resources table to serve as a foreign key; as a result, they haven't been converted
+- The final step for reinterpreting to UTF-8 doesn't make any changes in OpenRefine, but it ensures proper encoding when the results are downloaded to **Excel**
